@@ -8,8 +8,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
-void main() {
+Future<void> main() async {
   configure();
+
   runApp(ProviderScope(child: MyApp()));
 }
 
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Poppins'),
-      home: LoginScreen(),
+      home: SplashScreen(),
     );
   }
 }
@@ -40,7 +41,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 5), () {
+    Future.delayed(const Duration(seconds: 1), () {
       Get.to(LoginScreen());
     });
     super.initState();
