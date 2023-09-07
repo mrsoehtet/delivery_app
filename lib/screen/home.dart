@@ -1,8 +1,12 @@
+import 'package:delivery_app/error/errorScreen.dart';
 import 'package:delivery_app/screen/login.dart';
-import 'package:delivery_app/utils/constants.dart';
+import 'package:delivery_app/screen/profile.dart';
+import 'package:delivery_app/service/pickupRequestService.dart';
+import 'package:delivery_app/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 
 import '../controller/getController.dart';
@@ -19,6 +23,15 @@ class _HomeScreenState extends State<HomeScreen> {
   final PageStorageBucket bucket = PageStorageBucket();
   Widget currentScreen = HomeScreen();
   var orders = Get.find<OrderController>().orders;
+  var _remove;
+  var assignCount = 0;
+
+  @override
+  void initState() {
+    _remove = true;
+    assignCount;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -187,7 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   // style: TextButton.styleFrom(
                                   //     padding: const EdgeInsets.only(left: 70)),
                                   onPressed: () {
-                                    // Get.to(LoginScreen());
+                                    Get.to(ProfileScreen());
                                   },
                                   child: Center(
                                     child: const Text(
@@ -238,249 +251,435 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       //   drawer: const NavigationDrawer(),
       body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.all(16),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(
-              "aung naing's Dashboard",
-              style: TextStyle(
-                fontSize: 20,
-                // color: Colors.white,
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              // width: MediaQuery.of(context).size.width * 0.95,
-              height: 30,
-              decoration: BoxDecoration(color: Constants.gray),
-              child: Row(children: [
-                Icon(Icons.dashboard),
-                Text(
-                  ' Home > ',
-                  style: TextStyle(fontSize: 12),
-                ),
-                Text(
-                  ' Dashboard >',
-                  style: TextStyle(fontSize: 12),
-                ),
-              ]),
-            ),
-            SingleChildScrollView(
-              child: Expanded(
-                child: Container(
-                  // width: MediaQuery.of(context).size.width * 0.95,
-                  height: MediaQuery.of(context).size.height * 0.326,
-                  margin: EdgeInsets.symmetric(vertical: 16, horizontal: 4),
-                  child: InkWell(
-                    //onTap: () => Get.to(DailyChoice()),
-                    child: GridView.builder(
-                        itemCount: orders.length,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                childAspectRatio: 1.200,
-                                mainAxisSpacing: 8,
-                                crossAxisSpacing: 12,
-                                crossAxisCount: 2),
-                        itemBuilder: ((context, index) =>
-                            _buildGiftCard(orders[index]))),
-                  ),
+        child: Consumer(builder: (context, ref, child) {
+          return Container(
+            padding: EdgeInsets.all(16),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(
+                "aung naing's Dashboard",
+                style: TextStyle(
+                  fontSize: 20,
+                  // color: Colors.white,
                 ),
               ),
-            ),
-            Card(
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                //  margin: EdgeInsets.only(bottom: 100),
-                child: Column(children: [
-                  SizedBox(
-                    height: 10,
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                // width: MediaQuery.of(context).size.width * 0.95,
+                height: 30,
+                decoration: BoxDecoration(color: Constants.gray),
+                child: Row(children: [
+                  Icon(Icons.dashboard),
+                  Text(
+                    ' Home > ',
+                    style: TextStyle(fontSize: 12),
                   ),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'To Pickup List',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.remove,
-                              color: Colors.grey[500],
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Icon(
-                              Icons.cancel,
-                              color: Colors.grey[500],
-                            )
-                          ],
-                        )
-                      ],
-                    ),
+                  Text(
+                    ' Dashboard >',
+                    style: TextStyle(fontSize: 12),
                   ),
-                  Divider(),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 8),
-                    // color: Constants.gray,
-                    child: DataTable(
-                      headingRowColor:
-                          MaterialStateProperty.all(Constants.gray),
-                      dataRowColor: MaterialStateProperty.all(Colors.white),
-                      decoration: BoxDecoration(
-                          //color: Colors.grey
-                          ),
-                      horizontalMargin: 8,
-                      columnSpacing: 18,
-                      border: TableBorder.all(color: Colors.black12),
-                      columns: [
-                        DataColumn(
-                            label: Center(
-                          child: Text(
-                            "#",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 12,
-                            ),
-                          ),
-                        )),
-                        DataColumn(
-                            label: Center(
-                          child: Text(
-                            "Assign\n Date",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 12,
-                            ),
-                          ),
-                        )),
-                        DataColumn(
-                            label: Text(
-                          "Pickup\nInfo",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 12,
-                          ),
-                        )),
-                        DataColumn(
-                            label: Text(
-                          "Can\nPickup\nDate",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 12,
-                          ),
-                        )),
-                        DataColumn(
-                            label: Text(
-                          "Ways",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 12,
-                          ),
-                        )),
-                        DataColumn(
-                            label: Text(
-                          "Status",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 12,
-                          ),
-                        )),
-                        DataColumn(
-                            label: Text(
-                          "Action",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 12,
-                          ),
-                        )),
-                      ],
-                      rows: orders!.map((order) {
-                        return DataRow(cells: [
-                          DataCell(Container(
-                            padding: EdgeInsets.only(left: 5),
-                            //  color: Colors.white,
-                            child: Text(
-                              '',
-                            ),
-                          )),
-                          DataCell(Text(
-                            'aaa',
-                          )),
-                          DataCell(Text('bbb')),
-                          DataCell(Text('ccc')),
-                          DataCell(Text('ccc')),
-                          DataCell(Text('ccc')),
-                          DataCell(
-                              Text(
-                                "ddd",
-                                style: TextStyle(
-                                    // color: Colors.blue,
-                                    ),
-                              ), onTap: () {
-                            // Get.to(() => OrderDetailScreen(
-                            //       orderId: order.id!,
-                            //       orderStatus: order.last_status!.name!,
-                            //       order_id: order.orderId.toString(),
-                            //     )
-                            //     );
-                          })
-                        ]);
-                      }).toList(),
-                    ),
-                  ),
-                  Divider(),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Text(
-                        'Footer',
-                        //textAlign: TextAlign.start,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  )
                 ]),
               ),
-            ),
-          ]),
-        ),
+              Container(
+                // width: MediaQuery.of(context).size.width * 0.95,
+                //  height: MediaQuery.of(context).size.height * 0.326,
+                height: MediaQuery.of(context).size.height * 0.326,
+                margin: EdgeInsets.symmetric(vertical: 16, horizontal: 4),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _buildGiftCard(
+                            1, "Pickup(Assigned)", Constants.realRed),
+                        _buildGiftCard(0, "Pickup Process", Constants.yellow),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 4,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _buildGiftCard(
+                            0, "Delivery Process", Constants.realBlue),
+                        _buildGiftCard(0, "Total Done", Constants.green),
+                      ],
+                    ),
+                  ],
+                ),
+
+                // Column(
+                //   children: [
+                //     Row(
+                //       children: [
+                //         _buildGiftCard(
+                //             0, "To Pickup (Assigned)", Constants.realRed),
+                //         _buildGiftCard(
+                //             1, "Pickup Process", Constants.yellow),
+                //       ],
+                //     ),
+                //     Row(
+                //       children: [
+                //         _buildGiftCard(
+                //             0, "Delivery Process", Constants.realBlue),
+                //         _buildGiftCard(10, "Total Done", Constants.green),
+                //       ],
+                //     ),
+                //   ],
+                // )
+                // InkWell(
+                //   //onTap: () => Get.to(DailyChoice()),
+                //   child: GridView.builder(
+                //       itemCount: orders.length,
+                //       gridDelegate:
+                //           const SliverGridDelegateWithFixedCrossAxisCount(
+                //               childAspectRatio: 1.200,
+                //               mainAxisSpacing: 8,
+                //               crossAxisSpacing: 12,
+                //               crossAxisCount: 2),
+                //       itemBuilder: ((context, index) =>
+                //           _buildGiftCard(orders[index]))),
+                // ),
+              ),
+              _remove
+                  ? Card(
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        //  margin: EdgeInsets.only(bottom: 100),
+                        child: Column(children: [
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 8),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'To Pickup List',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.remove,
+                                      color: Colors.grey[500],
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        setState(() {});
+                                        _remove = !_remove;
+                                      },
+                                      child: Icon(
+                                        Icons.cancel,
+                                        color: Colors.grey[500],
+                                      ),
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                          Divider(),
+                          ref.watch(requestServiceProvider).when(
+                              data: (requestList) {
+                            for (var i = 0; i < requestList.length; i++) {
+                              if (requestList[i].status == "Assigned") {
+                                setState(() {
+                                  assignCount += 1;
+                                });
+                              }
+                            }
+                            return requestList.isNotEmpty
+                                ? Container(
+                                    margin: EdgeInsets.symmetric(horizontal: 8),
+                                    height: MediaQuery.of(context).size.height *
+                                        0.13,
+                                    // color: Constants.gray,
+                                    child: ListView(
+                                      scrollDirection: Axis.horizontal,
+                                      children: [
+                                        DataTable(
+                                          headingRowColor:
+                                              MaterialStateProperty.all(
+                                                  Constants.gray),
+                                          dataRowColor:
+                                              MaterialStateProperty.all(
+                                                  Colors.white),
+                                          decoration: BoxDecoration(
+                                              //color: Colors.grey
+                                              ),
+                                          horizontalMargin: 8,
+                                          columnSpacing: 18,
+                                          border: TableBorder.all(
+                                              color: Colors.black12),
+                                          columns: [
+                                            DataColumn(
+                                                label: Center(
+                                              child: Text(
+                                                "#",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontSize:
+                                                      Constants.tDefaultSize,
+                                                ),
+                                              ),
+                                            )),
+                                            DataColumn(
+                                                label: Center(
+                                              child: Text(
+                                                "Assign Date",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontSize:
+                                                      Constants.tDefaultSize,
+                                                ),
+                                              ),
+                                            )),
+                                            DataColumn(
+                                                label: Text(
+                                              "Pickup Info",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize:
+                                                    Constants.tDefaultSize,
+                                              ),
+                                            )),
+                                            DataColumn(
+                                                label: Text(
+                                              "",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize:
+                                                    Constants.tDefaultSize,
+                                              ),
+                                            )),
+                                            DataColumn(
+                                                label: Text(
+                                              "",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize:
+                                                    Constants.tDefaultSize,
+                                              ),
+                                            )),
+                                            DataColumn(
+                                                label: Text(
+                                              "",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize:
+                                                    Constants.tDefaultSize,
+                                              ),
+                                            )),
+                                            DataColumn(
+                                                label: Text(
+                                              "Can Pickup Date",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize:
+                                                    Constants.tDefaultSize,
+                                              ),
+                                            )),
+                                            DataColumn(
+                                                label: Text(
+                                              "Ways",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize:
+                                                    Constants.tDefaultSize,
+                                              ),
+                                            )),
+                                            DataColumn(
+                                                label: Text(
+                                              "Status",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize:
+                                                    Constants.tDefaultSize,
+                                              ),
+                                            )),
+                                            DataColumn(
+                                                label: Text(
+                                              "Action",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize:
+                                                    Constants.tDefaultSize,
+                                              ),
+                                            )),
+                                          ],
+                                          //rows: orders!.map((order) {
+                                          rows: requestList.map((request) {
+                                            return DataRow(cells: [
+                                              DataCell(Container(
+                                                padding:
+                                                    EdgeInsets.only(left: 5),
+                                                //  color: Colors.white,
+                                                child: Text(
+                                                  // '1',
+                                                  request.id.toString(),
+                                                  style: TextStyle(
+                                                      fontSize:
+                                                          Constants.tSmallSize),
+                                                ),
+                                              )),
+                                              DataCell(Text(
+                                                //'21-08-2023 01:23 am',
+
+                                                request.assign_date!,
+                                              )),
+                                              DataCell(Text(
+                                                // 'Client Name',
+                                                request.name!,
+                                                style: TextStyle(
+                                                    fontSize:
+                                                        Constants.tSmallSize),
+                                              )),
+                                              DataCell(Text(
+                                                //'2023-08-21',
+                                                request.phone!,
+                                                style: TextStyle(
+                                                    fontSize:
+                                                        Constants.tSmallSize),
+                                              )),
+                                              DataCell(Text(
+                                                //'2',
+                                                request.address!,
+                                                style: TextStyle(
+                                                    fontSize:
+                                                        Constants.tSmallSize),
+                                              )),
+                                              DataCell(Text(
+                                                //'done',
+                                                request.township!,
+                                                style: TextStyle(
+                                                  fontSize:
+                                                      Constants.tSmallSize,
+                                                  // color: Constants.green
+                                                ),
+                                              )),
+                                              DataCell(Text(
+                                                //'done',
+                                                request.can_pickup_date!,
+                                                style: TextStyle(
+                                                  fontSize:
+                                                      Constants.tSmallSize,
+                                                  //  color: Constants.green
+                                                ),
+                                              )),
+                                              DataCell(request.no_of_way != null
+                                                  ? Text(
+                                                      //'done',
+                                                      request.no_of_way!,
+                                                      style: TextStyle(
+                                                        fontSize: Constants
+                                                            .tSmallSize,
+                                                        //color:Constants.green
+                                                      ),
+                                                    )
+                                                  : Container()),
+                                              DataCell(request.status != null
+                                                  ? Text(
+                                                      //'done',
+                                                      request.status!,
+                                                      style: TextStyle(
+                                                          fontSize: Constants
+                                                              .tSmallSize,
+                                                          color:
+                                                              Constants.blue),
+                                                    )
+                                                  : Container()),
+                                              DataCell(
+                                                  Center(
+                                                    child: Icon(
+                                                      Icons.message,
+                                                      color: Constants.blue,
+                                                    ),
+                                                  ), onTap: () {
+                                                // Get.to(() => OrderDetailScreen(
+                                                //       orderId: order.id!,
+                                                //       orderStatus: order.last_status!.name!,
+                                                //       order_id: order.orderId.toString(),
+                                                //     )
+                                                //     );
+                                              })
+                                            ]);
+                                          }).toList(),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : Container();
+                          }, error: (Object error, StackTrace stackTrace) {
+                            return ErrorScreen(
+                              aspectR: 1,
+                              iconSize: 100,
+                              textSize: 18,
+                              profile: true,
+                            );
+                          }, loading: () {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }),
+                          Divider(),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Text(
+                                'Footer',
+                                //textAlign: TextAlign.start,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          )
+                        ]),
+                      ),
+                    )
+                  : Container(),
+            ]),
+          );
+        }),
       ),
     );
   }
 
-  _buildGiftCard(Order order) {
+  _buildGiftCard(int id, String name, Color color) {
     return InkWell(
       onTap: () {
         // Get.to(() => DailyChoice());
       },
       child: Container(
-        // width: MediaQuery.of(context).size.height * 0.3,
-        // height: MediaQuery.of(context).size.height * 0.3,
+        width: MediaQuery.of(context).size.width * 0.4,
+        height: MediaQuery.of(context).size.height * 0.16,
         child: Card(
           elevation: 5,
           //shadowColor: Colors.transparent,
-          color: order.color,
+          //color: order.color,
+          color: color,
           // shadowColor: Colors.black,
           child: Container(
             padding: EdgeInsets.only(top: 15),
             child: Column(children: [
               Text(
-                order.id.toString(),
+                // order.id.toString(),
+                id.toString(),
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 28,
@@ -496,7 +695,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
               Text(
                 // '3D',
-                order.pickup,
+                // order.pickup,
+                name,
                 style: TextStyle(color: Colors.white, fontSize: 12),
               ),
               SizedBox(

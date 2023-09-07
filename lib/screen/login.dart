@@ -1,6 +1,6 @@
-import 'package:delivery_app/screen/appstart.dart';
+import 'package:delivery_app/appStart/appstart.dart';
 import 'package:delivery_app/screen/home.dart';
-import 'package:delivery_app/utils/constants.dart';
+import 'package:delivery_app/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -163,6 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     obscureText: _isObscured,
                                     controller: passwordController,
                                     focusNode: passwordFocusNode,
+                                    // autofocus: true,
                                     decoration: InputDecoration(
                                       labelText: "password",
                                       labelStyle: TextStyle(fontSize: 12),
@@ -271,8 +272,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                                     color: Constants.blue),
                                                 child:
                                                     CircularProgressIndicator(
-                                                        //strokeWidth: 2,
-                                                        ),
+                                                  color: Colors.white,
+                                                  //strokeWidth: 2,
+                                                ),
                                               )
                                             : GestureDetector(
                                                 onTap: () {
@@ -329,8 +331,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                                         setState(() {
                                                           isloading = false;
                                                         });
-                                                        Get.off(
-                                                            () => HomePage());
+                                                        Get.off(() =>
+                                                            AppStartScreen());
                                                       } else {
                                                         setState(() {
                                                           isloading = false;
@@ -341,8 +343,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                                           Get.snackbar(
                                                             "Alert",
                                                             "အကောင့်ဝင်ခြင်း မအောင်မြင်ပါ",
-                                                            backgroundColor: Colors
-                                                                .lightGreenAccent,
+                                                            backgroundColor:
+                                                                Colors
+                                                                    .redAccent,
                                                           );
                                                         });
                                                       }

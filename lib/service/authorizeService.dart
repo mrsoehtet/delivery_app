@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 
 import '../error/dioErrorException.dart';
 import '../httpServic/httpException.dart';
-import '../utils/api.dart';
+import '../utils/constants.dart';
 import '../utils/global.dart';
 
 final authServiceProvider = Provider<AuthService>(
@@ -33,7 +33,7 @@ class AuthService {
         'login_name': phone,
         'password': password,
       });
-      var response = await http.post(Uri.parse(API.loginUrl),
+      var response = await http.post(Uri.parse(APIURL.loginUrl),
           body: encodeJson, headers: Global.headers);
       var userData = jsonDecode(response.body);
       return userData;
@@ -49,7 +49,7 @@ class AuthService {
   }) async {
     try {
       final token = await SharedPref.getData(key: SharedPref.token);
-      final response = await _dio.post(API.passwordResetUrl,
+      final response = await _dio.post(APIURL.passwordResetUrl,
           options: Options(
             validateStatus: (_) => true,
             followRedirects: false,
@@ -78,7 +78,7 @@ class AuthService {
     required String state,
     required String township,
   }) async {
-    print(API.editProfile);
+    print(APIURL.editProfile);
     final token = await SharedPref.getData(key: SharedPref.token);
     try {
       var encodeJson = json.encode({
@@ -90,7 +90,7 @@ class AuthService {
         'township': township,
       });
       print(encodeJson);
-      var response = await http.post(Uri.parse(API.editProfile), body: {
+      var response = await http.post(Uri.parse(APIURL.editProfile), body: {
         'full_name': fullName,
         'login_name': loginName,
         'phone': phone,
@@ -113,7 +113,7 @@ class AuthService {
   }) async {
     try {
       final token = await SharedPref.getData(key: SharedPref.token);
-      final response = await _dio.post(API.forgetPassword,
+      final response = await _dio.post(APIURL.forgetPassword,
           options: Options(
             validateStatus: (_) => true,
             followRedirects: false,
@@ -137,7 +137,7 @@ class AuthService {
     required String phone,
   }) async {
     try {
-      final response = await _dio.post(API.checkToken,
+      final response = await _dio.post(APIURL.checkToken,
           options: Options(
             validateStatus: (_) => true,
             followRedirects: false,
@@ -164,7 +164,7 @@ class AuthService {
     });
     print(encodeJson);
     var response = await http.post(
-      Uri.parse(API.signUpFirstStepUrl),
+      Uri.parse(APIURL.signUpFirstStepUrl),
       body: {"phone": phone},
       headers: <String, String>{
         'Accept': 'application/json; charset=UTF-8',
@@ -183,7 +183,7 @@ class AuthService {
     });
     print(encodeJson);
     var response = await http.post(
-      Uri.parse(API.referralCodeCheck),
+      Uri.parse(APIURL.referralCodeCheck),
       body: {"referral_code": referralCode},
       headers: <String, String>{
         'Accept': 'application/json; charset=UTF-8',
@@ -201,7 +201,7 @@ class AuthService {
   }) async {
     try {
       final logintoken = await SharedPref.getData(key: SharedPref.token);
-      final response = await _dio.post(API.resetPassword,
+      final response = await _dio.post(APIURL.resetPassword,
           options: Options(
             validateStatus: (_) => true,
             followRedirects: false,

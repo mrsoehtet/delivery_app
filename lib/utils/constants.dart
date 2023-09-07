@@ -1,22 +1,48 @@
-import 'package:flutter/animation.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+import 'package:delivery_app/model/pickuped.dart';
+import 'package:http/http.dart' as http;
 
-class Constants {
-  static Color gray = const Color(0xffd2d6de);
-  static Color red = const Color(0xffa94442);
-  static Color blue = const Color(0xff3c8dbc);
-  static Color  profileBlue = const Color(0xff045079);
+class APIURL {
+  APIURL(_);
 
-  static Color realRed = const Color(0xffdd4b39);
-  static Color yellow = const Color(0xfff39c12);
-  static Color realBlue = const Color(0xff00c0ef);
-  static Color green = const Color(0xff00a65a);
+  static var client = http.Client();
 
-  static const int text1 = 16;
+  static const String mainUrl = "https://newbrdemo.icgwebdevelopment.com/api";
+  static const String mainUrlForUri = "newbrdemo.icgwebdevelopment.com";
 
-  static const kGradient = LinearGradient(colors: [
-    Color(0xffAf69Ef),
-    Color(0xffDE7CEB),
-  ], begin: Alignment.centerLeft, end: Alignment.centerRight);
+  static const String movieListUrl =
+      "$mainUrl/title/get-videos?tconst=tt0944947&limit=7&region=MM";
+  static const String adsListUrl = "$mainUrl/advertises";
+
+  //Contact
+  static const String contactUrl = "$mainUrl/contact";
+
+  //Joker App Play Store Link
+  static const String playStoreLink =
+      "https://play.google.com/store/apps/details?id=com.lucky.seven_mm";
+
+  //Auth
+  static const String loginUrl = "$mainUrl/apilogin";
+  static const String profileUrl = "$mainUrl/delimens/profile";
+  static const String passwordResetUrl = "$mainUrl/delimens/changepassword";
+  static const String logout = "$mainUrl/delimens/logout";
+  static const String editProfile = "$mainUrl/delimens/edit";
+  static const String pickupRequest = "$mainUrl/pickup_request";
+  static const String pickedup = "$mainUrl/pickedup";
+
+  static const String signUpUrl = "$mainUrl/register";
+  static const String signUpFirstStepUrl = "$mainUrl/create-login";
+  static const String referralCodeCheck = "$mainUrl/verify-token";
+  //Request, Forgot, Reset Password
+  // static const String passwordResetUrl = "$mainUrl/delimens/changepassword";
+  static const String forgetPassword = "$mainUrl/password/create";
+  static const String resetPassword = "$mainUrl/password/reset";
+  static const String checkToken = "$mainUrl/verify";
+  // static const String logout = "$mainUrl/delimens/logout";
+
+  //static List<PickupRequest> requests = [];
+  static List<PickedUp> pickups = [];
+
+  //Profile
+  // static const String profileUrl = "$mainUrl/delimens/profile";
+  // static const String editProfile = "$mainUrl/delimens/edit";
 }

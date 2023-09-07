@@ -4,7 +4,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 
-import '../utils/constants.dart';
+import '../utils/theme.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -402,7 +402,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: ElevatedButton(
                       style:
                           ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.to(() => LoginScreen());
+                      },
                       child: Text(
                         "Logout",
                         style: TextStyle(
@@ -682,6 +684,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                     ),
+                  ),
+                  SizedBox(
+                    height: 10,
                   ),
                   SizedBox(
                     height: 35,

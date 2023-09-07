@@ -1,29 +1,30 @@
-import 'package:delivery_app/screen/delivery.dart';
+import 'package:delivery_app/screen/deliveryScreen.dart';
 import 'package:delivery_app/screen/home.dart';
-import 'package:delivery_app/screen/pickup.dart';
 import 'package:delivery_app/screen/profile.dart';
 import 'package:delivery_app/screen/signout.dart';
-import 'package:delivery_app/utils/constants.dart';
+import 'package:delivery_app/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+import '../screen/pickup/PickupScreen.dart';
+
+class AppStartScreen extends StatefulWidget {
+  const AppStartScreen({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<AppStartScreen> createState() => _AppStartScreenState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _AppStartScreenState extends State<AppStartScreen> {
   int _selectedIndex = 0;
   final List<Widget> screen = [
     HomeScreen(),
     PickupScreen(),
     DeliveryScreen(),
     ProfileScreen(),
-    SignOutScreen()
+    // SignOutScreen()
   ];
   @override
   Widget build(BuildContext context) {
@@ -53,7 +54,7 @@ class _HomePageState extends State<HomePage> {
                 // text: "Home",
               ),
               GButton(
-                icon: Icons.notification_add_sharp,
+                icon: Icons.card_giftcard,
                 iconSize: 30,
                 // text: "History",
               ),
@@ -67,11 +68,11 @@ class _HomePageState extends State<HomePage> {
                 iconSize: 30,
                 // text: "Setting",
               ),
-              GButton(
-                icon: Icons.exit_to_app,
-                iconSize: 30,
-                // text: "Setting",
-              )
+              // GButton(
+              //   icon: Icons.exit_to_app,
+              //   iconSize: 30,
+              //   // text: "Setting",
+              // )
             ]),
       ),
     );
