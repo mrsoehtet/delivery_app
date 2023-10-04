@@ -1,4 +1,3 @@
-
 import 'package:delivery_app/controller/isLoginController.dart';
 import 'package:delivery_app/controller/naviController.dart';
 import 'package:delivery_app/utils/sharedPref.dart';
@@ -37,6 +36,9 @@ class ErrorScreen extends StatelessWidget {
           Text(
             "Something went wrong!",
             style: TextStyle(fontSize: textSize),
+          ),
+          SizedBox(
+            height: 7,
           ),
           profile
               ? InkWell(
@@ -99,8 +101,7 @@ class ErrorScreen extends StatelessWidget {
                                                   const BorderRadius.all(
                                                       Radius.circular(15.0)),
                                               border: Border.all(
-                                                  color:
-                                                      Color(0xFF8E24AA),
+                                                  color: Color(0xFF8E24AA),
                                                   width: 1)),
                                           child: Text(
                                             'Cancel'.tr,
@@ -161,12 +162,12 @@ class ErrorScreen extends StatelessWidget {
                     elevation: 5,
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.6,
-                      height: MediaQuery.of(context).size.height * 0.06,
+                      height: MediaQuery.of(context).size.height * 0.05,
                       alignment: Alignment.center,
                       child: Text(
                         "Logout".tr,
                         style: const TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
                             fontWeight: FontWeight.bold,
                             color: Colors.white),
                       ),

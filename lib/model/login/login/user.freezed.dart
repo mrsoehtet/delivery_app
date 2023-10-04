@@ -22,7 +22,7 @@ User _$UserFromJson(Map<String, dynamic> json) {
 mixin _$User {
   int? get id => throw _privateConstructorUsedError;
   String? get full_name => throw _privateConstructorUsedError;
-  String? get User_name => throw _privateConstructorUsedError;
+  String? get login_name => throw _privateConstructorUsedError;
   String? get password => throw _privateConstructorUsedError;
   String? get phone => throw _privateConstructorUsedError;
   String? get address => throw _privateConstructorUsedError;
@@ -46,7 +46,7 @@ abstract class $UserCopyWith<$Res> {
   $Res call(
       {int? id,
       String? full_name,
-      String? User_name,
+      String? login_name,
       String? password,
       String? phone,
       String? address,
@@ -73,7 +73,7 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
   $Res call({
     Object? id = freezed,
     Object? full_name = freezed,
-    Object? User_name = freezed,
+    Object? login_name = freezed,
     Object? password = freezed,
     Object? phone = freezed,
     Object? address = freezed,
@@ -93,9 +93,9 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
           ? _value.full_name
           : full_name // ignore: cast_nullable_to_non_nullable
               as String?,
-      User_name: freezed == User_name
-          ? _value.User_name
-          : User_name // ignore: cast_nullable_to_non_nullable
+      login_name: freezed == login_name
+          ? _value.login_name
+          : login_name // ignore: cast_nullable_to_non_nullable
               as String?,
       password: freezed == password
           ? _value.password
@@ -146,7 +146,7 @@ abstract class _$$_UserCopyWith<$Res> implements $UserCopyWith<$Res> {
   $Res call(
       {int? id,
       String? full_name,
-      String? User_name,
+      String? login_name,
       String? password,
       String? phone,
       String? address,
@@ -169,7 +169,7 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
   $Res call({
     Object? id = freezed,
     Object? full_name = freezed,
-    Object? User_name = freezed,
+    Object? login_name = freezed,
     Object? password = freezed,
     Object? phone = freezed,
     Object? address = freezed,
@@ -189,9 +189,9 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
           ? _value.full_name
           : full_name // ignore: cast_nullable_to_non_nullable
               as String?,
-      freezed == User_name
-          ? _value.User_name
-          : User_name // ignore: cast_nullable_to_non_nullable
+      freezed == login_name
+          ? _value.login_name
+          : login_name // ignore: cast_nullable_to_non_nullable
               as String?,
       freezed == password
           ? _value.password
@@ -239,7 +239,7 @@ class _$_User implements _User {
   const _$_User(
       this.id,
       this.full_name,
-      this.User_name,
+      this.login_name,
       this.password,
       this.phone,
       this.address,
@@ -257,7 +257,7 @@ class _$_User implements _User {
   @override
   final String? full_name;
   @override
-  final String? User_name;
+  final String? login_name;
   @override
   final String? password;
   @override
@@ -279,7 +279,7 @@ class _$_User implements _User {
 
   @override
   String toString() {
-    return 'User(id: $id, full_name: $full_name, User_name: $User_name, password: $password, phone: $phone, address: $address, state: $state, township: $township, zone: $zone, branch_id: $branch_id, created_at: $created_at, updated_at: $updated_at)';
+    return 'User(id: $id, full_name: $full_name, login_name: $login_name, password: $password, phone: $phone, address: $address, state: $state, township: $township, zone: $zone, branch_id: $branch_id, created_at: $created_at, updated_at: $updated_at)';
   }
 
   @override
@@ -290,8 +290,8 @@ class _$_User implements _User {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.full_name, full_name) ||
                 other.full_name == full_name) &&
-            (identical(other.User_name, User_name) ||
-                other.User_name == User_name) &&
+            (identical(other.login_name, login_name) ||
+                other.login_name == login_name) &&
             (identical(other.password, password) ||
                 other.password == password) &&
             (identical(other.phone, phone) || other.phone == phone) &&
@@ -314,7 +314,7 @@ class _$_User implements _User {
       runtimeType,
       id,
       full_name,
-      User_name,
+      login_name,
       password,
       phone,
       address,
@@ -343,7 +343,7 @@ abstract class _User implements User {
   const factory _User(
       final int? id,
       final String? full_name,
-      final String? User_name,
+      final String? login_name,
       final String? password,
       final String? phone,
       final String? address,
@@ -361,7 +361,7 @@ abstract class _User implements User {
   @override
   String? get full_name;
   @override
-  String? get User_name;
+  String? get login_name;
   @override
   String? get password;
   @override

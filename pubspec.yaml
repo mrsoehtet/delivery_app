@@ -57,6 +57,10 @@ dependencies:
   url_launcher: ^6.1.8
   intl: ^0.18.0
   freezed_annotation: ^2.2.0
+  collection: 
+  liquid_pull_to_refresh: ^3.0.1
+  
+
 
 dev_dependencies:
   flutter_test:

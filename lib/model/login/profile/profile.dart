@@ -7,9 +7,9 @@ part 'profile.g.dart';
 @freezed
 class Profile with _$Profile {
   const factory Profile(
-    String? status,
-    User? user,
-    String? token,
+    bool? status,
+    User? data,
+    String? message,
   ) = _Profile;
 
   factory Profile.fromJson(Map<String, dynamic> json) =>

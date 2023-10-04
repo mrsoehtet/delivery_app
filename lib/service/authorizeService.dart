@@ -1,11 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
-
-
 import 'package:delivery_app/utils/sharedPref.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import '../error/dioErrorException.dart';
@@ -42,6 +39,32 @@ class AuthService {
     }
   }
 
+  Future<dynamic> editPhone({
+    required String phone,
+  }) async {
+    try {
+      var encodeJson = json.encode({
+        'phone': phone,
+      });
+
+      final token = await SharedPref.getData(key: SharedPref.token);
+      var response = await http.post(
+        Uri.parse(APIURL.editProfile),
+        body: encodeJson,
+        headers: <String, String>{
+          'Accept': 'application/json; charset=UTF-8',
+          'Authorization': '$token',
+        },
+      );
+      var editPhone = jsonDecode(response.body);
+      return editPhone;
+    } on SocketException {
+      throw FetchDataException('No Internet connection');
+    }
+  }
+
+
+
   Future<dynamic> changePassword({
     required String old_password,
     required String new_password,
@@ -71,36 +94,37 @@ class AuthService {
   }
 
   Future<dynamic> update({
-    required String fullName,
-    required String loginName,
+    // required String fullName,
+    // required String loginName,
     required String phone,
-    required String address,
-    required String state,
-    required String township,
+    // required String address,
+    // required String state,
+    // required String township,
   }) async {
     print(APIURL.editProfile);
     final token = await SharedPref.getData(key: SharedPref.token);
     try {
       var encodeJson = json.encode({
-        'full_name': fullName,
-        'login_name': loginName,
+        // 'full_name': fullName,
+        // 'login_name': loginName,
         'phone': phone,
-        'address': address,
-        'state': state,
-        'township': township,
+        // 'address': address,
+        // 'state': state,
+        // 'township': township,
       });
       print(encodeJson);
       var response = await http.post(Uri.parse(APIURL.editProfile), body: {
-        'full_name': fullName,
-        'login_name': loginName,
+        // 'full_name': fullName,
+        // 'login_name': loginName,
         'phone': phone,
-        'address': address,
-        'state': state,
-        'township': township,
+        // 'address': address,
+        // 'state': state,
+        // 'township': township,
       }, headers: <String, String>{
         'Accept': 'application/json; charset=UTF-8',
         'Authorization': '$token',
-      });
+      }
+      );
       var userData = jsonDecode(response.body);
       return userData;
     } on SocketException {

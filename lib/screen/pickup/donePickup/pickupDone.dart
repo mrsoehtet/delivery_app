@@ -1,17 +1,22 @@
-import 'package:delivery_app/screen/pickup/donePickup/pickupDoneDetail.dart';
-import 'package:delivery_app/screen/pickup/process/pickupProcessDetails.dart';
+import 'package:delivery_app/model/pickupDone/done/donePickup.dart';
 import 'package:delivery_app/screen/profile.dart';
+import 'package:delivery_app/service/pickupDoneSevice.dart';
+import 'package:delivery_app/service/pickupRequestService.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../controller/getController.dart';
 import '../../../utils/theme.dart';
 import '../../login.dart';
 
 class PickupDoneList extends StatefulWidget {
-  const PickupDoneList({super.key});
+  PickupDoneList({super.key});
+//  List<DonePickup> _dataRows = [];
 
   @override
   State<PickupDoneList> createState() => _PickupDoneListState();
@@ -19,6 +24,8 @@ class PickupDoneList extends StatefulWidget {
 
 class _PickupDoneListState extends State<PickupDoneList> {
   var orders = Get.find<OrderController>().orders;
+  List<DonePickup> _dataRows = [];
+
   TextEditingController countController = TextEditingController();
   FocusNode countFocusNode = FocusNode();
   List<String> items = ["30", "50", "100", "All"];
@@ -28,8 +35,45 @@ class _PickupDoneListState extends State<PickupDoneList> {
   @override
   void initState() {
     _remove = true;
+    //_loadData();
+
     super.initState();
   }
+
+//   void _refreshData() {
+//   setState(() {
+//     _dataRows.clear(); // Clear the existing data
+//     // Load new data or update _dataRows with refreshed data
+//     _loadData();
+//   });
+// }
+
+// void _loadData() async {
+//     // Fetch data from your API and update _dataRows
+//     final newData = await fetchDataFromApi();
+//     setState(() {
+//       _dataRows = newData.map((item) {
+//         return DataRow(
+//           cells: [
+//             DataCell(Text(item['item'])),
+//             DataCell(Text(item['value'])),
+//           ],
+//         );
+//       }).cast<DonePickup>().toList();
+//     });
+//   }
+
+//    Future<List<DonePickup?>> fetchDataFromApi() async {
+//     // Simulated API data for demonstration
+//     await Future.delayed(Duration(seconds: 2)); // Simulate API delay
+//     return
+//      [
+//      // {}
+//       {'item': 'Item 1', 'value': 'Value 1'},
+//       {'item': 'Item 2', 'value': 'Value 2'},
+//       // Add more data fetched from your API
+//     ];
+//   }
 
   @override
   Widget build(BuildContext context) {
@@ -247,435 +291,469 @@ class _PickupDoneListState extends State<PickupDoneList> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-          child: Container(
-        margin: EdgeInsets.all(16),
-        child: Column(children: [
-          Row(
-            children: [
-              Text(
-                "Delimen",
-                style: TextStyle(
-                  fontSize: 20,
-                  // color: Colors.white,
-                ),
+      body: SingleChildScrollView(child: Consumer(
+        builder: ((context, ref, child) {
+          //  final pickup = ref.watch(requestServiceProvider);
+          return Container(
+            margin: EdgeInsets.all(16),
+            child: Column(children: [
+              Row(
+                children: [
+                  Text(
+                    "Delimen",
+                    style: TextStyle(
+                      fontSize: 20,
+                      // color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    "Pickup Done",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
               ),
               SizedBox(
-                width: 10,
+                height: 10,
               ),
-              Text(
-                "Pickup Done",
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey,
-                ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                // width: MediaQuery.of(context).size.width * 0.95,
+                height: 30,
+                decoration: BoxDecoration(color: Constants.gray),
+                child: Row(children: [
+                  Icon(Icons.dashboard),
+                  Text(
+                    ' Home > ',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                  Text(
+                    ' Delimen >',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                  Text(
+                    ' Pickup Done',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                ]),
               ),
-            ],
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            // width: MediaQuery.of(context).size.width * 0.95,
-            height: 30,
-            decoration: BoxDecoration(color: Constants.gray),
-            child: Row(children: [
-              Icon(Icons.dashboard),
-              Text(
-                ' Home > ',
-                style: TextStyle(fontSize: 12),
+              SizedBox(
+                height: 16,
               ),
-              Text(
-                ' Delimen >',
-                style: TextStyle(fontSize: 12),
-              ),
-              Text(
-                ' Pickup Done',
-                style: TextStyle(fontSize: 12),
-              ),
-            ]),
-          ),
-          SizedBox(
-            height: 16,
-          ),
-          _remove
-              ? Card(
-                  child: Container(
-                    width: double.infinity,
-                    // height: MediaQuery.of(context).size.height * 0.5,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    //  margin: EdgeInsets.only(bottom: 100),
-                    child: Column(children: [
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 8),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Pickup Done List',
-                              style: TextStyle(
-                                  fontSize: 16, color: Constants.green),
-                            ),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.remove,
-                                  color: Colors.grey[500],
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      _remove = !_remove;
-                                    });
-                                  },
-                                  child: Icon(
-                                    Icons.cancel,
-                                    color: Colors.grey[500],
-                                  ),
-                                )
-                              ],
-                            )
-                          ],
+              _remove
+                  ? Card(
+                      child: Container(
+                        width: double.infinity,
+                        // height: MediaQuery.of(context).size.height * 0.5,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5),
                         ),
-                      ),
-                      Divider(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Show',
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
+                        //  margin: EdgeInsets.only(bottom: 100),
+                        child: Column(children: [
                           SizedBox(
-                            width: 5,
+                            height: 10,
                           ),
                           Container(
-                            width: MediaQuery.of(context).size.width * 0.27,
-                            height: 35,
-                            margin: EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey)),
-                            padding: EdgeInsets.symmetric(horizontal: 7),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                value: value,
-                                isExpanded: true,
-                                items: items.map(buildMenuItem).toList(),
-                                onChanged: (value) =>
-                                    setState(() => this.value = value),
-                              ),
-                            )
-
-                            // value: selecttownshipDetailPick,
-
-                            ,
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            'entries',
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                          )
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Search:',
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 3,
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.height * 0.2,
-                            height: 35,
-                            child: TextFormField(
-                              controller: countController,
-                              focusNode: countFocusNode,
-                              decoration: InputDecoration(
-                                // labelText: "user name",
-                                labelStyle: TextStyle(fontSize: 12),
-                                //  suffixIcon: Icon(Icons.person),
-                                fillColor: Colors.white,
-                                focusedBorder: OutlineInputBorder(
-                                  //  borderRadius: BorderRadius.circular(10.0),
-                                  borderSide: BorderSide(
-                                    color: Colors.black12,
-                                  ),
+                            margin: EdgeInsets.symmetric(horizontal: 8),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Order Done List',
+                                  style: TextStyle(
+                                      fontSize: 16, color: Constants.green),
                                 ),
-                                enabledBorder: OutlineInputBorder(
-                                  // borderRadius: BorderRadius.circular(10.0),
-                                  borderSide: BorderSide(
-                                    color: Colors.grey,
-                                    // width: 2.0,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.31,
-                        margin: EdgeInsets.symmetric(horizontal: 8),
-                        // color: Constants.gray,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: [
-                            DataTable(
-                              headingRowColor:
-                                  MaterialStateProperty.all(Constants.gray),
-                              dataRowColor:
-                                  MaterialStateProperty.all(Colors.white),
-                              decoration: BoxDecoration(
-                                  //color: Colors.grey
-                                  ),
-                              horizontalMargin: 8,
-                              columnSpacing: 18,
-                              border: TableBorder.all(color: Colors.black12),
-                              columns: [
-                                DataColumn(
-                                    label: Text(
-                                  "#",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                  ),
-                                )),
-                                DataColumn(
-                                    label: Text(
-                                  "Pickup Date",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: Constants.tDefaultSize,
-                                  ),
-                                )),
-                                DataColumn(
-                                    label: Text(
-                                  "Track Code",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                  ),
-                                )),
-                                DataColumn(
-                                    label: Text(
-                                  "Pickup Info",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: Constants.tDefaultSize,
-                                  ),
-                                )),
-                                DataColumn(
-                                    label: Text(
-                                  "",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: Constants.tDefaultSize,
-                                  ),
-                                )),
-                                DataColumn(
-                                    label: Text(
-                                  "",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: Constants.tDefaultSize,
-                                  ),
-                                )),
-                                DataColumn(
-                                    label: Text(
-                                  "",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: Constants.tDefaultSize,
-                                  ),
-                                )),
-                                DataColumn(
-                                    label: Text(
-                                  "",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: Constants.tDefaultSize,
-                                  ),
-                                )),
-                                DataColumn(
-                                    label: Text(
-                                  "Status",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: Constants.tDefaultSize,
-                                  ),
-                                )),
-                                DataColumn(
-                                    label: Text(
-                                  "Action",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: Constants.tDefaultSize,
-                                  ),
-                                )),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.remove,
+                                      color: Colors.grey[500],
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    InkWell(
+                                      onTap: (() {
+                                        setState(() {
+                                          _remove = !_remove;
+                                        });
+                                      }),
+                                      child: Icon(
+                                        Icons.cancel,
+                                        color: Colors.grey[500],
+                                      ),
+                                    )
+                                  ],
+                                )
                               ],
-                              rows: orders!.map((order) {
-                                return DataRow(cells: [
-                                  DataCell(Container(
-                                    padding: EdgeInsets.only(left: 5),
-                                    //  color: Colors.white,
+                            ),
+                          ),
+                          Divider(),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.center,
+                          //   children: [
+                          //     Text(
+                          //       'Show',
+                          //       style: TextStyle(
+                          //         fontSize: 14,
+                          //       ),
+                          //     ),
+                          //     SizedBox(
+                          //       width: 5,
+                          //     ),
+                          //     Container(
+                          //       width: MediaQuery.of(context).size.width * 0.27,
+                          //       height: 35,
+                          //       margin: EdgeInsets.all(16),
+                          //       decoration: BoxDecoration(
+                          //           border: Border.all(color: Colors.grey)),
+                          //       padding: EdgeInsets.symmetric(horizontal: 7),
+                          //       child: DropdownButtonHideUnderline(
+                          //         child: DropdownButton<String>(
+                          //           value: value,
+                          //           isExpanded: true,
+                          //           items: items.map(buildMenuItem).toList(),
+                          //           onChanged: (value) =>
+                          //               setState(() => this.value = value),
+                          //         ),
+                          //       ),
+
+                          //       // value: selecttownshipDetailPick,
+                          //     ),
+                          //     SizedBox(
+                          //       width: 5,
+                          //     ),
+                          //     Text(
+                          //       'entries',
+                          //       style: TextStyle(
+                          //         fontSize: 14,
+                          //       ),
+                          //     )
+                          //   ],
+                          // ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Search:',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 3,
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.height * 0.2,
+                                height: 35,
+                                child: TextFormField(
+                                  controller: countController,
+                                  focusNode: countFocusNode,
+                                  decoration: InputDecoration(
+                                    // labelText: "user name",
+                                    labelStyle: TextStyle(fontSize: 12),
+                                    //  suffixIcon: Icon(Icons.person),
+                                    fillColor: Colors.white,
+                                    focusedBorder: OutlineInputBorder(
+                                      //  borderRadius: BorderRadius.circular(10.0),
+                                      borderSide: BorderSide(
+                                        color: Colors.black12,
+                                      ),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      // borderRadius: BorderRadius.circular(10.0),
+                                      borderSide: BorderSide(
+                                        color: Colors.grey,
+                                        //  width: 2.0,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          ref.watch(donePickupServiceProvider).when(
+                              data: (donePickupList) {
+                            return Container(
+                              height: MediaQuery.of(context).size.height * 0.45,
+                              margin: EdgeInsets.symmetric(horizontal: 8),
+                              // color: Constants.gray,
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.vertical,
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: DataTable(
+                                    headingRowColor: MaterialStateProperty.all(
+                                        Constants.gray),
+                                    dataRowColor:
+                                        MaterialStateProperty.all(Colors.white),
+                                    decoration: BoxDecoration(
+                                        //color: Colors.grey
+                                        ),
+                                    horizontalMargin: 8,
+                                    columnSpacing: 18,
+                                    border:
+                                        TableBorder.all(color: Colors.black12),
+                                    columns: [
+                                      DataColumn(
+                                          label: Text(
+                                        "#",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: Constants.tDefaultSize,
+                                        ),
+                                      )),
+                                      DataColumn(
+                                          label: Text(
+                                        "Pickup Date",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: Constants.tDefaultSize,
+                                        ),
+                                      )),
+                                      DataColumn(
+                                          label: Text(
+                                        "Track Code",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: Constants.tDefaultSize,
+                                        ),
+                                      )),
+                                      DataColumn(
+                                          label: Text(
+                                        "Pickup Info",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: Constants.tDefaultSize,
+                                        ),
+                                      )),
+                                      DataColumn(
+                                          label: Text(
+                                        "",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: Constants.tDefaultSize,
+                                        ),
+                                      )),
+                                      DataColumn(
+                                          label: Text(
+                                        "",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: Constants.tDefaultSize,
+                                        ),
+                                      )),
+                                      DataColumn(
+                                          label: Text(
+                                        "",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: Constants.tDefaultSize,
+                                        ),
+                                      )),
+                                      DataColumn(
+                                          label: Text(
+                                        "",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: Constants.tDefaultSize,
+                                        ),
+                                      )),
+                                      DataColumn(
+                                          label: Text(
+                                        "Status",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: Constants.tDefaultSize,
+                                        ),
+                                      )),
+                                      DataColumn(
+                                          label: Text(
+                                        "Action",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: Constants.tDefaultSize,
+                                        ),
+                                      )),
+                                    ],
+                                    // rows:_dataRows;
+                                    rows: donePickupList.map((donePickup) {
+                                      String apiDateString =
+                                          "${donePickup!.picked_up_date_time!}"; // Replace this with your API date
+                                      DateTime apiDate =
+                                          DateTime.parse(apiDateString);
+                                      String formattedDate =
+                                          DateFormat('dd-MM-yyyy a')
+                                              .format(apiDate);
+                                      print(formattedDate);
+                                      //rows: orders!.map((order) {
+                                      return DataRow(cells: [
+                                        DataCell(Container(
+                                          padding: EdgeInsets.only(left: 5),
+                                          //  color: Colors.white,
+                                          child: Text(
+                                            // '1',
+                                            donePickup!.id.toString(),
+                                            // OrderController.requests.id??'',
+                                            style: TextStyle(
+                                                fontSize: Constants.tSmallSize),
+                                          ),
+                                        )),
+                                        DataCell(Text(
+                                          //'21-08-2023 01:23 am',
+                                          "$formattedDate",
+                                          style: TextStyle(
+                                              fontSize: Constants.tSmallSize),
+                                        )),
+                                        DataCell(Text(
+                                          // '11-230020',
+                                          donePickup.order_code!,
+                                          style: TextStyle(
+                                              fontSize: Constants.tSmallSize),
+                                        )),
+                                        DataCell(Text(
+                                          //'Client Name',
+                                          donePickup.from_name!,
+                                          style: TextStyle(
+                                              fontSize: Constants.tSmallSize),
+                                        )),
+                                        DataCell(Text(
+                                          // '09964483525',
+                                          donePickup.from_phone!,
+                                          style: TextStyle(
+                                              fontSize: Constants.tSmallSize),
+                                        )),
+                                        DataCell(Text(
+                                          // 'South Okkalapa',
+                                          donePickup.from_addres!,
+                                          style: TextStyle(
+                                              fontSize: Constants.tSmallSize),
+                                        )),
+                                        DataCell(Text(
+                                          // 'Dagon',
+                                          donePickup.from_township!,
+                                          style: TextStyle(
+                                              fontSize: Constants.tSmallSize),
+                                        )),
+                                        DataCell(Text(
+                                          'Yangon',
+                                          style: TextStyle(
+                                              fontSize: Constants.tSmallSize),
+                                        )),
+                                        DataCell(donePickup.status != null
+                                            ? Text(
+                                                'Done',
+                                                //process.status!,
+                                                style: TextStyle(
+                                                    color: Constants.green,
+                                                    fontSize:
+                                                        Constants.tSmallSize),
+                                              )
+                                            : Text('')),
+                                        DataCell(
+                                            Center(
+                                              child: Icon(
+                                                Icons.message,
+                                                color: Constants.blue,
+                                              ),
+                                            ), onTap: () {
+                                          //  Get.to(() => PickupDoneListDetail());
+                                          //       orderId: order.id!,
+                                          //       orderStatus: order.last_status!.name!,
+                                          //       order_id: order.orderId.toString(),
+                                          //     )
+                                          //     );
+                                        })
+                                      ]);
+                                    }).toList(),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }, error: (Object error, StackTrace stackTrace) {
+                            return Text('$error');
+                          }, loading: () {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          // Text(
+                          //   'Showing 1 to 2 of 2 entries',
+                          //   style: TextStyle(fontSize: 14),
+                          // ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Container(
+                            height: MediaQuery.of(context).size.height * 0.04,
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 3,
+                            ),
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black12)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Container(
+                                  child: Text(
+                                    'Previous',
+                                    style: TextStyle(
+                                        fontSize: 12, color: Colors.black54),
+                                  ),
+                                ),
+                                Container(
+                                  width: 30,
+                                  color: Constants.blue,
+                                  child: Center(
                                     child: Text(
                                       '1',
                                       style: TextStyle(
-                                          fontSize: Constants.tSmallSize),
+                                          fontSize: 12, color: Colors.white),
                                     ),
-                                  )),
-                                  DataCell(Text(
-                                    '21-08-2023 01:23 am',
-                                    style: TextStyle(
-                                        fontSize: Constants.tSmallSize),
-                                  )),
-                                  DataCell(Text(
-                                    '11-230020',
-                                    style: TextStyle(
-                                        fontSize: Constants.tSmallSize),
-                                  )),
-                                  DataCell(Text(
-                                    'Client Name',
-                                    style: TextStyle(
-                                        fontSize: Constants.tSmallSize),
-                                  )),
-                                  DataCell(Text(
-                                    '09964483525',
-                                    style: TextStyle(
-                                        fontSize: Constants.tSmallSize),
-                                  )),
-                                  DataCell(Text(
-                                    'South Okkalapa',
-                                    style: TextStyle(
-                                        fontSize: Constants.tSmallSize),
-                                  )),
-                                  DataCell(Text(
-                                    'Dagon',
-                                    style: TextStyle(
-                                        fontSize: Constants.tSmallSize),
-                                  )),
-                                  DataCell(Text(
-                                    'Yangon',
-                                    style: TextStyle(
-                                        fontSize: Constants.tSmallSize),
-                                  )),
-                                  DataCell(Text(
-                                    'done',
-                                    style: TextStyle(
-                                        color: Constants.green,
-                                        fontSize: Constants.tSmallSize),
-                                  )),
-                                  DataCell(
-                                      Center(
-                                        child: Icon(
-                                          Icons.message,
-                                          color: Constants.blue,
-                                        ),
-                                      ), onTap: () {
-                                    Get.to(() => PickupDoneDetail());
-                                    // Get.to(() => OrderDetailScreen(
-                                    //       orderId: order.id!,
-                                    //       orderStatus: order.last_status!.name!,
-                                    //       order_id: order.orderId.toString(),
-                                    //     )
-                                    //     );
-                                  })
-                                ]);
-                              }).toList(),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Text(
-                        'Showing 1 to 2 of 2 entries',
-                        style: TextStyle(fontSize: 14),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.04,
-                        width: MediaQuery.of(context).size.width * 0.4,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 3,
-                        ),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black12)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Container(
-                              child: Text(
-                                'Previous',
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.black54),
-                              ),
-                            ),
-                            Container(
-                              width: 30,
-                              color: Constants.blue,
-                              child: Center(
-                                child: Text(
-                                  '1',
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.white),
+                                  ),
                                 ),
+                                Text(
+                                  'Next',
+                                  style: TextStyle(
+                                      fontSize: 12, color: Colors.black54),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Divider(),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Text(
+                                'Footer',
+                                //textAlign: TextAlign.start,
                               ),
                             ),
-                            Text(
-                              'Next',
-                              style: TextStyle(
-                                  fontSize: 12, color: Colors.black54),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Divider(),
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: Text(
-                            'Footer',
-                            //textAlign: TextAlign.start,
                           ),
-                        ),
+                          SizedBox(
+                            height: 10,
+                          )
+                        ]),
                       ),
-                      SizedBox(
-                        height: 10,
-                      )
-                    ]),
-                  ),
-                )
-              : Container(),
-        ]),
+                    )
+                  : Container(),
+            ]),
+          );
+        }),
       )),
     );
   }

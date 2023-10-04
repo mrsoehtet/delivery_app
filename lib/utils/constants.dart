@@ -26,8 +26,18 @@ class APIURL {
   static const String passwordResetUrl = "$mainUrl/delimens/changepassword";
   static const String logout = "$mainUrl/delimens/logout";
   static const String editProfile = "$mainUrl/delimens/edit";
+  static const String addWayWithPhoto = "$mainUrl/addway_with_photo";
+  static const String addWithQRCode = "$mainUrl/add_way_qr";
+  static const String donePickup = "$mainUrl/pickup";
+  static const String updateAvatar = "$mainUrl/update_avatar";
+  static const String getProfile = "$mainUrl/delimens/profile";
+  static const String changePassword = "$mainUrl/delimens/changepassword";
   static const String pickupRequest = "$mainUrl/pickup_request";
+  static const String pickupProcess = "$mainUrl/pickup_process";
+  static const String pickupDone = "$mainUrl/pickup_done";
   static const String pickedup = "$mainUrl/pickedup";
+  static const String pickup_ways = "$mainUrl/pickup_ways";
+  static const String delete_ways = "$mainUrl/delete_way";
 
   static const String signUpUrl = "$mainUrl/register";
   static const String signUpFirstStepUrl = "$mainUrl/create-login";

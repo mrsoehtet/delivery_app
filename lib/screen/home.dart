@@ -8,9 +8,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
-
 import '../controller/getController.dart';
-import '../model/order.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -43,11 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         centerTitle: true,
         backgroundColor: Constants.blue,
-        leading: IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.menu,
-            )),
+        leading: Text(''),
         actions: [
           IconButton(
               onPressed: () {
@@ -116,123 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
               )),
           InkWell(
             onTap: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return StatefulBuilder(
-                      builder: (BuildContext context, StateSetter setState) {
-                    return Container(
-                      height: MediaQuery.of(context).size.height * 0.2,
-                      child: AlertDialog(
-                        contentPadding: EdgeInsets.zero,
-                        titleTextStyle:
-                            const TextStyle(fontSize: 14, color: Colors.black),
-                        content: Container(
-                          color: Constants.blue,
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height * 0.25,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 20),
-                          child: Column(
-                            //  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Container(
-                                //  margin: EdgeInsets.symmetric(horizontal: 5),
-                                padding: EdgeInsets.only(right: 10),
-                                child: CircleAvatar(
-                                  radius: 37,
-                                  backgroundColor: Colors.white24,
-                                  child: CircleAvatar(
-                                    maxRadius: 35,
-                                    backgroundColor: Colors.black45,
-                                    child: Icon(
-                                      Icons.person,
-                                      size: 55,
-                                      color: Colors.white54,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 15, right: 15),
-                                child: Text(
-                                  "aung naing",
-                                  style: const TextStyle(
-                                      fontSize: 12, color: Colors.white70),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 3,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 15, right: 15),
-                                child: Text(
-                                  "Delivery Men",
-                                  style: const TextStyle(
-                                      fontSize: 12, color: Colors.white70),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 3,
-                              ),
-                              Center(
-                                  child: Text(
-                                'Delivery Management System',
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.white70),
-                              )),
-                            ],
-                          ),
-                        ),
-                        actions: [
-                          Container(
-                            // color: Colors.black12,
-                            padding: EdgeInsets.only(left: 8),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                OutlinedButton(
-                                  // style: TextButton.styleFrom(
-                                  //     padding: const EdgeInsets.only(left: 70)),
-                                  onPressed: () {
-                                    Get.to(ProfileScreen());
-                                  },
-                                  child: Center(
-                                    child: const Text(
-                                      "Profile",
-                                      style: TextStyle(
-                                          color: Colors.black54, fontSize: 12),
-                                    ),
-                                  ),
-                                ),
-                                OutlinedButton(
-                                  // style: TextButton.styleFrom(
-                                  //     padding: const EdgeInsets.only(left: 30)),
-                                  onPressed: () {
-                                    Get.to(() => LoginScreen());
-                                    // Get.back();
-                                  },
-                                  child: Center(
-                                    child: const Text("Sign out",
-                                        style: TextStyle(
-                                            color: Colors.black54,
-                                            fontSize: 12)),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    );
-                  });
-                },
-              );
+              Get.to(() => ProfileScreen());
             },
             child: Container(
               padding: EdgeInsets.only(right: 10),
@@ -396,7 +274,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ref.watch(requestServiceProvider).when(
                               data: (requestList) {
                             for (var i = 0; i < requestList.length; i++) {
-                              if (requestList[i].status == "Assigned") {
+                              if (requestList[i]!.status == "Assigned") {
                                 setState(() {
                                   assignCount += 1;
                                 });
@@ -406,12 +284,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ? Container(
                                     margin: EdgeInsets.symmetric(horizontal: 8),
                                     height: MediaQuery.of(context).size.height *
-                                        0.13,
+                                        0.25,
                                     // color: Constants.gray,
-                                    child: ListView(
-                                      scrollDirection: Axis.horizontal,
-                                      children: [
-                                        DataTable(
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.vertical,
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: DataTable(
                                           headingRowColor:
                                               MaterialStateProperty.all(
                                                   Constants.gray),
@@ -523,14 +402,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ],
                                           //rows: orders!.map((order) {
                                           rows: requestList.map((request) {
-                                            return DataRow(cells: [
+                                            return
+                                                // request!.status == null?
+                                                DataRow(cells: [
                                               DataCell(Container(
                                                 padding:
                                                     EdgeInsets.only(left: 5),
                                                 //  color: Colors.white,
                                                 child: Text(
                                                   // '1',
-                                                  request.id.toString(),
+                                                  request!.id.toString(),
                                                   style: TextStyle(
                                                       fontSize:
                                                           Constants.tSmallSize),
@@ -540,31 +421,34 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 //'21-08-2023 01:23 am',
 
                                                 request.assign_date!,
+                                                style: TextStyle(
+                                                    fontSize:
+                                                        Constants.tSmallSize),
                                               )),
                                               DataCell(Text(
                                                 // 'Client Name',
-                                                request.name!,
+                                                request!.name!,
                                                 style: TextStyle(
                                                     fontSize:
                                                         Constants.tSmallSize),
                                               )),
                                               DataCell(Text(
                                                 //'2023-08-21',
-                                                request.phone!,
+                                                request!.phone!,
                                                 style: TextStyle(
                                                     fontSize:
                                                         Constants.tSmallSize),
                                               )),
                                               DataCell(Text(
                                                 //'2',
-                                                request.address!,
+                                                request!.address!,
                                                 style: TextStyle(
                                                     fontSize:
                                                         Constants.tSmallSize),
                                               )),
                                               DataCell(Text(
                                                 //'done',
-                                                request.township!,
+                                                request!.township!,
                                                 style: TextStyle(
                                                   fontSize:
                                                       Constants.tSmallSize,
@@ -573,24 +457,25 @@ class _HomeScreenState extends State<HomeScreen> {
                                               )),
                                               DataCell(Text(
                                                 //'done',
-                                                request.can_pickup_date!,
+                                                request!.can_pickup_date!,
                                                 style: TextStyle(
                                                   fontSize:
                                                       Constants.tSmallSize,
                                                   //  color: Constants.green
                                                 ),
                                               )),
-                                              DataCell(request.no_of_way != null
-                                                  ? Text(
-                                                      //'done',
-                                                      request.no_of_way!,
-                                                      style: TextStyle(
-                                                        fontSize: Constants
-                                                            .tSmallSize,
-                                                        //color:Constants.green
-                                                      ),
-                                                    )
-                                                  : Container()),
+                                              DataCell(
+                                                  request!.no_of_way != null
+                                                      ? Text(
+                                                          //'done',
+                                                          request.no_of_way!,
+                                                          style: TextStyle(
+                                                            fontSize: Constants
+                                                                .tSmallSize,
+                                                            //color:Constants.green
+                                                          ),
+                                                        )
+                                                      : Container()),
                                               DataCell(request.status != null
                                                   ? Text(
                                                       //'done',
@@ -601,7 +486,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           color:
                                                               Constants.blue),
                                                     )
-                                                  : Container()),
+                                                  : Text(
+                                                      'Assigned',
+                                                      style: TextStyle(
+                                                          fontSize: Constants
+                                                              .tSmallSize,
+                                                          color:
+                                                              Constants.blue),
+                                                    )),
                                               DataCell(
                                                   Center(
                                                     child: Icon(
@@ -617,9 +509,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 //     );
                                               })
                                             ]);
+                                            // : DataRow(cells: [
+                                            //     DataCell(Text('')),
+                                            //     DataCell(Text('')),
+                                            //     DataCell(Text('')),
+                                            //     DataCell(Text('')),
+                                            //     DataCell(Text('')),
+                                            //     DataCell(Text('')),
+                                            //     DataCell(Text('')),
+                                            //     DataCell(Text('')),
+                                            //     DataCell(Text('')),
+                                            //     DataCell(Text('')),
+                                            //   ]);
                                           }).toList(),
                                         ),
-                                      ],
+                                      ),
                                     ),
                                   )
                                 : Container();

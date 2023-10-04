@@ -1,13 +1,11 @@
 import 'package:delivery_app/screen/deliveryScreen.dart';
 import 'package:delivery_app/screen/home.dart';
 import 'package:delivery_app/screen/profile.dart';
-import 'package:delivery_app/screen/signout.dart';
 import 'package:delivery_app/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-
 import '../screen/pickup/PickupScreen.dart';
 
 class AppStartScreen extends StatefulWidget {
@@ -28,6 +26,7 @@ class _AppStartScreenState extends State<AppStartScreen> {
   ];
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: Center(
         child: screen.elementAt(_selectedIndex),

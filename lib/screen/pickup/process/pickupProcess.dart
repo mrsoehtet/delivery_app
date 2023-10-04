@@ -1,5 +1,6 @@
 import 'package:delivery_app/screen/pickup/process/pickupProcessDetails.dart';
 import 'package:delivery_app/screen/profile.dart';
+import 'package:delivery_app/service/pickupProcessService.dart';
 import 'package:delivery_app/service/pickupRequestService.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../controller/getController.dart';
 import '../../../utils/theme.dart';
@@ -355,50 +357,48 @@ class _PickupProcessState extends State<PickupProcess> {
                             ),
                           ),
                           Divider(),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Show',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Container(
-                                width: MediaQuery.of(context).size.width * 0.27,
-                                height: 35,
-                                margin: EdgeInsets.all(16),
-                                decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey)),
-                                padding: EdgeInsets.symmetric(horizontal: 7),
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton<String>(
-                                    value: value,
-                                    isExpanded: true,
-                                    items: items.map(buildMenuItem).toList(),
-                                    onChanged: (value) =>
-                                        setState(() => this.value = value),
-                                  ),
-                                )
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.center,
+                          //   children: [
+                          //     Text(
+                          //       'Show',
+                          //       style: TextStyle(
+                          //         fontSize: 14,
+                          //       ),
+                          //     ),
+                          //     SizedBox(
+                          //       width: 5,
+                          //     ),
+                          //     Container(
+                          //       width: MediaQuery.of(context).size.width * 0.27,
+                          //       height: 35,
+                          //       margin: EdgeInsets.all(16),
+                          //       decoration: BoxDecoration(
+                          //           border: Border.all(color: Colors.grey)),
+                          //       padding: EdgeInsets.symmetric(horizontal: 7),
+                          //       child: DropdownButtonHideUnderline(
+                          //         child: DropdownButton<String>(
+                          //           value: value,
+                          //           isExpanded: true,
+                          //           items: items.map(buildMenuItem).toList(),
+                          //           onChanged: (value) =>
+                          //               setState(() => this.value = value),
+                          //         ),
+                          //       ),
 
-                                // value: selecttownshipDetailPick,
-
-                                ,
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Text(
-                                'entries',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                ),
-                              )
-                            ],
-                          ),
+                          //       // value: selecttownshipDetailPick,
+                          //     ),
+                          //     SizedBox(
+                          //       width: 5,
+                          //     ),
+                          //     Text(
+                          //       'entries',
+                          //       style: TextStyle(
+                          //         fontSize: 14,
+                          //       ),
+                          //     )
+                          //   ],
+                          // ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -443,197 +443,217 @@ class _PickupProcessState extends State<PickupProcess> {
                           SizedBox(
                             height: 10,
                           ),
-                          ref.watch(requestServiceProvider).when(data: (requestList) {
-                            return
-                          Container(
-                            height: MediaQuery.of(context).size.height * 0.31,
-                            margin: EdgeInsets.symmetric(horizontal: 8),
-                            // color: Constants.gray,
-                            child: ListView(
-                              scrollDirection: Axis.horizontal,
-                              children: [
-                                DataTable(
-                                  headingRowColor:
-                                      MaterialStateProperty.all(Constants.gray),
-                                  dataRowColor:
-                                      MaterialStateProperty.all(Colors.white),
-                                  decoration: BoxDecoration(
-                                      //color: Colors.grey
-                                      ),
-                                  horizontalMargin: 8,
-                                  columnSpacing: 18,
-                                  border:
-                                      TableBorder.all(color: Colors.black12),
-                                  columns: [
-                                    DataColumn(
-                                        label: Text(
-                                      "#",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: Constants.tDefaultSize,
-                                      ),
-                                    )),
-                                    DataColumn(
-                                        label: Text(
-                                      "Pickup Date",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: Constants.tDefaultSize,
-                                      ),
-                                    )),
-                                    DataColumn(
-                                        label: Text(
-                                      "Track Code",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: Constants.tDefaultSize,
-                                      ),
-                                    )),
-                                    DataColumn(
-                                        label: Text(
-                                      "Pickup Info",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: Constants.tDefaultSize,
-                                      ),
-                                    )),
-                                    DataColumn(
-                                        label: Text(
-                                      "",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: Constants.tDefaultSize,
-                                      ),
-                                    )),
-                                    DataColumn(
-                                        label: Text(
-                                      "",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: Constants.tDefaultSize,
-                                      ),
-                                    )),
-                                    DataColumn(
-                                        label: Text(
-                                      "",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: Constants.tDefaultSize,
-                                      ),
-                                    )),
-                                    DataColumn(
-                                        label: Text(
-                                      "",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: Constants.tDefaultSize,
-                                      ),
-                                    )),
-                                    DataColumn(
-                                        label: Text(
-                                      "Status",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: Constants.tDefaultSize,
-                                      ),
-                                    )),
-                                    DataColumn(
-                                        label: Text(
-                                      "Action",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: Constants.tDefaultSize,
-                                      ),
-                                    )),
-                                  ],
-                                   //rows :requestList.data.map((request){
-                                  rows: orders!.map((order) {
-                                    return DataRow(cells: [
-                                      DataCell(Container(
-                                        padding: EdgeInsets.only(left: 5),
-                                        //  color: Colors.white,
-                                        child: Text(
-                                          '1',
-                                          // OrderController.requests.id??'',
-                                          style: TextStyle(
-                                              fontSize: Constants.tSmallSize),
+                          ref.watch(processServiceProvider).when(
+                              data: (processList) {
+                            return Container(
+                              height: MediaQuery.of(context).size.height * 0.45,
+                              margin: EdgeInsets.symmetric(horizontal: 8),
+                              // color: Constants.gray,
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.vertical,
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: DataTable(
+                                    headingRowColor: MaterialStateProperty.all(
+                                        Constants.gray),
+                                    dataRowColor:
+                                        MaterialStateProperty.all(Colors.white),
+                                    decoration: BoxDecoration(
+                                        //color: Colors.grey
+                                        ),
+                                    horizontalMargin: 8,
+                                    columnSpacing: 18,
+                                    border:
+                                        TableBorder.all(color: Colors.black12),
+                                    columns: [
+                                      DataColumn(
+                                          label: Text(
+                                        "#",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: Constants.tDefaultSize,
                                         ),
                                       )),
-                                      DataCell(Text(
-                                        '21-08-2023 01:23 am',
+                                      DataColumn(
+                                          label: Text(
+                                        "Pickup Date",
+                                        textAlign: TextAlign.center,
                                         style: TextStyle(
-                                            fontSize: Constants.tSmallSize),
+                                          fontSize: Constants.tDefaultSize,
+                                        ),
                                       )),
-                                      DataCell(Text(
-                                        '11-230020',
+                                      DataColumn(
+                                          label: Text(
+                                        "Track Code",
+                                        textAlign: TextAlign.center,
                                         style: TextStyle(
-                                            fontSize: Constants.tSmallSize),
+                                          fontSize: Constants.tDefaultSize,
+                                        ),
                                       )),
-                                      DataCell(Text(
-                                        'Client Name',
+                                      DataColumn(
+                                          label: Text(
+                                        "Pickup Info",
+                                        textAlign: TextAlign.center,
                                         style: TextStyle(
-                                            fontSize: Constants.tSmallSize),
+                                          fontSize: Constants.tDefaultSize,
+                                        ),
                                       )),
-                                      DataCell(Text(
-                                        '09964483525',
+                                      DataColumn(
+                                          label: Text(
+                                        "",
+                                        textAlign: TextAlign.center,
                                         style: TextStyle(
-                                            fontSize: Constants.tSmallSize),
+                                          fontSize: Constants.tDefaultSize,
+                                        ),
                                       )),
-                                      DataCell(Text(
-                                        'South Okkalapa',
+                                      DataColumn(
+                                          label: Text(
+                                        "",
+                                        textAlign: TextAlign.center,
                                         style: TextStyle(
-                                            fontSize: Constants.tSmallSize),
+                                          fontSize: Constants.tDefaultSize,
+                                        ),
                                       )),
-                                      DataCell(Text(
-                                        'Dagon',
+                                      DataColumn(
+                                          label: Text(
+                                        "",
+                                        textAlign: TextAlign.center,
                                         style: TextStyle(
-                                            fontSize: Constants.tSmallSize),
+                                          fontSize: Constants.tDefaultSize,
+                                        ),
                                       )),
-                                      DataCell(Text(
-                                        'Yangon',
+                                      DataColumn(
+                                          label: Text(
+                                        "",
+                                        textAlign: TextAlign.center,
                                         style: TextStyle(
-                                            fontSize: Constants.tSmallSize),
+                                          fontSize: Constants.tDefaultSize,
+                                        ),
                                       )),
-                                      DataCell(Text(
-                                        'done',
+                                      DataColumn(
+                                          label: Text(
+                                        "Status",
+                                        textAlign: TextAlign.center,
                                         style: TextStyle(
-                                            color: Constants.green,
-                                            fontSize: Constants.tSmallSize),
+                                          fontSize: Constants.tDefaultSize,
+                                        ),
                                       )),
-                                      DataCell(
-                                          Center(
-                                            child: Icon(
-                                              Icons.message,
-                                              color: Constants.blue,
-                                            ),
-                                          ), onTap: () {
-                                        Get.to(() => PickupProcessDetail());
-                                        //       orderId: order.id!,
-                                        //       orderStatus: order.last_status!.name!,
-                                        //       order_id: order.orderId.toString(),
-                                        //     )
-                                        //     );
-                                      })
-                                    ]);
-                                  }).toList(),
+                                      DataColumn(
+                                          label: Text(
+                                        "Action",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: Constants.tDefaultSize,
+                                        ),
+                                      )),
+                                    ],
+                                    rows: processList.map((process) {
+                                      String apiDateString =
+                                          "${process!.picked_up_date_time!}"; // Replace this with your API date
+                                      DateTime apiDate =
+                                          DateTime.parse(apiDateString);
+                                      String formattedDate =
+                                          DateFormat('dd-MM-yyyy a')
+                                              .format(apiDate);
+                                      print(formattedDate);
+                                      //rows: orders!.map((order) {
+                                      return DataRow(cells: [
+                                        DataCell(Container(
+                                          padding: EdgeInsets.only(left: 5),
+                                          //  color: Colors.white,
+                                          child: Text(
+                                            // '1',
+                                            process!.id.toString(),
+                                            // OrderController.requests.id??'',
+                                            style: TextStyle(
+                                                fontSize: Constants.tSmallSize),
+                                          ),
+                                        )),
+                                        DataCell(Text(
+                                          //'21-08-2023 01:23 am',
+                                          "$formattedDate",
+                                          style: TextStyle(
+                                              fontSize: Constants.tSmallSize),
+                                        )),
+                                        DataCell(Text(
+                                          // '11-230020',
+                                          process.order_code!,
+                                          style: TextStyle(
+                                              fontSize: Constants.tSmallSize),
+                                        )),
+                                        DataCell(Text(
+                                          //'Client Name',
+                                          process.from_name!,
+                                          style: TextStyle(
+                                              fontSize: Constants.tSmallSize),
+                                        )),
+                                        DataCell(Text(
+                                          // '09964483525',
+                                          process.from_phone!,
+                                          style: TextStyle(
+                                              fontSize: Constants.tSmallSize),
+                                        )),
+                                        DataCell(Text(
+                                          // 'South Okkalapa',
+                                          process.from_addres!,
+                                          style: TextStyle(
+                                              fontSize: Constants.tSmallSize),
+                                        )),
+                                        DataCell(Text(
+                                          // 'Dagon',
+                                          process.from_township!,
+                                          style: TextStyle(
+                                              fontSize: Constants.tSmallSize),
+                                        )),
+                                        DataCell(Text(
+                                          'Yangon',
+                                          style: TextStyle(
+                                              fontSize: Constants.tSmallSize),
+                                        )),
+                                        DataCell(process.status != null
+                                            ? Text(
+                                                'Picked Up',
+                                                //process.status!,
+                                                style: TextStyle(
+                                                    color: Constants.blue,
+                                                    fontSize:
+                                                        Constants.tSmallSize),
+                                              )
+                                            : Text('')),
+                                        DataCell(
+                                            Center(
+                                              child: Icon(
+                                                Icons.message,
+                                                color: Constants.blue,
+                                              ),
+                                            ), onTap: () {
+                                          Get.to(() => PickupProcessDetail());
+                                          //       orderId: order.id!,
+                                          //       orderStatus: order.last_status!.name!,
+                                          //       order_id: order.orderId.toString(),
+                                          //     )
+                                          //     );
+                                        })
+                                      ]);
+                                    }).toList(),
+                                  ),
                                 ),
-                              ],
-                            ),
-                          );
-                          }, error: (Object error, StackTrace stackTrace) {
-                            return SizedBox(
-                              height: 30,
+                              ),
                             );
+                          }, error: (Object error, StackTrace stackTrace) {
+                            return Text('$error');
                           }, loading: () {
-                            return Text('');
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
                           }),
                           SizedBox(
                             height: 16,
                           ),
-                          Text(
-                            'Showing 1 to 2 of 2 entries',
-                            style: TextStyle(fontSize: 14),
-                          ),
+                          // Text(
+                          //   'Showing 1 to 2 of 2 entries',
+                          //   style: TextStyle(fontSize: 14),
+                          // ),
                           SizedBox(
                             height: 5,
                           ),

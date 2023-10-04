@@ -2,8 +2,6 @@ import 'package:delivery_app/screen/login.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-
-import '../utils/api.dart';
 import '../utils/theme.dart';
 
 class PreScreen extends StatefulWidget {

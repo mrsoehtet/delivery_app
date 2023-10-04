@@ -36,11 +36,7 @@ class _PickupScreenState extends State<PickupScreen> {
           ),
           centerTitle: true,
           backgroundColor: Constants.blue,
-          leading: IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.menu,
-              )),
+          leading: Text(''),
           actions: [
             IconButton(
                 onPressed: () {
@@ -110,125 +106,126 @@ class _PickupScreenState extends State<PickupScreen> {
                 )),
             InkWell(
               onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return StatefulBuilder(
-                        builder: (BuildContext context, StateSetter setState) {
-                      return Container(
-                        height: MediaQuery.of(context).size.height * 0.2,
-                        child: AlertDialog(
-                          contentPadding: EdgeInsets.zero,
-                          titleTextStyle: const TextStyle(
-                              fontSize: 14, color: Colors.black),
-                          content: Container(
-                            color: Constants.blue,
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height * 0.25,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 20),
-                            child: Column(
-                              //  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Container(
-                                  //  margin: EdgeInsets.symmetric(horizontal: 5),
-                                  padding: EdgeInsets.only(right: 10),
-                                  child: CircleAvatar(
-                                    radius: 37,
-                                    backgroundColor: Colors.white24,
-                                    child: CircleAvatar(
-                                      maxRadius: 35,
-                                      backgroundColor: Colors.black45,
-                                      child: Icon(
-                                        Icons.person,
-                                        size: 55,
-                                        color: Colors.white54,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 15, right: 15),
-                                  child: Text(
-                                    "aung naing",
-                                    style: const TextStyle(
-                                        fontSize: 12, color: Colors.white70),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 3,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 15, right: 15),
-                                  child: Text(
-                                    "Delivery Men",
-                                    style: const TextStyle(
-                                        fontSize: 12, color: Colors.white70),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 3,
-                                ),
-                                Center(
-                                    child: Text(
-                                  'Delivery Management System',
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.white70),
-                                )),
-                              ],
-                            ),
-                          ),
-                          actions: [
-                            Container(
-                              // color: Colors.black12,
-                              padding: EdgeInsets.only(left: 8),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  OutlinedButton(
-                                    // style: TextButton.styleFrom(
-                                    //     padding: const EdgeInsets.only(left: 70)),
-                                    onPressed: () {
-                                      Get.to(ProfileScreen());
-                                    },
-                                    child: Center(
-                                      child: const Text(
-                                        "Profile",
-                                        style: TextStyle(
-                                            color: Colors.black54,
-                                            fontSize: 12),
-                                      ),
-                                    ),
-                                  ),
-                                  OutlinedButton(
-                                    // style: TextButton.styleFrom(
-                                    //     padding: const EdgeInsets.only(left: 30)),
-                                    onPressed: () {
-                                      Get.to(() => LoginScreen());
-                                      // Get.back();
-                                    },
-                                    child: Center(
-                                      child: const Text("Sign out",
-                                          style: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 12)),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      );
-                    });
-                  },
-                );
+                Get.to(ProfileScreen());
+                // showDialog(
+                //   context: context,
+                //   builder: (context) {
+                //     return StatefulBuilder(
+                //         builder: (BuildContext context, StateSetter setState) {
+                //       return Container(
+                //         height: MediaQuery.of(context).size.height * 0.2,
+                //         child: AlertDialog(
+                //           contentPadding: EdgeInsets.zero,
+                //           titleTextStyle: const TextStyle(
+                //               fontSize: 14, color: Colors.black),
+                //           content: Container(
+                //             color: Constants.blue,
+                //             width: MediaQuery.of(context).size.width,
+                //             height: MediaQuery.of(context).size.height * 0.25,
+                //             padding: const EdgeInsets.symmetric(
+                //                 horizontal: 10, vertical: 20),
+                //             child: Column(
+                //               //  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                //               children: [
+                //                 Container(
+                //                   //  margin: EdgeInsets.symmetric(horizontal: 5),
+                //                   padding: EdgeInsets.only(right: 10),
+                //                   child: CircleAvatar(
+                //                     radius: 37,
+                //                     backgroundColor: Colors.white24,
+                //                     child: CircleAvatar(
+                //                       maxRadius: 35,
+                //                       backgroundColor: Colors.black45,
+                //                       child: Icon(
+                //                         Icons.person,
+                //                         size: 55,
+                //                         color: Colors.white54,
+                //                       ),
+                //                     ),
+                //                   ),
+                //                 ),
+                //                 SizedBox(
+                //                   height: 20,
+                //                 ),
+                //                 Padding(
+                //                   padding: const EdgeInsets.only(
+                //                       left: 15, right: 15),
+                //                   child: Text(
+                //                     "aung naing",
+                //                     style: const TextStyle(
+                //                         fontSize: 12, color: Colors.white70),
+                //                   ),
+                //                 ),
+                //                 SizedBox(
+                //                   height: 3,
+                //                 ),
+                //                 Padding(
+                //                   padding: const EdgeInsets.only(
+                //                       left: 15, right: 15),
+                //                   child: Text(
+                //                     "Delivery Men",
+                //                     style: const TextStyle(
+                //                         fontSize: 12, color: Colors.white70),
+                //                   ),
+                //                 ),
+                //                 SizedBox(
+                //                   height: 3,
+                //                 ),
+                //                 Center(
+                //                     child: Text(
+                //                   'Delivery Management System',
+                //                   style: TextStyle(
+                //                       fontSize: 12, color: Colors.white70),
+                //                 )),
+                //               ],
+                //             ),
+                //           ),
+                //           actions: [
+                //             Container(
+                //               // color: Colors.black12,
+                //               padding: EdgeInsets.only(left: 8),
+                //               child: Row(
+                //                 mainAxisAlignment:
+                //                     MainAxisAlignment.spaceBetween,
+                //                 children: [
+                //                   OutlinedButton(
+                //                     // style: TextButton.styleFrom(
+                //                     //     padding: const EdgeInsets.only(left: 70)),
+                //                     onPressed: () {
+                //                       Get.to(ProfileScreen());
+                //                     },
+                //                     child: Center(
+                //                       child: const Text(
+                //                         "Profile",
+                //                         style: TextStyle(
+                //                             color: Colors.black54,
+                //                             fontSize: 12),
+                //                       ),
+                //                     ),
+                //                   ),
+                //                   OutlinedButton(
+                //                     // style: TextButton.styleFrom(
+                //                     //     padding: const EdgeInsets.only(left: 30)),
+                //                     onPressed: () {
+                //                       Get.to(() => LoginScreen());
+                //                       // Get.back();
+                //                     },
+                //                     child: Center(
+                //                       child: const Text("Sign out",
+                //                           style: TextStyle(
+                //                               color: Colors.black54,
+                //                               fontSize: 12)),
+                //                     ),
+                //                   ),
+                //                 ],
+                //               ),
+                //             )
+                //           ],
+                //         ),
+                //       );
+                //     });
+                //   },
+                // );
               },
               child: Container(
                 padding: EdgeInsets.only(right: 10),
@@ -332,56 +329,6 @@ class _PickupScreenState extends State<PickupScreen> {
           ),
         ],
       ),
-      // child: ExpansionTile(
-      //   title: Text(
-      //     'To Pickup',
-      //     style: TextStyle(
-      //       fontSize: 16,
-      //     ),
-      //   ),
-      //   children: [...List.generate(1, (index) => _buildTextCard())],
-      // ),
     );
   }
-
-  // Container _buildTextCard() {
-  //   return Container(
-  //     margin: EdgeInsets.symmetric(horizontal: 16),
-  //     child: Column(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //         children: [
-  //           Row(
-  //             children: [
-  //               Text(
-  //                 'Request List',
-  //               ),
-  //               InkWell(
-  //                 onTap: () => PickupRequestList(),
-  //                 child: Icon(Icons.arrow_forward),
-  //               ),
-  //             ],
-  //           ),
-  //           Divider(),
-  //           InkWell(
-  //             onTap: () => PickupProcessList(),
-  //             child: Text(
-  //               'Pickup Process List',
-  //             ),
-  //           ),
-  //           Divider(),
-  //           InkWell(
-  //             onTap: () => PickupDoneList(),
-  //             child: Text(
-  //               'Pickup Done List',
-  //             ),
-  //           ),
-  //           Divider(),
-  //           InkWell(onTap: () => ReportList(), child: Text('Report List')),
-  //           SizedBox(
-  //             height: 10,
-  //           )
-  //         ]),
-  //   );
-  //}
 }

@@ -1,26 +1,26 @@
-import 'package:delivery_app/model/pickupRequest/request/request.dart';
+import 'package:delivery_app/model/pickupDone/done/donePickup.dart';
+import 'package:delivery_app/model/pickupDone/donePickupList/donePickupList.dart';
 import 'package:delivery_app/utils/constants.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import '../controller/isLoginController.dart';
-import '../model/pickupRequest/requestList/requestList.dart';
 import '../utils/sharedPref.dart';
 
-final requestServiceProvider =
-    FutureProvider.autoDispose<List<Request?>>((ref) async {
-  final service = ref.watch(requestProvider);
-  final requestData = await service.getRequestInfo();
-  return requestData;
+final donePickupServiceProvider =
+    FutureProvider.autoDispose<List<DonePickup?>>((ref) async {
+  final service = ref.watch(donePickupProvider);
+  final donePickupData = await service.getRequestInfo();
+  return donePickupData;
 });
 
-final requestProvider = Provider((ref) => RequestService(Dio()));
+final donePickupProvider = Provider((ref) => donePickupService(Dio()));
 
-class RequestService {
-  RequestService(this._dio);
+class donePickupService {
+  donePickupService(this._dio);
   Dio _dio;
 
-  Request? requestData;
+  //donePickup? donePickup;
 
   final IsLoginController isLoginController = Get.put(IsLoginController());
 
@@ -28,7 +28,7 @@ class RequestService {
     final token = await SharedPref.getData(key: SharedPref.token);
 
     final response = await _dio.get(
-      APIURL.pickupRequest,
+      APIURL.pickupDone,
       options: Options(
         headers: <String, String>{
           'Accept': 'application/json; charset=UTF-8',
@@ -36,7 +36,7 @@ class RequestService {
         },
       ),
     );
-    final request = RequestList.fromJson(response.data);
+    final request = DonePickupList.fromJson(response.data);
     return request.data;
   }
 }

@@ -20,9 +20,9 @@ Profile _$ProfileFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Profile {
-  String? get status => throw _privateConstructorUsedError;
-  User? get user => throw _privateConstructorUsedError;
-  String? get token => throw _privateConstructorUsedError;
+  bool? get status => throw _privateConstructorUsedError;
+  User? get data => throw _privateConstructorUsedError;
+  String? get message => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -34,9 +34,9 @@ abstract class $ProfileCopyWith<$Res> {
   factory $ProfileCopyWith(Profile value, $Res Function(Profile) then) =
       _$ProfileCopyWithImpl<$Res, Profile>;
   @useResult
-  $Res call({String? status, User? user, String? token});
+  $Res call({bool? status, User? data, String? message});
 
-  $UserCopyWith<$Res>? get user;
+  $UserCopyWith<$Res>? get data;
 }
 
 /// @nodoc
@@ -53,34 +53,34 @@ class _$ProfileCopyWithImpl<$Res, $Val extends Profile>
   @override
   $Res call({
     Object? status = freezed,
-    Object? user = freezed,
-    Object? token = freezed,
+    Object? data = freezed,
+    Object? message = freezed,
   }) {
     return _then(_value.copyWith(
       status: freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
-              as String?,
-      user: freezed == user
-          ? _value.user
-          : user // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      data: freezed == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
               as User?,
-      token: freezed == token
-          ? _value.token
-          : token // ignore: cast_nullable_to_non_nullable
+      message: freezed == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
               as String?,
     ) as $Val);
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $UserCopyWith<$Res>? get user {
-    if (_value.user == null) {
+  $UserCopyWith<$Res>? get data {
+    if (_value.data == null) {
       return null;
     }
 
-    return $UserCopyWith<$Res>(_value.user!, (value) {
-      return _then(_value.copyWith(user: value) as $Val);
+    return $UserCopyWith<$Res>(_value.data!, (value) {
+      return _then(_value.copyWith(data: value) as $Val);
     });
   }
 }
@@ -92,10 +92,10 @@ abstract class _$$_ProfileCopyWith<$Res> implements $ProfileCopyWith<$Res> {
       __$$_ProfileCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? status, User? user, String? token});
+  $Res call({bool? status, User? data, String? message});
 
   @override
-  $UserCopyWith<$Res>? get user;
+  $UserCopyWith<$Res>? get data;
 }
 
 /// @nodoc
@@ -109,21 +109,21 @@ class __$$_ProfileCopyWithImpl<$Res>
   @override
   $Res call({
     Object? status = freezed,
-    Object? user = freezed,
-    Object? token = freezed,
+    Object? data = freezed,
+    Object? message = freezed,
   }) {
     return _then(_$_Profile(
       freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
-              as String?,
-      freezed == user
-          ? _value.user
-          : user // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      freezed == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
               as User?,
-      freezed == token
-          ? _value.token
-          : token // ignore: cast_nullable_to_non_nullable
+      freezed == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
   }
@@ -132,21 +132,21 @@ class __$$_ProfileCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_Profile implements _Profile {
-  const _$_Profile(this.status, this.user, this.token);
+  const _$_Profile(this.status, this.data, this.message);
 
   factory _$_Profile.fromJson(Map<String, dynamic> json) =>
       _$$_ProfileFromJson(json);
 
   @override
-  final String? status;
+  final bool? status;
   @override
-  final User? user;
+  final User? data;
   @override
-  final String? token;
+  final String? message;
 
   @override
   String toString() {
-    return 'Profile(status: $status, user: $user, token: $token)';
+    return 'Profile(status: $status, data: $data, message: $message)';
   }
 
   @override
@@ -155,13 +155,13 @@ class _$_Profile implements _Profile {
         (other.runtimeType == runtimeType &&
             other is _$_Profile &&
             (identical(other.status, status) || other.status == status) &&
-            (identical(other.user, user) || other.user == user) &&
-            (identical(other.token, token) || other.token == token));
+            (identical(other.data, data) || other.data == data) &&
+            (identical(other.message, message) || other.message == message));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, status, user, token);
+  int get hashCode => Object.hash(runtimeType, status, data, message);
 
   @JsonKey(ignore: true)
   @override
@@ -179,16 +179,16 @@ class _$_Profile implements _Profile {
 
 abstract class _Profile implements Profile {
   const factory _Profile(
-      final String? status, final User? user, final String? token) = _$_Profile;
+      final bool? status, final User? data, final String? message) = _$_Profile;
 
   factory _Profile.fromJson(Map<String, dynamic> json) = _$_Profile.fromJson;
 
   @override
-  String? get status;
+  bool? get status;
   @override
-  User? get user;
+  User? get data;
   @override
-  String? get token;
+  String? get message;
   @override
   @JsonKey(ignore: true)
   _$$_ProfileCopyWith<_$_Profile> get copyWith =>

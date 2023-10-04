@@ -1,5 +1,4 @@
 import 'package:delivery_app/appStart/appstart.dart';
-import 'package:delivery_app/screen/home.dart';
 import 'package:delivery_app/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -270,10 +269,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                                         BorderRadius.circular(
                                                             12),
                                                     color: Constants.blue),
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  color: Colors.white,
-                                                  //strokeWidth: 2,
+                                                child: SizedBox(
+                                                  height: 30,
+                                                  width: 30,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    color: Colors.white,
+                                                    //strokeWidth: 2,
+                                                  ),
                                                 ),
                                               )
                                             : GestureDetector(
@@ -355,7 +358,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                       "Alert",
                                                       "Please Enter Required Field",
                                                       backgroundColor:
-                                                          Colors.white,
+                                                          Colors.redAccent,
                                                     );
                                                   }
                                                 },
