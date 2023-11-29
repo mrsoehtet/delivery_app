@@ -1,0 +1,115 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'orderDetail.freezed.dart';
+part 'orderDetail.g.dart';
+
+@freezed
+class OrderDetail with _$OrderDetail {
+  const factory OrderDetail(
+    int? id,
+    String? order_code,
+    String? user_id,
+    String? user_type,
+    String? order_date,
+    String? confirm_status,
+    String? order_status,
+    String? order_note,
+    String? delimen_id,
+    String? created_at,
+    String? updated_at,
+    String? delimen_note,
+    String? staff_note,
+    String? oid,
+    String? order_create_date,
+    String? order_id,
+    String? from_name,
+    String? from_phone,
+    String? from_addres,
+    String? from_township,
+    String? from_state,
+    String? item_info,
+    String? number_of_item,
+    String? width,
+    String? height,
+    String? length,
+    String? weight,
+    String? can_pickup_date,
+    String? pay_status,
+    String? photo_1,
+    String? remark,
+    String? to_name,
+    String? to_phone,
+    String? to_address,
+    String? to_township,
+    String? to_state,
+    String? puckup_fee,
+    String? deli_fee,
+    String? service_total,
+    String? item_amount,
+    String? net_total,
+    String? payment_method,
+    String? system_note,
+    String? request_date,
+    String? esign,
+    String? o_status,
+  ) = _OrderDetail;
+
+  factory OrderDetail.fromJson(Map<String, dynamic> json) =>
+      _$OrderDetailFromJson(json);
+}
+
+
+/*
+       "id": 113,
+        "order_code": "11-230123-11",
+        "user_id": "4",
+        "user_type": "1",
+        "order_date": "2023-11-07 05:45:01",
+        "confirm_status": "0",
+        "order_status": "6",
+        "order_note": null,
+        "delimen_id": null,
+        "created_at": "2023-11-07T04:39:56.000000Z",
+        "updated_at": "2023-11-07T04:41:10.000000Z",
+        "delimen_note": null,
+        "staff_note": null,
+        "oid": "117",
+        "order_create_date": "2023-11-07 11:09:55",
+        "order_id": "117",
+        "from_name": "Client Name",
+        "from_phone": "09421011543",
+        "from_addres": "No.1, Sample Street, 5 ward",
+        "from_township": "Dagon",
+        "from_state": "12",
+        "item_info": "Bag",
+        "number_of_item": "1",
+        "width": "25",
+        "height": "10",
+        "length": "25",
+        "weight": "1.00",
+        "can_pickup_date": "2023-11-07",
+        "pay_status": "Pay Sender",
+        "photo_1": "",
+        "photo_2": "",
+        "photo_3": "",
+
+        "remark": null,
+        "to_name": "Kyaw Swar",
+        "to_phone": "09964483525",
+        "to_address": "no 10 , Pyay Road",
+        "to_township": "Ahlone (အလုံ)",
+        "to_state": "12",
+
+
+        "puckup_fee": "0",
+        "deli_fee": "2500",
+        "service_total": "2500",
+        "item_amount": "15000",
+        "net_total": "17500",
+
+        "payment_method": "To Collect Money",
+        "system_note": "",
+        "request_date": "2023-11-07 11:10:39",
+        "esign": null,
+        "o_status": "6"
+*/

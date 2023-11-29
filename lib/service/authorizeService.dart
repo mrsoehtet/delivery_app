@@ -30,8 +30,12 @@ class AuthService {
         'login_name': phone,
         'password': password,
       });
-      var response = await http.post(Uri.parse(APIURL.loginUrl),
-          body: encodeJson, headers: Global.headers);
+      print(encodeJson);
+      var response = await http
+          .post(Uri.parse(APIURL.loginUrl), body: encodeJson, headers: {
+        "Accept": "application/json",
+        "Content-Type":"application/json",
+      });
       var userData = jsonDecode(response.body);
       return userData;
     } on SocketException {
@@ -62,8 +66,6 @@ class AuthService {
       throw FetchDataException('No Internet connection');
     }
   }
-
-
 
   Future<dynamic> changePassword({
     required String old_password,
@@ -123,8 +125,7 @@ class AuthService {
       }, headers: <String, String>{
         'Accept': 'application/json; charset=UTF-8',
         'Authorization': '$token',
-      }
-      );
+      });
       var userData = jsonDecode(response.body);
       return userData;
     } on SocketException {

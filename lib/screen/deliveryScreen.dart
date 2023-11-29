@@ -1,17 +1,16 @@
+import 'package:delivery_app/controller/naviController.dart';
 import 'package:delivery_app/screen/delivery/cancelDeli/cancelDeliverScreen.dart';
 import 'package:delivery_app/screen/delivery/doneDeliver/doneDeliverScreen.dart';
 import 'package:delivery_app/screen/delivery/getWay/getWayScreen.dart';
 import 'package:delivery_app/screen/delivery/processList/deliverProcess.dart';
 import 'package:delivery_app/screen/delivery/returnDeli/returnDeliScreen.dart';
 import 'package:delivery_app/screen/delivery/transferToWH/transferToWHScreen.dart';
-import 'package:delivery_app/screen/login.dart';
 import 'package:delivery_app/screen/profile.dart';
+import 'package:delivery_app/utils/global.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
-import '../controller/getController.dart';
-import '../model/order.dart';
 import '../utils/theme.dart';
 
 class DeliveryScreen extends StatefulWidget {
@@ -25,6 +24,8 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //  bottomNavigationBar: buildBottomNavigationMenu(context, naviController),
+      // backgroundColor: Color.fromARGB(0, 212, 245, 242),
       appBar: AppBar(
         title: Text(
           "Delivery",
@@ -122,61 +123,99 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
           margin: EdgeInsets.symmetric(horizontal: 8),
           child: Column(children: [
             Container(
-              // width: MediaQuery.of(context).size.width * 0.95,
-              height: MediaQuery.of(context).size.height * 0.5,
               margin: EdgeInsets.symmetric(vertical: 16, horizontal: 4),
-              child: InkWell(
-                  //onTap: () => Get.to(DailyChoice()),
-                  child: Column(
+              child: Column(
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       InkWell(
                           onTap: (() {
-                            Get.to(GetWayScreen());
+                            Get.to(() => GetWayScreen());
                           }),
-                          child: DeliveryCard(deliWay: 'Get Way')),
+                          child: DeliveryCard(
+                              deliWay: 'Get Way',
+                              image: 'assets/icons/exit.png')),
                       InkWell(
-                          onTap: () => Get.to(TransferToWHScreen()),
-                          child: DeliveryCard(deliWay: 'Transfer To WH')),
-                      InkWell(
-                          onTap: () => Get.to(DeliverProcessList()),
-                          child:
-                              DeliveryCard(deliWay: 'Delivery Process List')),
+                          onTap: () => Get.to(() => TransferToWHScreen()),
+                          child: DeliveryCard(
+                              deliWay: 'Transfer To WH',
+                              image: 'assets/icons/transfer.png')),
+                      // InkWell(
+                      //     onTap: () => Get.to(DeliverProcessList()),
+                      //     child: DeliveryCard(
+                      //       deliWay: 'Delivery Process List',
+                      //       image: 'assets/icons/processing.png',
+                      //     )),
                     ],
                   ),
                   SizedBox(
                     height: 10,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       InkWell(
-                          onTap: () => Get.to(DoneDeliverScreen()),
-                          child:
-                              DeliveryCard(deliWay: 'Done (Delivered) List')),
+                          onTap: () => Get.to(() => DeliverProcessList()),
+                          child: DeliveryCard(
+                            deliWay: 'Delivery Process List',
+                            image: 'assets/icons/processing.png',
+                          )),
                       InkWell(
-                          onTap: () => Get.to(ReturnDeliverScreen()),
-                          child: DeliveryCard(deliWay: 'Return')),
-                      InkWell(
-                          onTap: () => Get.to(CancelDeliverScreen()),
-                          child: DeliveryCard(deliWay: 'Cancel (Back to OS)')),
+                          onTap: () => Get.to(() => DoneDeliverScreen()),
+                          child: DeliveryCard(
+                            deliWay: 'Done (Delivered) List',
+                            image: 'assets/icons/work-in-progress.png',
+                          )),
+                      // InkWell(
+                      //     onTap: () => Get.to(ReturnDeliverScreen()),
+                      //     child: DeliveryCard(
+                      //         deliWay: 'Return',
+                      //         image: 'assets/icons/work-in-progress.png')),
+                      // InkWell(
+                      //     onTap: () => Get.to(CancelDeliverScreen()),
+                      //     child: DeliveryCard(
+                      //         deliWay: 'Cancel (Back to OS)',
+                      //         image: 'assets/icons/work-in-progress.png')),
                     ],
                   ),
                   SizedBox(
                     height: 10,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      DeliveryCard(
-                        deliWay: 'Report',
+                      InkWell(
+                          onTap: () => Get.to(() => ReturnDeliverScreen()),
+                          child: DeliveryCard(
+                              deliWay: 'Return',
+                              image: 'assets/icons/return.png')),
+                      InkWell(
+                          onTap: () => Get.to(() => CancelDeliverScreen()),
+                          child: DeliveryCard(
+                              deliWay: 'Cancel (Back to OS)',
+                              image: 'assets/icons/multiply.png')),
+                      // DeliveryCard(
+                      //     deliWay: 'Report',
+                      //     image: 'assets/icons/work-in-progress.png'),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    //  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      SizedBox(
+                        width: 20,
                       ),
+                      DeliveryCard(
+                          deliWay: 'Report',
+                          image: 'assets/icons/report (1).png'),
                     ],
                   ),
                 ],
-              )),
+              ),
             ),
           ])),
     );
@@ -184,29 +223,37 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
 }
 
 class DeliveryCard extends StatelessWidget {
-  const DeliveryCard({super.key, required this.deliWay});
+  DeliveryCard({super.key, required this.deliWay, required this.image});
   final String deliWay;
+  final String image;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.3,
-      height: MediaQuery.of(context).size.height * 0.12,
+      width: MediaQuery.of(context).size.width * 0.35,
+      height: MediaQuery.of(context).size.height * 0.15,
       child: Card(
-        color: Constants.gray,
+        // color: Constants.gray,
         elevation: 5,
         //shadowColor: Colors.transparent,
         // shadowColor: Colors.black,
         child: Container(
           padding: EdgeInsets.only(top: 15),
           child: Column(children: [
+            Image.asset(
+              image,
+              scale: 13,
+            ),
+            SizedBox(
+              height: 10,
+            ),
             Text(
               // delivery.name.toString(),
               deliWay,
               textAlign: TextAlign.center,
               style: TextStyle(
                   color: Colors.black,
-                  fontSize: 14,
+                  fontSize: 12,
                   fontWeight: FontWeight.bold),
             ),
             SizedBox(

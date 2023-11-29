@@ -1,8 +1,15 @@
+import 'package:delivery_app/controller/naviController.dart';
+import 'package:delivery_app/screen/delivery/getWay/getWayDetail.dart';
 import 'package:delivery_app/screen/profile.dart';
+import 'package:delivery_app/service/deliveryReturnServic.dart';
+import 'package:delivery_app/service/orderDetailService.dart';
+import 'package:delivery_app/utils/global.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../controller/getController.dart';
 import '../../../utils/theme.dart';
@@ -16,15 +23,112 @@ class ReturnDeliverScreen extends StatefulWidget {
 }
 
 class _ReturnDeliverScreenState extends State<ReturnDeliverScreen> {
+  String? orderid;
+  final TextStyle unselectedLabelStyle = TextStyle(
+      color: Colors.white.withOpacity(0.5),
+      fontWeight: FontWeight.w500,
+      fontSize: 12);
+
+  final TextStyle selectedLabelStyle = TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.w500,
+    fontSize: 12,
+  );
   var orders = Get.find<OrderController>().orders;
   TextEditingController countController = TextEditingController();
   FocusNode countFocusNode = FocusNode();
   List<String> items = ["30", "50", "100", "All"];
   String? value;
+  var _remove;
+  @override
+  void initState() {
+    _remove = true;
+
+    super.initState();
+  }
+
+  buildBottomNavigationMenu(context, naviController) {
+    return Obx(
+      () => MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.09,
+          child: BottomNavigationBar(
+            showUnselectedLabels: true,
+            showSelectedLabels: true,
+            onTap: Global.changePage,
+            currentIndex: naviController.currentIndex.value,
+            // backgroundColor: Color.fromRGBO(101, 10, 10, 0.8),
+            backgroundColor: Constants.blue,
+            unselectedItemColor: Colors.white,
+            selectedItemColor: Constants.red,
+            unselectedLabelStyle: unselectedLabelStyle,
+            selectedLabelStyle: selectedLabelStyle,
+            type: BottomNavigationBarType.fixed,
+            items: [
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.home,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Home'.tr,
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.card_giftcard,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Pickup'.tr,
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.qr_code,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Scan'.tr,
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.delivery_dining,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Delivery',
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.person_sharp,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Account'.tr,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    final NaviController naviController = Get.put(NaviController());
+
     return Scaffold(
+      bottomNavigationBar: buildBottomNavigationMenu(context, naviController),
       appBar: AppBar(
         title: Text(
           "DelimenPannel",
@@ -189,7 +293,7 @@ class _ReturnDeliverScreenState extends State<ReturnDeliverScreen> {
                                   // style: TextButton.styleFrom(
                                   //     padding: const EdgeInsets.only(left: 70)),
                                   onPressed: () {
-                                    Get.to(ProfileScreen());
+                                    Get.to(() => ProfileScreen());
                                   },
                                   child: Center(
                                     child: const Text(
@@ -238,473 +342,382 @@ class _ReturnDeliverScreenState extends State<ReturnDeliverScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-          child: Container(
-        margin: EdgeInsets.all(16),
-        child: Column(children: [
-          Row(
-            children: [
-              Text(
-                "Delimen",
-                style: TextStyle(
-                  fontSize: 20,
-                  // color: Colors.white,
-                ),
+      body: SingleChildScrollView(child: Consumer(
+        builder: (BuildContext context, WidgetRef ref, Widget? child) {
+          return Container(
+            margin: EdgeInsets.all(16),
+            child: Column(children: [
+              Row(
+                children: [
+                  Text(
+                    "Delimen",
+                    style: TextStyle(
+                      fontSize: 20,
+                      // color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    "Return List",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
               ),
               SizedBox(
-                width: 10,
+                height: 10,
               ),
-              Text(
-                "Return List",
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            // width: MediaQuery.of(context).size.width * 0.95,
-            height: 30,
-            decoration: BoxDecoration(color: Constants.gray),
-            child: Row(children: [
-              Icon(Icons.dashboard),
-              Text(
-                ' Home > ',
-                style: TextStyle(fontSize: 12),
-              ),
-              Text(
-                ' Delimen >',
-                style: TextStyle(fontSize: 12),
-              ),
-              Text(
-                ' Return List',
-                style: TextStyle(fontSize: 12),
-              ),
-            ]),
-          ),
-          SizedBox(
-            height: 16,
-          ),
-          Card(
-            child: Container(
-              width: double.infinity,
-              // height: MediaQuery.of(context).size.height * 0.5,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(5),
-              ),
-              //  margin: EdgeInsets.only(bottom: 100),
-              child: Column(children: [
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Container(
-                      //   padding:
-                      //       EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      //   width: MediaQuery.of(context).size.width * 0.21,
-                      //   decoration: BoxDecoration(
-                      //       color: Constants.realBlue,
-                      //       borderRadius: BorderRadius.circular(3)),
-                      //   child: Row(
-                      //     children: [
-                      //       Text(
-                      //         'GetWay',
-                      //         //  textAlign: TextAlign.center,
-                      //         style: TextStyle(
-                      //             fontSize: Constants.tDefaultSize,
-                      //             color: Colors.white),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
-                      Text(
-                        '',
-                        style: TextStyle(fontSize: 16, color: Constants.green),
-                      ),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.remove,
-                            color: Colors.grey[500],
+              _remove
+                  ? Card(
+                      child: Container(
+                        width: double.infinity,
+                        // height: MediaQuery.of(context).size.height * 0.5,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        //  margin: EdgeInsets.only(bottom: 100),
+                        child: Column(children: [
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 8),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  '',
+                                  style: TextStyle(
+                                      fontSize: 16, color: Constants.green),
+                                ),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.remove,
+                                      color: Colors.grey[500],
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    InkWell(
+                                      onTap: (() {
+                                        setState(() {
+                                          _remove = !_remove;
+                                        });
+                                      }),
+                                      child: Icon(
+                                        Icons.cancel,
+                                        color: Colors.grey[500],
+                                      ),
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                          Divider(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Search:',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 3,
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.height * 0.2,
+                                height: 35,
+                                child: TextFormField(
+                                  controller: countController,
+                                  focusNode: countFocusNode,
+                                  decoration: InputDecoration(
+                                    // labelText: "user name",
+                                    labelStyle: TextStyle(fontSize: 12),
+                                    //  suffixIcon: Icon(Icons.person),
+                                    fillColor: Colors.white,
+                                    focusedBorder: OutlineInputBorder(
+                                      //  borderRadius: BorderRadius.circular(10.0),
+                                      borderSide: BorderSide(
+                                        color: Colors.black12,
+                                      ),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      // borderRadius: BorderRadius.circular(10.0),
+                                      borderSide: BorderSide(
+                                        color: Colors.grey,
+                                        //  width: 2.0,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           SizedBox(
-                            width: 10,
+                            height: 10,
                           ),
-                          Icon(
-                            Icons.cancel,
-                            color: Colors.grey[500],
+                          ref.watch(deliReturnServiceProvider).when(
+                              data: (deliReturnList) {
+                            return Container(
+                              height: MediaQuery.of(context).size.height * 0.61,
+                              margin: EdgeInsets.symmetric(horizontal: 8),
+                              // color: Constants.gray,
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.vertical,
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: DataTable(
+                                    headingRowColor: MaterialStateProperty.all(
+                                        Constants.gray),
+                                    dataRowColor:
+                                        MaterialStateProperty.all(Colors.white),
+                                    decoration: BoxDecoration(
+                                        //color: Colors.grey
+                                        ),
+                                    horizontalMargin: 8,
+                                    columnSpacing: 18,
+                                    border:
+                                        TableBorder.all(color: Colors.black12),
+                                    columns: [
+                                      DataColumn(
+                                          label: Text(
+                                        "#",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: Constants.tDefaultSize,
+                                        ),
+                                      )),
+                                      DataColumn(
+                                          label: Text(
+                                        "Process Date",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: Constants.tDefaultSize,
+                                        ),
+                                      )),
+                                      DataColumn(
+                                          label: Text(
+                                        "Code",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: Constants.tDefaultSize,
+                                        ),
+                                      )),
+                                      DataColumn(
+                                          label: Text(
+                                        "To Delivery Info",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: Constants.tDefaultSize,
+                                        ),
+                                      )),
+                                      DataColumn(
+                                          label: Text(
+                                        "",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: Constants.tDefaultSize,
+                                        ),
+                                      )),
+                                      DataColumn(
+                                          label: Text(
+                                        "",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: Constants.tDefaultSize,
+                                        ),
+                                      )),
+                                      DataColumn(
+                                          label: Text(
+                                        "",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: Constants.tDefaultSize,
+                                        ),
+                                      )),
+                                      DataColumn(
+                                          label: Text(
+                                        "Parcel Info",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: Constants.tDefaultSize,
+                                        ),
+                                      )),
+                                      DataColumn(
+                                          label: Text(
+                                        "Weight",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: Constants.tDefaultSize,
+                                        ),
+                                      )),
+                                      DataColumn(
+                                          label: Text(
+                                        "Note",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: Constants.tDefaultSize,
+                                        ),
+                                      )),
+                                      DataColumn(
+                                          label: Text(
+                                        "Action",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: Constants.tDefaultSize,
+                                        ),
+                                      )),
+                                    ],
+                                    rows: deliReturnList.map((deliReturn) {
+                                      String apiDateString =
+                                          "${deliReturn!.created_at!}"; // Replace this with your API date
+                                      DateTime apiDate =
+                                          DateTime.parse(apiDateString);
+                                      String formattedDate =
+                                          DateFormat('dd-MM-yyyy H:m a')
+                                              .format(apiDate);
+                                      return DataRow(cells: [
+                                        DataCell(Container(
+                                          padding: EdgeInsets.only(left: 5),
+                                          //  color: Colors.white,
+                                          child: Text(
+                                            (deliReturnList
+                                                        .indexOf(deliReturn) +
+                                                    1)
+                                                .toString(),
+                                            style: TextStyle(
+                                                fontSize: Constants.tSmallSize),
+                                          ),
+                                        )),
+                                        DataCell(Text(
+                                          "$formattedDate",
+                                          style: TextStyle(
+                                              fontSize: Constants.tSmallSize),
+                                        )),
+                                        DataCell(Text(
+                                          deliReturn.order_code!,
+                                          style: TextStyle(
+                                              fontSize: Constants.tSmallSize),
+                                        )),
+                                        DataCell(Text(
+                                          deliReturn.to_name!,
+                                          style: TextStyle(
+                                              fontSize: Constants.tSmallSize),
+                                        )),
+                                        DataCell(Text(
+                                          deliReturn.to_phone!,
+                                          style: TextStyle(
+                                              fontSize: Constants.tSmallSize),
+                                        )),
+                                        DataCell(Text(
+                                          deliReturn.to_address!,
+                                          style: TextStyle(
+                                              fontSize: Constants.tSmallSize),
+                                        )),
+                                        DataCell(Text(
+                                          deliReturn.to_township!,
+                                          style: TextStyle(
+                                              fontSize: Constants.tSmallSize),
+                                        )),
+                                        DataCell(Text(
+                                          deliReturn.item_info!,
+                                          style: TextStyle(
+                                              fontSize: Constants.tSmallSize),
+                                        )),
+                                        DataCell(Text(
+                                          deliReturn.weight!,
+                                          style: TextStyle(
+                                              // color: Constants.green,
+                                              fontSize: Constants.tSmallSize),
+                                        )),
+                                        DataCell(deliReturn.note != null
+                                            ? Text(
+                                                deliReturn.note!,
+                                                style: TextStyle(
+                                                    // color: Constants.green,
+                                                    fontSize:
+                                                        Constants.tSmallSize),
+                                              )
+                                            : Container()),
+                                        DataCell(
+                                            InkWell(
+                                              onTap: (() async {
+                                                setState(() {
+                                                  orderid =
+                                                      deliReturn.order_id!;
+                                                });
+                                                bool res = await Get.to(
+                                                    GetWayDetail(
+                                                        id: orderid
+                                                            .toString()));
+
+                                                if (res) {
+                                                  ref.invalidate(
+                                                      orderDetailProvider);
+                                                }
+                                              }),
+                                              child: Center(
+                                                child: Container(
+                                                  width: 20,
+                                                  height: 20,
+                                                  color: Constants.blue,
+                                                  child: Icon(
+                                                    Icons.menu,
+                                                    size: 18,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                            ), onTap: () {
+                                        })
+                                      ]);
+                                    }).toList(),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }, error: (Object error, StackTrace stackTrace) {
+                            return Text('$error');
+                          }, loading: () {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Divider(),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Text(
+                                '',
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
                           )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                Divider(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Show',
-                      style: TextStyle(
-                        fontSize: 14,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.27,
-                      height: 35,
-                      margin: EdgeInsets.all(16),
-                      decoration:
-                          BoxDecoration(border: Border.all(color: Colors.grey)),
-                      padding: EdgeInsets.symmetric(horizontal: 7),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          value: value,
-                          isExpanded: true,
-                          items: items.map(buildMenuItem).toList(),
-                          onChanged: (value) =>
-                              setState(() => this.value = value),
-                        ),
-                      )
-
-                      // value: selecttownshipDetailPick,
-
-                      ,
-                    ),
-                    // SizedBox(
-                    //   width: MediaQuery.of(context).size.height * 0.12,
-                    //   height: 35,
-                    //   child: TextFormField(
-                    //     controller: countController,
-                    //     focusNode: countFocusNode,
-                    //     decoration: InputDecoration(
-                    //       // labelText: "user name",
-                    //       labelStyle: TextStyle(fontSize: 12),
-                    //       //  suffixIcon: Icon(Icons.person),
-                    //       fillColor: Colors.white,
-                    //       focusedBorder: OutlineInputBorder(
-                    //         //  borderRadius: BorderRadius.circular(10.0),
-                    //         borderSide: BorderSide(
-                    //           color: Colors.black12,
-                    //         ),
-                    //       ),
-                    //       enabledBorder: OutlineInputBorder(
-                    //         // borderRadius: BorderRadius.circular(10.0),
-                    //         borderSide: BorderSide(
-                    //           color: Colors.grey,
-                    //           // width: 2.0,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      'entries',
-                      style: TextStyle(
-                        fontSize: 14,
+                        ]),
                       ),
                     )
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Search:',
-                      style: TextStyle(
-                        fontSize: 14,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 3,
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.height * 0.2,
-                      height: 35,
-                      child: TextFormField(
-                        controller: countController,
-                        focusNode: countFocusNode,
-                        decoration: InputDecoration(
-                          // labelText: "user name",
-                          labelStyle: TextStyle(fontSize: 12),
-                          //  suffixIcon: Icon(Icons.person),
-                          fillColor: Colors.white,
-                          focusedBorder: OutlineInputBorder(
-                            //  borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide(
-                              color: Colors.black12,
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            // borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide(
-                              color: Colors.grey,
-                              //  width: 2.0,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.31,
-                  margin: EdgeInsets.symmetric(horizontal: 8),
-                  // color: Constants.gray,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      DataTable(
-                        headingRowColor:
-                            MaterialStateProperty.all(Constants.gray),
-                        dataRowColor: MaterialStateProperty.all(Colors.white),
-                        decoration: BoxDecoration(
-                            //color: Colors.grey
-                            ),
-                        horizontalMargin: 8,
-                        columnSpacing: 18,
-                        border: TableBorder.all(color: Colors.black12),
-                        columns: [
-                          DataColumn(
-                              label: Text(
-                            "#",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: Constants.tDefaultSize,
-                            ),
-                          )),
-                          DataColumn(
-                              label: Text(
-                            "Process Date",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: Constants.tDefaultSize,
-                            ),
-                          )),
-                          DataColumn(
-                              label: Text(
-                            "Code",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: Constants.tDefaultSize,
-                            ),
-                          )),
-                          DataColumn(
-                              label: Text(
-                            "To Delivery Info",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: Constants.tDefaultSize,
-                            ),
-                          )),
-                          DataColumn(
-                              label: Text(
-                            "",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: Constants.tDefaultSize,
-                            ),
-                          )),
-                          DataColumn(
-                              label: Text(
-                            "",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: Constants.tDefaultSize,
-                            ),
-                          )),
-                          DataColumn(
-                              label: Text(
-                            "",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: Constants.tDefaultSize,
-                            ),
-                          )),
-                          DataColumn(
-                              label: Text(
-                            "Parcel Info",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: Constants.tDefaultSize,
-                            ),
-                          )),
-                          DataColumn(
-                              label: Text(
-                            "Weight",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: Constants.tDefaultSize,
-                            ),
-                          )),
-                          DataColumn(
-                              label: Text(
-                            "Note",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: Constants.tDefaultSize,
-                            ),
-                          )),
-                          DataColumn(
-                              label: Text(
-                            "Action",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: Constants.tDefaultSize,
-                            ),
-                          )),
-                        ],
-                        rows: orders!.map((order) {
-                          return DataRow(cells: [
-                            DataCell(Container(
-                              padding: EdgeInsets.only(left: 5),
-                              //  color: Colors.white,
-                              child: Text(
-                                '1',
-                                style:
-                                    TextStyle(fontSize: Constants.tSmallSize),
-                              ),
-                            )),
-                            DataCell(Text(
-                              '21-08-2023 01:23 am',
-                              style: TextStyle(fontSize: Constants.tSmallSize),
-                            )),
-                            DataCell(Text(
-                              '11-230020',
-                              style: TextStyle(fontSize: Constants.tSmallSize),
-                            )),
-                            DataCell(Text(
-                              'Ko Thura',
-                              style: TextStyle(fontSize: Constants.tSmallSize),
-                            )),
-                            DataCell(Text(
-                              '09964483525',
-                              style: TextStyle(fontSize: Constants.tSmallSize),
-                            )),
-                            DataCell(Text(
-                              '12e Ad Road',
-                              style: TextStyle(fontSize: Constants.tSmallSize),
-                            )),
-                            DataCell(Text(
-                              'Dagon',
-                              style: TextStyle(fontSize: Constants.tSmallSize),
-                            )),
-                            DataCell(Text(
-                              'Box',
-                              style: TextStyle(fontSize: Constants.tSmallSize),
-                            )),
-                            DataCell(Text(
-                              '1.00',
-                              style: TextStyle(
-                                  // color: Constants.green,
-                                  fontSize: Constants.tSmallSize),
-                            )),
-                            DataCell(Text(
-                              'Not connect',
-                              style: TextStyle(
-                                  // color: Constants.green,
-                                  fontSize: Constants.tSmallSize),
-                            )),
-                            DataCell(
-                                Center(
-                                  child: Icon(
-                                    Icons.message,
-                                    color: Constants.blue,
-                                  ),
-                                ), onTap: () {
-                              // Get.to(() => ReturnDeliverScreenDetail());
-                              //       orderId: order.id!,
-                              //       orderStatus: order.last_status!.name!,
-                              //       order_id: order.orderId.toString(),
-                              //     )
-                              //     );
-                            })
-                          ]);
-                        }).toList(),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                Text(
-                  'Showing 1 to 2 of 2 entries',
-                  style: TextStyle(fontSize: 14),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.04,
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 3,
-                  ),
-                  decoration:
-                      BoxDecoration(border: Border.all(color: Colors.black12)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
-                        child: Text(
-                          'Previous',
-                          style: TextStyle(fontSize: 12, color: Colors.black54),
-                        ),
-                      ),
-                      Container(
-                        width: 30,
-                        color: Constants.blue,
-                        child: Center(
-                          child: Text(
-                            '1',
-                            style: TextStyle(fontSize: 12, color: Colors.white),
-                          ),
-                        ),
-                      ),
-                      Text(
-                        'Next',
-                        style: TextStyle(fontSize: 12, color: Colors.black54),
-                      ),
-                    ],
-                  ),
-                ),
-                Divider(),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Text(
-                      'Footer',
-                      //textAlign: TextAlign.start,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                )
-              ]),
-            ),
-          ),
-        ]),
+                  : Container(),
+            ]),
+          );
+        },
       )),
     );
   }

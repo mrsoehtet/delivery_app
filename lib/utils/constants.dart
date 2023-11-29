@@ -38,6 +38,18 @@ class APIURL {
   static const String pickedup = "$mainUrl/pickedup";
   static const String pickup_ways = "$mainUrl/pickup_ways";
   static const String delete_ways = "$mainUrl/delete_way";
+  static const String deliveryGetWay = "$mainUrl/delivery/getway";
+  static const String deliveryGetWayList = "$mainUrl/delivery/getway_list";
+  static const String deliverytransferToWH =
+      "$mainUrl/delivery/transfer_towh_list";
+  static const String deliveryProcessList = "$mainUrl/delivery/processlist";
+  static const String deliveryDone = "$mainUrl/delivery/done";
+  static const String sendToWHPost = "$mainUrl/delivery/send_towh";
+  static const String returnParcel = "$mainUrl/delivery/return_parcel";
+  static const String cancelParcel = "$mainUrl/delivery/return_parcel";
+  static const String deliveryDoneList = "$mainUrl/delivery/done_list";
+  static const String deliveryReturnList = "$mainUrl/delivery/return_list";
+  
 
   static const String signUpUrl = "$mainUrl/register";
   static const String signUpFirstStepUrl = "$mainUrl/create-login";

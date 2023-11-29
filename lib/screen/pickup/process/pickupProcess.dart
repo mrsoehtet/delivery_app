@@ -1,9 +1,12 @@
+import 'package:delivery_app/controller/naviController.dart';
+import 'package:delivery_app/screen/delivery/getWay/getWayDetail.dart';
 import 'package:delivery_app/screen/pickup/process/pickupProcessDetails.dart';
 import 'package:delivery_app/screen/profile.dart';
+import 'package:delivery_app/service/orderDetailService.dart';
 import 'package:delivery_app/service/pickupProcessService.dart';
 import 'package:delivery_app/service/pickupRequestService.dart';
+import 'package:delivery_app/utils/global.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -22,6 +25,17 @@ class PickupProcess extends StatefulWidget {
 }
 
 class _PickupProcessState extends State<PickupProcess> {
+  String? orderid;
+  final TextStyle unselectedLabelStyle = TextStyle(
+      color: Colors.white.withOpacity(0.5),
+      fontWeight: FontWeight.w500,
+      fontSize: 12);
+
+  final TextStyle selectedLabelStyle = TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.w500,
+    fontSize: 12,
+  );
   var orders = Get.find<OrderController>().orders;
 
   TextEditingController countController = TextEditingController();
@@ -37,9 +51,88 @@ class _PickupProcessState extends State<PickupProcess> {
     super.initState();
   }
 
+  buildBottomNavigationMenu(context, naviController) {
+    return Obx(
+      () => MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.09,
+          child: BottomNavigationBar(
+            showUnselectedLabels: true,
+            showSelectedLabels: true,
+            onTap: Global.changePage,
+            currentIndex: naviController.currentIndex.value,
+            // backgroundColor: Color.fromRGBO(101, 10, 10, 0.8),
+            backgroundColor: Constants.blue,
+            unselectedItemColor: Colors.white,
+            selectedItemColor: Constants.red,
+            unselectedLabelStyle: unselectedLabelStyle,
+            selectedLabelStyle: selectedLabelStyle,
+            type: BottomNavigationBarType.fixed,
+            items: [
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.home,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Home'.tr,
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.card_giftcard,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Pickup'.tr,
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.qr_code,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Scan'.tr,
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.delivery_dining,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Delivery',
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.person_sharp,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Account'.tr,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final NaviController naviController = Get.put(NaviController());
+
     return Scaffold(
+      bottomNavigationBar: buildBottomNavigationMenu(context, naviController),
       appBar: AppBar(
         title: Text(
           "DelimenPannel",
@@ -204,7 +297,7 @@ class _PickupProcessState extends State<PickupProcess> {
                                   // style: TextButton.styleFrom(
                                   //     padding: const EdgeInsets.only(left: 70)),
                                   onPressed: () {
-                                    Get.to(ProfileScreen());
+                                    Get.to(() => ProfileScreen());
                                   },
                                   child: Center(
                                     child: const Text(
@@ -283,30 +376,30 @@ class _PickupProcessState extends State<PickupProcess> {
               SizedBox(
                 height: 10,
               ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                // width: MediaQuery.of(context).size.width * 0.95,
-                height: 30,
-                decoration: BoxDecoration(color: Constants.gray),
-                child: Row(children: [
-                  Icon(Icons.dashboard),
-                  Text(
-                    ' Home > ',
-                    style: TextStyle(fontSize: 12),
-                  ),
-                  Text(
-                    ' Delimen >',
-                    style: TextStyle(fontSize: 12),
-                  ),
-                  Text(
-                    ' Pickup Process',
-                    style: TextStyle(fontSize: 12),
-                  ),
-                ]),
-              ),
-              SizedBox(
-                height: 16,
-              ),
+              // Container(
+              //   padding: EdgeInsets.symmetric(horizontal: 10),
+              //   // width: MediaQuery.of(context).size.width * 0.95,
+              //   height: 30,
+              //   decoration: BoxDecoration(color: Constants.gray),
+              //   child: Row(children: [
+              //     Icon(Icons.dashboard),
+              //     Text(
+              //       ' Home > ',
+              //       style: TextStyle(fontSize: 12),
+              //     ),
+              //     Text(
+              //       ' Delimen >',
+              //       style: TextStyle(fontSize: 12),
+              //     ),
+              //     Text(
+              //       ' Pickup Process',
+              //       style: TextStyle(fontSize: 12),
+              //     ),
+              //   ]),
+              // ),
+              // SizedBox(
+              //   height: 16,
+              // ),
               _remove
                   ? Card(
                       child: Container(
@@ -446,7 +539,7 @@ class _PickupProcessState extends State<PickupProcess> {
                           ref.watch(processServiceProvider).when(
                               data: (processList) {
                             return Container(
-                              height: MediaQuery.of(context).size.height * 0.45,
+                              height: MediaQuery.of(context).size.height * 0.57,
                               margin: EdgeInsets.symmetric(horizontal: 8),
                               // color: Constants.gray,
                               child: SingleChildScrollView(
@@ -560,47 +653,41 @@ class _PickupProcessState extends State<PickupProcess> {
                                       return DataRow(cells: [
                                         DataCell(Container(
                                           padding: EdgeInsets.only(left: 5),
-                                          //  color: Colors.white,
                                           child: Text(
                                             // '1',
-                                            process!.id.toString(),
-                                            // OrderController.requests.id??'',
+                                            (processList.indexOf(process) + 1)
+                                                .toString(),
+
                                             style: TextStyle(
                                                 fontSize: Constants.tSmallSize),
                                           ),
                                         )),
                                         DataCell(Text(
-                                          //'21-08-2023 01:23 am',
                                           "$formattedDate",
                                           style: TextStyle(
                                               fontSize: Constants.tSmallSize),
                                         )),
                                         DataCell(Text(
-                                          // '11-230020',
                                           process.order_code!,
                                           style: TextStyle(
                                               fontSize: Constants.tSmallSize),
                                         )),
                                         DataCell(Text(
-                                          //'Client Name',
                                           process.from_name!,
                                           style: TextStyle(
                                               fontSize: Constants.tSmallSize),
                                         )),
                                         DataCell(Text(
-                                          // '09964483525',
                                           process.from_phone!,
                                           style: TextStyle(
                                               fontSize: Constants.tSmallSize),
                                         )),
                                         DataCell(Text(
-                                          // 'South Okkalapa',
                                           process.from_addres!,
                                           style: TextStyle(
                                               fontSize: Constants.tSmallSize),
                                         )),
                                         DataCell(Text(
-                                          // 'Dagon',
                                           process.from_township!,
                                           style: TextStyle(
                                               fontSize: Constants.tSmallSize),
@@ -613,7 +700,6 @@ class _PickupProcessState extends State<PickupProcess> {
                                         DataCell(process.status != null
                                             ? Text(
                                                 'Picked Up',
-                                                //process.status!,
                                                 style: TextStyle(
                                                     color: Constants.blue,
                                                     fontSize:
@@ -621,19 +707,50 @@ class _PickupProcessState extends State<PickupProcess> {
                                               )
                                             : Text('')),
                                         DataCell(
-                                            Center(
+                                          Center(
+                                            child: Container(
+                                              width: 20,
+                                              height: 20,
+                                              color: Constants.blue,
                                               child: Icon(
-                                                Icons.message,
-                                                color: Constants.blue,
+                                                Icons.menu,
+                                                size: 18,
+                                                color: Colors.white,
                                               ),
-                                            ), onTap: () {
-                                          Get.to(() => PickupProcessDetail());
-                                          //       orderId: order.id!,
-                                          //       orderStatus: order.last_status!.name!,
-                                          //       order_id: order.orderId.toString(),
-                                          //     )
-                                          //     );
-                                        })
+                                            ),
+                                          ),
+                                          onTap: (() async {
+                                            setState(() {
+                                              orderid = process.order_id!;
+                                            });
+                                            bool res = await Get.to(
+                                                GetWayDetail(
+                                                    id: orderid.toString()));
+                                            print("Id Id Id $orderid");
+                                            if (res) {
+                                              ref.invalidate(
+                                                  orderDetailProvider);
+                                            }
+                                          }),
+                                          //      onTap: () {
+                                          //   //  Get.to(() => PickupProcessDetail());
+                                          //   (
+                                          //     () async {
+                                          //     setState(() {
+                                          //       orderid = process.order_id;
+                                          //     });
+
+                                          //     bool res = await Get.to(
+                                          //         GetWayDetail(
+                                          //             id: orderid.toString()));
+                                          //     print('++++++ $orderid ');
+                                          //     if (res) {
+                                          //       ref.invalidate(
+                                          //           orderDetailProvider);
+                                          //     }
+                                          //   });
+                                          // }
+                                        )
                                       ]);
                                     }).toList(),
                                   ),
@@ -650,57 +767,18 @@ class _PickupProcessState extends State<PickupProcess> {
                           SizedBox(
                             height: 16,
                           ),
-                          // Text(
-                          //   'Showing 1 to 2 of 2 entries',
-                          //   style: TextStyle(fontSize: 14),
-                          // ),
+
                           SizedBox(
                             height: 5,
                           ),
-                          Container(
-                            height: MediaQuery.of(context).size.height * 0.04,
-                            width: MediaQuery.of(context).size.width * 0.4,
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 3,
-                            ),
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black12)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Container(
-                                  child: Text(
-                                    'Previous',
-                                    style: TextStyle(
-                                        fontSize: 12, color: Colors.black54),
-                                  ),
-                                ),
-                                Container(
-                                  width: 30,
-                                  color: Constants.blue,
-                                  child: Center(
-                                    child: Text(
-                                      '1',
-                                      style: TextStyle(
-                                          fontSize: 12, color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  'Next',
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.black54),
-                                ),
-                              ],
-                            ),
-                          ),
+
                           Divider(),
                           Align(
                             alignment: Alignment.topLeft,
                             child: Padding(
                               padding: const EdgeInsets.only(left: 8.0),
                               child: Text(
-                                'Footer',
+                                '',
                                 //textAlign: TextAlign.start,
                               ),
                             ),

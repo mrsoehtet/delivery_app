@@ -1,5 +1,6 @@
 import 'package:delivery_app/model/login/login/user.dart';
 import 'package:delivery_app/model/login/profile/profile.dart';
+import 'package:delivery_app/screen/login.dart';
 import 'package:delivery_app/utils/constants.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -52,8 +53,7 @@ class ProfileService {
       isLoginController.logout();
       Global.loginStatus();
       Global.isLogIn = false;
-      NaviController.to.currentIndex.value = 4;
-      //  Get.off(() => PreScreen());
+      Get.off(() => LoginScreen());
       Get.snackbar(
         "Alert",
         "သင်၏ အင်တာနက်လိုင်း အခက်အခဲကြောင့် အကောင့်ပြန်ဝင်ပါ",

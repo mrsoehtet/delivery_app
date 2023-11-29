@@ -1,4 +1,6 @@
 import 'package:delivery_app/appStart/appstart.dart';
+import 'package:delivery_app/appStart/naviScreen.dart';
+import 'package:delivery_app/utils/global.dart';
 import 'package:delivery_app/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -24,8 +26,8 @@ class _LoginScreenState extends State<LoginScreen> {
   FocusNode passwordFocusNode = FocusNode();
   RememberController rememberController = Get.put(RememberController());
   bool _remember = false;
-  // String? rememberName;
-  // String? rememberPassword;
+  String? rememberName;
+  String? rememberPassword;
   // bool showPassword = false;
   bool isloading = false;
 
@@ -37,9 +39,22 @@ class _LoginScreenState extends State<LoginScreen> {
     // TODO: implement initState
     _isObscured = true;
     super.initState();
-    Future.delayed(Duration(seconds: 3), () {
-      Get.to(LoginScreen());
-    });
+    checkRememberUser();
+  }
+
+  checkRememberUser() async {
+    rememberName = rememberController.readRememberUsername();
+    rememberPassword = rememberController.readRememberPassword();
+    if (rememberName != "" &&
+        rememberName != null &&
+        rememberPassword != "" &&
+        rememberPassword != null) {
+      setState(() {
+        nameController.text = rememberName!;
+        passwordController.text = rememberPassword!;
+        _remember = true;
+      });
+    }
   }
 
   @override
@@ -125,7 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 SizedBox(
                                   height: 10,
                                 ),
-                                SizedBox(
+                                Container(
                                   height: 45,
                                   child: TextFormField(
                                     controller: nameController,
@@ -156,13 +171,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                 SizedBox(
                                   height: 16,
                                 ),
-                                SizedBox(
+                                Container(
                                   height: 45,
                                   child: TextFormField(
                                     obscureText: _isObscured,
                                     controller: passwordController,
                                     focusNode: passwordFocusNode,
-                                    // autofocus: true,
                                     decoration: InputDecoration(
                                       labelText: "password",
                                       labelStyle: TextStyle(fontSize: 12),
@@ -331,12 +345,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                                           rememberController
                                                               .removeRememberPassword();
                                                         }
+                                                        Global.isLogIn = true;
+                                                        Global.loginStatus();
                                                         setState(() {
                                                           isloading = false;
                                                         });
                                                         Get.off(() =>
-                                                            AppStartScreen());
-                                                      } else {
+                                                            NaviScreen());
+                                                      } 
+                                                      else {
                                                         setState(() {
                                                           isloading = false;
                                                           nameController

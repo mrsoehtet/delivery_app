@@ -1,5 +1,5 @@
 import 'package:delivery_app/error/errorScreen.dart';
-import 'package:delivery_app/screen/login.dart';
+import 'package:delivery_app/screen/pickup/request/pickupRequestDetail.dart';
 import 'package:delivery_app/screen/profile.dart';
 import 'package:delivery_app/service/pickupRequestService.dart';
 import 'package:delivery_app/utils/theme.dart';
@@ -18,6 +18,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int? requestid;
   final PageStorageBucket bucket = PageStorageBucket();
   Widget currentScreen = HomeScreen();
   var orders = Get.find<OrderController>().orders;
@@ -134,37 +135,31 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: EdgeInsets.all(16),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(
-                "aung naing's Dashboard",
-                style: TextStyle(
-                  fontSize: 20,
-                  // color: Colors.white,
-                ),
-              ),
               SizedBox(
                 height: 10,
               ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 // width: MediaQuery.of(context).size.width * 0.95,
-                height: 30,
+                height: 40,
                 decoration: BoxDecoration(color: Constants.gray),
                 child: Row(children: [
-                  Icon(Icons.dashboard),
-                  Text(
-                    ' Home > ',
-                    style: TextStyle(fontSize: 12),
+                  Icon(
+                    Icons.person,
+                    size: 30,
                   ),
                   Text(
-                    ' Dashboard >',
-                    style: TextStyle(fontSize: 12),
+                    "aung naing's Dashboard",
+                    style: TextStyle(fontSize: 18),
                   ),
+                  // Text(
+                  //   ' Dashboard >',
+                  //   style: TextStyle(fontSize: 12),
+                  // ),
                 ]),
               ),
               Container(
-                // width: MediaQuery.of(context).size.width * 0.95,
-                //  height: MediaQuery.of(context).size.height * 0.326,
-                height: MediaQuery.of(context).size.height * 0.326,
+                height: MediaQuery.of(context).size.height * 0.12,
                 margin: EdgeInsets.symmetric(vertical: 16, horizontal: 4),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -173,56 +168,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         _buildGiftCard(
-                            1, "Pickup(Assigned)", Constants.realRed),
+                            1, "Pickup\n(Assigned)", Constants.realRed),
                         _buildGiftCard(0, "Pickup Process", Constants.yellow),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 4,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
                         _buildGiftCard(
                             0, "Delivery Process", Constants.realBlue),
                         _buildGiftCard(0, "Total Done", Constants.green),
                       ],
                     ),
+                    SizedBox(
+                      height: 4,
+                    ),
                   ],
                 ),
-
-                // Column(
-                //   children: [
-                //     Row(
-                //       children: [
-                //         _buildGiftCard(
-                //             0, "To Pickup (Assigned)", Constants.realRed),
-                //         _buildGiftCard(
-                //             1, "Pickup Process", Constants.yellow),
-                //       ],
-                //     ),
-                //     Row(
-                //       children: [
-                //         _buildGiftCard(
-                //             0, "Delivery Process", Constants.realBlue),
-                //         _buildGiftCard(10, "Total Done", Constants.green),
-                //       ],
-                //     ),
-                //   ],
-                // )
-                // InkWell(
-                //   //onTap: () => Get.to(DailyChoice()),
-                //   child: GridView.builder(
-                //       itemCount: orders.length,
-                //       gridDelegate:
-                //           const SliverGridDelegateWithFixedCrossAxisCount(
-                //               childAspectRatio: 1.200,
-                //               mainAxisSpacing: 8,
-                //               crossAxisSpacing: 12,
-                //               crossAxisCount: 2),
-                //       itemBuilder: ((context, index) =>
-                //           _buildGiftCard(orders[index]))),
-                // ),
               ),
               _remove
                   ? Card(
@@ -273,18 +230,20 @@ class _HomeScreenState extends State<HomeScreen> {
                           Divider(),
                           ref.watch(requestServiceProvider).when(
                               data: (requestList) {
-                            for (var i = 0; i < requestList.length; i++) {
-                              if (requestList[i]!.status == "Assigned") {
+                            for (var i = 0; i < requestList.data!.length; i++) {
+                              if (requestList.data![i]!.status == "Assigned") {
                                 setState(() {
                                   assignCount += 1;
                                 });
                               }
                             }
-                            return requestList.isNotEmpty
+                            return requestList.data!.isNotEmpty
                                 ? Container(
-                                    margin: EdgeInsets.symmetric(horizontal: 8),
+                                    margin: EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                    ),
                                     height: MediaQuery.of(context).size.height *
-                                        0.25,
+                                        0.45,
                                     // color: Constants.gray,
                                     child: SingleChildScrollView(
                                       scrollDirection: Axis.vertical,
@@ -401,46 +360,43 @@ class _HomeScreenState extends State<HomeScreen> {
                                             )),
                                           ],
                                           //rows: orders!.map((order) {
-                                          rows: requestList.map((request) {
+                                          rows:
+                                              requestList.data!.map((request) {
                                             return
                                                 // request!.status == null?
                                                 DataRow(cells: [
                                               DataCell(Container(
                                                 padding:
                                                     EdgeInsets.only(left: 5),
-                                                //  color: Colors.white,
                                                 child: Text(
-                                                  // '1',
-                                                  request!.id.toString(),
+                                                  (requestList.data!.indexOf(
+                                                              request) +
+                                                          1)
+                                                      .toString(),
                                                   style: TextStyle(
                                                       fontSize:
                                                           Constants.tSmallSize),
                                                 ),
                                               )),
                                               DataCell(Text(
-                                                //'21-08-2023 01:23 am',
-
                                                 request.assign_date!,
                                                 style: TextStyle(
                                                     fontSize:
                                                         Constants.tSmallSize),
                                               )),
                                               DataCell(Text(
-                                                // 'Client Name',
                                                 request!.name!,
                                                 style: TextStyle(
                                                     fontSize:
                                                         Constants.tSmallSize),
                                               )),
                                               DataCell(Text(
-                                                //'2023-08-21',
                                                 request!.phone!,
                                                 style: TextStyle(
                                                     fontSize:
                                                         Constants.tSmallSize),
                                               )),
                                               DataCell(Text(
-                                                //'2',
                                                 request!.address!,
                                                 style: TextStyle(
                                                     fontSize:
@@ -452,7 +408,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 style: TextStyle(
                                                   fontSize:
                                                       Constants.tSmallSize,
-                                                  // color: Constants.green
                                                 ),
                                               )),
                                               DataCell(Text(
@@ -461,18 +416,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 style: TextStyle(
                                                   fontSize:
                                                       Constants.tSmallSize,
-                                                  //  color: Constants.green
                                                 ),
                                               )),
                                               DataCell(
                                                   request!.no_of_way != null
                                                       ? Text(
-                                                          //'done',
                                                           request.no_of_way!,
                                                           style: TextStyle(
                                                             fontSize: Constants
                                                                 .tSmallSize,
-                                                            //color:Constants.green
                                                           ),
                                                         )
                                                       : Container()),
@@ -495,32 +447,33 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               Constants.blue),
                                                     )),
                                               DataCell(
-                                                  Center(
+                                                Center(
+                                                  child: Container(
+                                                    width: 20,
+                                                    height: 20,
+                                                    color: Constants.blue,
                                                     child: Icon(
-                                                      Icons.message,
-                                                      color: Constants.blue,
+                                                      Icons.menu,
+                                                      size: 18,
+                                                      color: Colors.white,
                                                     ),
-                                                  ), onTap: () {
-                                                // Get.to(() => OrderDetailScreen(
-                                                //       orderId: order.id!,
-                                                //       orderStatus: order.last_status!.name!,
-                                                //       order_id: order.orderId.toString(),
-                                                //     )
-                                                //     );
-                                              })
+                                                  ),
+                                                ),
+                                                onTap: () async {
+                                                  setState(() {
+                                                    requestid = request.id!;
+                                                  });
+                                                  bool res = await Get.to(
+                                                      PickupRequestDetails(
+                                                          id: requestid
+                                                              .toString()));
+                                                  if (res) {
+                                                    ref.invalidate(
+                                                        requestServiceProvider);
+                                                  }
+                                                },
+                                              )
                                             ]);
-                                            // : DataRow(cells: [
-                                            //     DataCell(Text('')),
-                                            //     DataCell(Text('')),
-                                            //     DataCell(Text('')),
-                                            //     DataCell(Text('')),
-                                            //     DataCell(Text('')),
-                                            //     DataCell(Text('')),
-                                            //     DataCell(Text('')),
-                                            //     DataCell(Text('')),
-                                            //     DataCell(Text('')),
-                                            //     DataCell(Text('')),
-                                            //   ]);
                                           }).toList(),
                                         ),
                                       ),
@@ -539,24 +492,24 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: CircularProgressIndicator(),
                             );
                           }),
-                          Divider(),
+                          // Divider(),
                           Align(
                             alignment: Alignment.topLeft,
                             child: Padding(
                               padding: const EdgeInsets.only(left: 8.0),
                               child: Text(
-                                'Footer',
+                                '',
                                 //textAlign: TextAlign.start,
                               ),
                             ),
                           ),
-                          SizedBox(
-                            height: 10,
-                          )
                         ]),
                       ),
                     )
                   : Container(),
+              SizedBox(
+                height: 20,
+              )
             ]),
           );
         }),
@@ -570,8 +523,8 @@ class _HomeScreenState extends State<HomeScreen> {
         // Get.to(() => DailyChoice());
       },
       child: Container(
-        width: MediaQuery.of(context).size.width * 0.4,
-        height: MediaQuery.of(context).size.height * 0.16,
+        width: MediaQuery.of(context).size.width * 0.22,
+        height: MediaQuery.of(context).size.height * 0.115,
         child: Card(
           elevation: 5,
           //shadowColor: Colors.transparent,
@@ -579,88 +532,25 @@ class _HomeScreenState extends State<HomeScreen> {
           color: color,
           // shadowColor: Colors.black,
           child: Container(
-            padding: EdgeInsets.only(top: 15),
+            padding: EdgeInsets.only(top: 3),
             child: Column(children: [
               Text(
                 // order.id.toString(),
                 id.toString(),
                 style: TextStyle(
                     color: Colors.white,
-                    fontSize: 28,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold),
               ),
-              SizedBox(
-                height: 5,
-              ),
-
-              // Divider(
-              //   color: CustomColor.black,
-              // ),
-
               Text(
                 // '3D',
                 // order.pickup,
                 name,
+                textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 12),
               ),
               SizedBox(
                 height: 15,
-              ),
-
-              // Container(
-              //   //   padding: EdgeInsets.only(top: 1),
-              //   child: ElevatedButton(
-              //       style: ElevatedButton.styleFrom(
-              //           backgroundColor: Colors.transparent),
-              //       onPressed: () {
-              //         // Get.to(HomePage());
-              //       },
-              //       child: Row(
-              //         mainAxisAlignment: MainAxisAlignment.center,
-              //         children: [
-              //           Text(
-              //             "More Info",
-              //             style: TextStyle(fontSize: 15),
-              //           ),
-              //           SizedBox(
-              //             width: 10,
-              //           ),
-              //           Icon(
-              //             Icons.arrow_forward_outlined,
-              //             size: 20,
-              //           )
-              //         ],
-              //       )),
-              // )
-              Container(
-                width: double.infinity,
-                height: 25,
-                padding: EdgeInsets.only(left: 16, top: 3),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(4),
-                        bottomRight: Radius.circular(4)),
-                    color: Colors.black26),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "More Info",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12.0,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Icon(
-                      Icons.arrow_forward,
-                      size: 18,
-                      color: Colors.white,
-                    )
-                  ],
-                ),
               ),
             ]),
           ),

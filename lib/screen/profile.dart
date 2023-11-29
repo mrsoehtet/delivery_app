@@ -2,10 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:delivery_app/appStart/appstart.dart';
 import 'package:delivery_app/controller/getController.dart';
+import 'package:delivery_app/controller/isLoginController.dart';
+import 'package:delivery_app/controller/naviController.dart';
 import 'package:delivery_app/screen/login.dart';
 import 'package:delivery_app/service/authorizeService.dart';
 import 'package:delivery_app/service/profileService.dart';
 import 'package:delivery_app/utils/constants.dart';
+import 'package:delivery_app/utils/global.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -285,7 +288,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Row(
                       children: [
                         Text(
-                          "aung naing",
+                          // "aung naing",
+                          profileList!.full_name.toString(),
                           style: TextStyle(
                             fontSize: 20,
                             // color: Colors.white,
@@ -549,7 +553,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.red),
                               onPressed: () {
-                                Get.to(() => LoginScreen());
+                                SharedPref.clear();
+                                IsLoginController().logout();
+                                Global.loginStatus();
+                                Global.isLogIn = false;
+                                NaviController.to.currentIndex.value = 0;
+                                Get.back();
+                                Get.off(() => LoginScreen());
+                                Get.snackbar(
+                                  "Notice",
+                                  "Logout Successfully",
+                                  backgroundColor: Constants.kPrimaryLightColor,
+                                );
                               },
                               child: Text(
                                 "Logout",

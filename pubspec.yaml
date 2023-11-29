@@ -59,8 +59,11 @@ dependencies:
   freezed_annotation: ^2.2.0
   collection: 
   liquid_pull_to_refresh: ^3.0.1
-  
+  signature:
+  flutter_signature_pad: ^3.0.1
+  path_provider: ^2.1.1
 
+  
 
 dev_dependencies:
   flutter_test:

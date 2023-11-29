@@ -1,7 +1,10 @@
+import 'package:delivery_app/controller/naviController.dart';
 import 'package:delivery_app/model/pickupDone/done/donePickup.dart';
+import 'package:delivery_app/screen/delivery/getWay/getWayDetail.dart';
 import 'package:delivery_app/screen/profile.dart';
+import 'package:delivery_app/service/orderDetailService.dart';
 import 'package:delivery_app/service/pickupDoneSevice.dart';
-import 'package:delivery_app/service/pickupRequestService.dart';
+import 'package:delivery_app/utils/global.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter/material.dart';
@@ -23,6 +26,19 @@ class PickupDoneList extends StatefulWidget {
 }
 
 class _PickupDoneListState extends State<PickupDoneList> {
+  String? orderid;
+
+  final TextStyle unselectedLabelStyle = TextStyle(
+      color: Colors.white.withOpacity(0.5),
+      fontWeight: FontWeight.w500,
+      fontSize: 12);
+
+  final TextStyle selectedLabelStyle = TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.w500,
+    fontSize: 12,
+  );
+
   var orders = Get.find<OrderController>().orders;
   List<DonePickup> _dataRows = [];
 
@@ -35,49 +51,91 @@ class _PickupDoneListState extends State<PickupDoneList> {
   @override
   void initState() {
     _remove = true;
-    //_loadData();
-
     super.initState();
   }
 
-//   void _refreshData() {
-//   setState(() {
-//     _dataRows.clear(); // Clear the existing data
-//     // Load new data or update _dataRows with refreshed data
-//     _loadData();
-//   });
-// }
-
-// void _loadData() async {
-//     // Fetch data from your API and update _dataRows
-//     final newData = await fetchDataFromApi();
-//     setState(() {
-//       _dataRows = newData.map((item) {
-//         return DataRow(
-//           cells: [
-//             DataCell(Text(item['item'])),
-//             DataCell(Text(item['value'])),
-//           ],
-//         );
-//       }).cast<DonePickup>().toList();
-//     });
-//   }
-
-//    Future<List<DonePickup?>> fetchDataFromApi() async {
-//     // Simulated API data for demonstration
-//     await Future.delayed(Duration(seconds: 2)); // Simulate API delay
-//     return
-//      [
-//      // {}
-//       {'item': 'Item 1', 'value': 'Value 1'},
-//       {'item': 'Item 2', 'value': 'Value 2'},
-//       // Add more data fetched from your API
-//     ];
-//   }
+  buildBottomNavigationMenu(context, naviController) {
+    return Obx(
+      () => MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.09,
+          child: BottomNavigationBar(
+            showUnselectedLabels: true,
+            showSelectedLabels: true,
+            onTap: Global.changePage,
+            currentIndex: naviController.currentIndex.value,
+            // backgroundColor: Color.fromRGBO(101, 10, 10, 0.8),
+            backgroundColor: Constants.blue,
+            unselectedItemColor: Colors.white,
+            selectedItemColor: Constants.red,
+            unselectedLabelStyle: unselectedLabelStyle,
+            selectedLabelStyle: selectedLabelStyle,
+            type: BottomNavigationBarType.fixed,
+            items: [
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.home,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Home'.tr,
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.card_giftcard,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Pickup'.tr,
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.qr_code,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Scan'.tr,
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.delivery_dining,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Delivery',
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.person_sharp,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Account'.tr,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    final NaviController naviController = Get.put(NaviController());
+
     return Scaffold(
+      bottomNavigationBar: buildBottomNavigationMenu(context, naviController),
       appBar: AppBar(
         title: Text(
           "DelimenPannel",
@@ -242,7 +300,7 @@ class _PickupDoneListState extends State<PickupDoneList> {
                                   // style: TextButton.styleFrom(
                                   //     padding: const EdgeInsets.only(left: 70)),
                                   onPressed: () {
-                                    Get.to(ProfileScreen());
+                                    Get.to(() => ProfileScreen());
                                   },
                                   child: Center(
                                     child: const Text(
@@ -293,7 +351,6 @@ class _PickupDoneListState extends State<PickupDoneList> {
       ),
       body: SingleChildScrollView(child: Consumer(
         builder: ((context, ref, child) {
-          //  final pickup = ref.watch(requestServiceProvider);
           return Container(
             margin: EdgeInsets.all(16),
             child: Column(children: [
@@ -320,30 +377,6 @@ class _PickupDoneListState extends State<PickupDoneList> {
               ),
               SizedBox(
                 height: 10,
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                // width: MediaQuery.of(context).size.width * 0.95,
-                height: 30,
-                decoration: BoxDecoration(color: Constants.gray),
-                child: Row(children: [
-                  Icon(Icons.dashboard),
-                  Text(
-                    ' Home > ',
-                    style: TextStyle(fontSize: 12),
-                  ),
-                  Text(
-                    ' Delimen >',
-                    style: TextStyle(fontSize: 12),
-                  ),
-                  Text(
-                    ' Pickup Done',
-                    style: TextStyle(fontSize: 12),
-                  ),
-                ]),
-              ),
-              SizedBox(
-                height: 16,
               ),
               _remove
                   ? Card(
@@ -395,48 +428,6 @@ class _PickupDoneListState extends State<PickupDoneList> {
                             ),
                           ),
                           Divider(),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.center,
-                          //   children: [
-                          //     Text(
-                          //       'Show',
-                          //       style: TextStyle(
-                          //         fontSize: 14,
-                          //       ),
-                          //     ),
-                          //     SizedBox(
-                          //       width: 5,
-                          //     ),
-                          //     Container(
-                          //       width: MediaQuery.of(context).size.width * 0.27,
-                          //       height: 35,
-                          //       margin: EdgeInsets.all(16),
-                          //       decoration: BoxDecoration(
-                          //           border: Border.all(color: Colors.grey)),
-                          //       padding: EdgeInsets.symmetric(horizontal: 7),
-                          //       child: DropdownButtonHideUnderline(
-                          //         child: DropdownButton<String>(
-                          //           value: value,
-                          //           isExpanded: true,
-                          //           items: items.map(buildMenuItem).toList(),
-                          //           onChanged: (value) =>
-                          //               setState(() => this.value = value),
-                          //         ),
-                          //       ),
-
-                          //       // value: selecttownshipDetailPick,
-                          //     ),
-                          //     SizedBox(
-                          //       width: 5,
-                          //     ),
-                          //     Text(
-                          //       'entries',
-                          //       style: TextStyle(
-                          //         fontSize: 14,
-                          //       ),
-                          //     )
-                          //   ],
-                          // ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -484,7 +475,7 @@ class _PickupDoneListState extends State<PickupDoneList> {
                           ref.watch(donePickupServiceProvider).when(
                               data: (donePickupList) {
                             return Container(
-                              height: MediaQuery.of(context).size.height * 0.45,
+                              height: MediaQuery.of(context).size.height * 0.57,
                               margin: EdgeInsets.symmetric(horizontal: 8),
                               // color: Constants.gray,
                               child: SingleChildScrollView(
@@ -595,51 +586,45 @@ class _PickupDoneListState extends State<PickupDoneList> {
                                           DateFormat('dd-MM-yyyy a')
                                               .format(apiDate);
                                       print(formattedDate);
-                                      //rows: orders!.map((order) {
+
                                       return DataRow(cells: [
                                         DataCell(Container(
                                           padding: EdgeInsets.only(left: 5),
-                                          //  color: Colors.white,
                                           child: Text(
-                                            // '1',
-                                            donePickup!.id.toString(),
-                                            // OrderController.requests.id??'',
+                                            (donePickupList
+                                                        .indexOf(donePickup) +
+                                                    1)
+                                                .toString(),
                                             style: TextStyle(
                                                 fontSize: Constants.tSmallSize),
                                           ),
                                         )),
                                         DataCell(Text(
-                                          //'21-08-2023 01:23 am',
                                           "$formattedDate",
                                           style: TextStyle(
                                               fontSize: Constants.tSmallSize),
                                         )),
                                         DataCell(Text(
-                                          // '11-230020',
                                           donePickup.order_code!,
                                           style: TextStyle(
                                               fontSize: Constants.tSmallSize),
                                         )),
                                         DataCell(Text(
-                                          //'Client Name',
                                           donePickup.from_name!,
                                           style: TextStyle(
                                               fontSize: Constants.tSmallSize),
                                         )),
                                         DataCell(Text(
-                                          // '09964483525',
                                           donePickup.from_phone!,
                                           style: TextStyle(
                                               fontSize: Constants.tSmallSize),
                                         )),
                                         DataCell(Text(
-                                          // 'South Okkalapa',
                                           donePickup.from_addres!,
                                           style: TextStyle(
                                               fontSize: Constants.tSmallSize),
                                         )),
                                         DataCell(Text(
-                                          // 'Dagon',
                                           donePickup.from_township!,
                                           style: TextStyle(
                                               fontSize: Constants.tSmallSize),
@@ -652,7 +637,6 @@ class _PickupDoneListState extends State<PickupDoneList> {
                                         DataCell(donePickup.status != null
                                             ? Text(
                                                 'Done',
-                                                //process.status!,
                                                 style: TextStyle(
                                                     color: Constants.green,
                                                     fontSize:
@@ -660,19 +644,32 @@ class _PickupDoneListState extends State<PickupDoneList> {
                                               )
                                             : Text('')),
                                         DataCell(
-                                            Center(
+                                          Center(
+                                            child: Container(
+                                              width: 20,
+                                              height: 20,
+                                              color: Constants.blue,
                                               child: Icon(
-                                                Icons.message,
-                                                color: Constants.blue,
+                                                Icons.menu,
+                                                size: 18,
+                                                color: Colors.white,
                                               ),
-                                            ), onTap: () {
-                                          //  Get.to(() => PickupDoneListDetail());
-                                          //       orderId: order.id!,
-                                          //       orderStatus: order.last_status!.name!,
-                                          //       order_id: order.orderId.toString(),
-                                          //     )
-                                          //     );
-                                        })
+                                            ),
+                                          ),
+                                          onTap: (() async {
+                                            setState(() {
+                                              orderid = donePickup.order_id!;
+                                            });
+                                            bool res = await Get.to(
+                                                GetWayDetail(
+                                                    id: orderid.toString()));
+                                            print("Id Id Id $orderid");
+                                            if (res) {
+                                              ref.invalidate(
+                                                  orderDetailProvider);
+                                            }
+                                          }),
+                                        )
                                       ]);
                                     }).toList(),
                                   ),
@@ -689,49 +686,8 @@ class _PickupDoneListState extends State<PickupDoneList> {
                           SizedBox(
                             height: 16,
                           ),
-                          // Text(
-                          //   'Showing 1 to 2 of 2 entries',
-                          //   style: TextStyle(fontSize: 14),
-                          // ),
                           SizedBox(
                             height: 5,
-                          ),
-                          Container(
-                            height: MediaQuery.of(context).size.height * 0.04,
-                            width: MediaQuery.of(context).size.width * 0.4,
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 3,
-                            ),
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black12)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Container(
-                                  child: Text(
-                                    'Previous',
-                                    style: TextStyle(
-                                        fontSize: 12, color: Colors.black54),
-                                  ),
-                                ),
-                                Container(
-                                  width: 30,
-                                  color: Constants.blue,
-                                  child: Center(
-                                    child: Text(
-                                      '1',
-                                      style: TextStyle(
-                                          fontSize: 12, color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  'Next',
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.black54),
-                                ),
-                              ],
-                            ),
                           ),
                           Divider(),
                           Align(
@@ -739,7 +695,7 @@ class _PickupDoneListState extends State<PickupDoneList> {
                             child: Padding(
                               padding: const EdgeInsets.only(left: 8.0),
                               child: Text(
-                                'Footer',
+                                '',
                                 //textAlign: TextAlign.start,
                               ),
                             ),

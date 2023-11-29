@@ -1,3 +1,4 @@
+import 'package:delivery_app/appStart/naviScreen.dart';
 import 'package:delivery_app/controller/isLoginController.dart';
 import 'package:delivery_app/controller/naviController.dart';
 import 'package:delivery_app/utils/sharedPref.dart';
@@ -120,7 +121,7 @@ class ErrorScreen extends StatelessWidget {
                                           NaviController.to.currentIndex.value =
                                               0;
                                           Get.back();
-                                          Get.off(() => PreScreen());
+                                          Get.off(() => NaviScreen());
                                           Get.snackbar(
                                             "Notice",
                                             "Logout Successfully",

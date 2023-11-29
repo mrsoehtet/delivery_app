@@ -1,5 +1,7 @@
+import 'package:delivery_app/controller/naviController.dart';
 import 'package:delivery_app/screen/pickup/process/pickupProcess.dart';
 import 'package:delivery_app/screen/profile.dart';
+import 'package:delivery_app/utils/global.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -17,15 +19,104 @@ class PickupDoneDetail extends StatefulWidget {
 }
 
 class _PickupDoneDetailState extends State<PickupDoneDetail> {
+  final TextStyle unselectedLabelStyle = TextStyle(
+      color: Colors.white.withOpacity(0.5),
+      fontWeight: FontWeight.w500,
+      fontSize: 12);
+
+  final TextStyle selectedLabelStyle = TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.w500,
+    fontSize: 12,
+  );
   var orders = Get.find<OrderController>().orders;
   TextEditingController countController = TextEditingController();
   FocusNode countFocusNode = FocusNode();
   List<String> items = ["30", "50", "100", "All"];
   String? value;
 
+  buildBottomNavigationMenu(context, naviController) {
+    return Obx(
+      () => MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.09,
+          child: BottomNavigationBar(
+            showUnselectedLabels: true,
+            showSelectedLabels: true,
+            onTap: Global.changePage,
+            currentIndex: naviController.currentIndex.value,
+            // backgroundColor: Color.fromRGBO(101, 10, 10, 0.8),
+            backgroundColor: Constants.blue,
+            unselectedItemColor: Colors.white,
+            selectedItemColor: Constants.red,
+            unselectedLabelStyle: unselectedLabelStyle,
+            selectedLabelStyle: selectedLabelStyle,
+            type: BottomNavigationBarType.fixed,
+            items: [
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.home,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Home'.tr,
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.card_giftcard,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Pickup'.tr,
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.qr_code,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Scan'.tr,
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.delivery_dining,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Delivery',
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.person_sharp,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Account'.tr,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final NaviController naviController = Get.put(NaviController());
+
     return Scaffold(
+      bottomNavigationBar: buildBottomNavigationMenu(context, naviController),
       appBar: AppBar(
         title: Text(
           "DelimenPannel",
@@ -190,7 +281,7 @@ class _PickupDoneDetailState extends State<PickupDoneDetail> {
                                   // style: TextButton.styleFrom(
                                   //     padding: const EdgeInsets.only(left: 70)),
                                   onPressed: () {
-                                    Get.to(ProfileScreen());
+                                    Get.to(()=>ProfileScreen());
                                   },
                                   child: Center(
                                     child: const Text(

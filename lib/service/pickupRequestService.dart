@@ -8,7 +8,7 @@ import '../model/pickupRequest/requestList/requestList.dart';
 import '../utils/sharedPref.dart';
 
 final requestServiceProvider =
-    FutureProvider.autoDispose<List<Request?>>((ref) async {
+    FutureProvider.autoDispose<RequestList>((ref) async {
   final service = ref.watch(requestProvider);
   final requestData = await service.getRequestInfo();
   return requestData;
@@ -37,6 +37,6 @@ class RequestService {
       ),
     );
     final request = RequestList.fromJson(response.data);
-    return request.data;
+    return request;
   }
 }

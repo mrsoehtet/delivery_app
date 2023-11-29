@@ -1,5 +1,7 @@
+import 'package:delivery_app/controller/naviController.dart';
 import 'package:delivery_app/screen/pickup/report/reportDetail.dart';
 import 'package:delivery_app/screen/profile.dart';
+import 'package:delivery_app/utils/global.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -18,15 +20,104 @@ class ReportList extends StatefulWidget {
 }
 
 class _ReportListState extends State<ReportList> {
+  final TextStyle unselectedLabelStyle = TextStyle(
+      color: Colors.white.withOpacity(0.5),
+      fontWeight: FontWeight.w500,
+      fontSize: 12);
+
+  final TextStyle selectedLabelStyle = TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.w500,
+    fontSize: 12,
+  );
   var orders = Get.find<OrderController>().orders;
   TextEditingController countController = TextEditingController();
   FocusNode countFocusNode = FocusNode();
   List<String> items = ["30", "50", "100", "All"];
   String? value;
 
+  buildBottomNavigationMenu(context, naviController) {
+    return Obx(
+      () => MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.09,
+          child: BottomNavigationBar(
+            showUnselectedLabels: true,
+            showSelectedLabels: true,
+            onTap: Global.changePage,
+            currentIndex: naviController.currentIndex.value,
+            // backgroundColor: Color.fromRGBO(101, 10, 10, 0.8),
+            backgroundColor: Constants.blue,
+            unselectedItemColor: Colors.white,
+            selectedItemColor: Constants.red,
+            unselectedLabelStyle: unselectedLabelStyle,
+            selectedLabelStyle: selectedLabelStyle,
+            type: BottomNavigationBarType.fixed,
+            items: [
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.home,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Home'.tr,
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.card_giftcard,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Pickup'.tr,
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.qr_code,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Scan'.tr,
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.delivery_dining,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Delivery',
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.person_sharp,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Account'.tr,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final NaviController naviController = Get.put(NaviController());
+
     return Scaffold(
+      bottomNavigationBar: buildBottomNavigationMenu(context, naviController),
       appBar: AppBar(
         title: Text(
           "DelimenPannel",
@@ -191,7 +282,7 @@ class _ReportListState extends State<ReportList> {
                                   // style: TextButton.styleFrom(
                                   //     padding: const EdgeInsets.only(left: 70)),
                                   onPressed: () {
-                                    Get.to(ProfileScreen());
+                                    Get.to(() => ProfileScreen());
                                   },
                                   child: Center(
                                     child: const Text(
@@ -333,50 +424,50 @@ class _ReportListState extends State<ReportList> {
                   ),
                 ),
                 Divider(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Show',
-                      style: TextStyle(
-                        fontSize: 14,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.27,
-                      height: 35,
-                      margin: EdgeInsets.all(16),
-                      decoration:
-                          BoxDecoration(border: Border.all(color: Colors.grey)),
-                      padding: EdgeInsets.symmetric(horizontal: 7),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          value: value,
-                          isExpanded: true,
-                          items: items.map(buildMenuItem).toList(),
-                          onChanged: (value) =>
-                              setState(() => this.value = value),
-                        ),
-                      )
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     Text(
+                //       'Show',
+                //       style: TextStyle(
+                //         fontSize: 14,
+                //       ),
+                //     ),
+                //     SizedBox(
+                //       width: 5,
+                //     ),
+                //     Container(
+                //       width: MediaQuery.of(context).size.width * 0.27,
+                //       height: 35,
+                //       margin: EdgeInsets.all(16),
+                //       decoration:
+                //           BoxDecoration(border: Border.all(color: Colors.grey)),
+                //       padding: EdgeInsets.symmetric(horizontal: 7),
+                //       child: DropdownButtonHideUnderline(
+                //         child: DropdownButton<String>(
+                //           value: value,
+                //           isExpanded: true,
+                //           items: items.map(buildMenuItem).toList(),
+                //           onChanged: (value) =>
+                //               setState(() => this.value = value),
+                //         ),
+                //       )
 
-                      // value: selecttownshipDetailPick,
+                //       // value: selecttownshipDetailPick,
 
-                      ,
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      'entries',
-                      style: TextStyle(
-                        fontSize: 14,
-                      ),
-                    )
-                  ],
-                ),
+                //       ,
+                //     ),
+                //     SizedBox(
+                //       width: 5,
+                //     ),
+                //     Text(
+                //       'entries',
+                //       style: TextStyle(
+                //         fontSize: 14,
+                //       ),
+                //     )
+                //   ],
+                // ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -567,9 +658,15 @@ class _ReportListState extends State<ReportList> {
                             )),
                             DataCell(
                                 Center(
-                                  child: Icon(
-                                    Icons.message,
+                                  child: Container(
+                                    width: 20,
+                                    height: 20,
                                     color: Constants.blue,
+                                    child: Icon(
+                                      Icons.menu,
+                                      size: 18,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ), onTap: () {
                               Get.to(() => ReportDetail());
@@ -590,54 +687,54 @@ class _ReportListState extends State<ReportList> {
                 SizedBox(
                   height: 16,
                 ),
-                Text(
-                  'Showing 1 to 2 of 2 entries',
-                  style: TextStyle(fontSize: 14),
-                ),
+                // Text(
+                //   'Showing 1 to 2 of 2 entries',
+                //   style: TextStyle(fontSize: 14),
+                // ),
                 SizedBox(
                   height: 5,
                 ),
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.04,
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 3,
-                  ),
-                  decoration:
-                      BoxDecoration(border: Border.all(color: Colors.black12)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
-                        child: Text(
-                          'Previous',
-                          style: TextStyle(fontSize: 12, color: Colors.black54),
-                        ),
-                      ),
-                      Container(
-                        width: 30,
-                        color: Constants.blue,
-                        child: Center(
-                          child: Text(
-                            '1',
-                            style: TextStyle(fontSize: 12, color: Colors.white),
-                          ),
-                        ),
-                      ),
-                      Text(
-                        'Next',
-                        style: TextStyle(fontSize: 12, color: Colors.black54),
-                      ),
-                    ],
-                  ),
-                ),
+                // Container(
+                //   height: MediaQuery.of(context).size.height * 0.04,
+                //   width: MediaQuery.of(context).size.width * 0.4,
+                //   padding: EdgeInsets.symmetric(
+                //     horizontal: 3,
+                //   ),
+                //   decoration:
+                //       BoxDecoration(border: Border.all(color: Colors.black12)),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+                //     children: [
+                //       Container(
+                //         child: Text(
+                //           'Previous',
+                //           style: TextStyle(fontSize: 12, color: Colors.black54),
+                //         ),
+                //       ),
+                //       Container(
+                //         width: 30,
+                //         color: Constants.blue,
+                //         child: Center(
+                //           child: Text(
+                //             '1',
+                //             style: TextStyle(fontSize: 12, color: Colors.white),
+                //           ),
+                //         ),
+                //       ),
+                //       Text(
+                //         'Next',
+                //         style: TextStyle(fontSize: 12, color: Colors.black54),
+                //       ),
+                //     ],
+                //   ),
+                // ),
                 Divider(),
                 Align(
                   alignment: Alignment.topLeft,
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8.0),
                     child: Text(
-                      'Footer',
+                      '',
                       //textAlign: TextAlign.start,
                     ),
                   ),

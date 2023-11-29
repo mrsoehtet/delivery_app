@@ -7,6 +7,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import '../screen/pickup/PickupScreen.dart';
+import '../screen/qrScanScreen.dart';
 
 class AppStartScreen extends StatefulWidget {
   const AppStartScreen({super.key});
@@ -20,13 +21,13 @@ class _AppStartScreenState extends State<AppStartScreen> {
   final List<Widget> screen = [
     HomeScreen(),
     PickupScreen(),
+    QRScanScreen(),
     DeliveryScreen(),
     ProfileScreen(),
     // SignOutScreen()
   ];
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: Center(
         child: screen.elementAt(_selectedIndex),
@@ -50,10 +51,15 @@ class _AppStartScreenState extends State<AppStartScreen> {
               GButton(
                 icon: Icons.home,
                 iconSize: 30,
-                // text: "Home",
+                //text: "Home",
               ),
               GButton(
                 icon: Icons.card_giftcard,
+                iconSize: 30,
+                // text: "Pickup",
+              ),
+              GButton(
+                icon: Icons.qr_code,
                 iconSize: 30,
                 // text: "History",
               ),

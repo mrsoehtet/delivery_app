@@ -24,7 +24,7 @@ class _PreScreenState extends State<PreScreen> {
   @override
   void initState() {
     Future.delayed(const Duration(milliseconds: 3000), () {
-      Get.to(LoginScreen());
+      Get.off(()=>LoginScreen());
       //passedCheck();
     });
     super.initState();
