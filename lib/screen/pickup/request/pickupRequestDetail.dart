@@ -318,7 +318,7 @@ class _PickupRequestDetailsState extends ConsumerState<PickupRequestDetails> {
                                     // style: TextButton.styleFrom(
                                     //     padding: const EdgeInsets.only(left: 70)),
                                     onPressed: () {
-                                      Get.to(()=>ProfileScreen());
+                                      Get.to(() => ProfileScreen());
                                     },
                                     child: Center(
                                       child: const Text(

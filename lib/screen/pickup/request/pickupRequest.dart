@@ -988,7 +988,8 @@ class _PickupRequestListState extends State<PickupRequestList> {
                                             style: TextStyle(
                                                 fontSize: Constants.tSmallSize),
                                           )),
-                                          DataCell(request.no_of_way != null
+                                          DataCell(request.no_of_way != null &&
+                                                  request.no_of_way != -1
                                               ? Text(
                                                   //'2',
                                                   request!.no_of_way.toString(),
@@ -1276,8 +1277,8 @@ class _PickupRequestListState extends State<PickupRequestList> {
                                                                                           height: 30,
                                                                                           alignment: Alignment.center,
                                                                                           child: Container(
-                                                                                            width: 20,
-                                                                                            height: 20,
+                                                                                            width: 18,
+                                                                                            height: 18,
                                                                                             child: CircularProgressIndicator(
                                                                                               color: Colors.white,
                                                                                             ),
@@ -1289,7 +1290,7 @@ class _PickupRequestListState extends State<PickupRequestList> {
                                                                                         splashColor: Colors.transparent,
                                                                                         onTap: () async {
                                                                                           // final token = await SharedPref.getData(key: SharedPref.token)
-                                                                                          setState(() {
+                                                                                          setStateDialog(() {
                                                                                             isLoading = true;
                                                                                           });
 
@@ -1301,7 +1302,7 @@ class _PickupRequestListState extends State<PickupRequestList> {
                                                                                           ref.invalidate(requestServiceProvider);
                                                                                           Fluttertoast.showToast(msg: 'Successful Scan', toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.CENTER, timeInSecForIosWeb: 1, backgroundColor: Colors.green, fontSize: 14);
 
-                                                                                          setState(() {
+                                                                                          setStateDialog(() {
                                                                                             isLoading = false;
                                                                                           });
                                                                                           Get.back();
