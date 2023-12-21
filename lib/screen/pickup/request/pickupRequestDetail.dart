@@ -4,6 +4,7 @@ import 'package:delivery_app/controller/naviController.dart';
 import 'package:delivery_app/model/pickupWays/pickupList/pickupList.dart';
 import 'package:delivery_app/screen/deleteButtonScreen.dart';
 import 'package:delivery_app/screen/profile.dart';
+import 'package:delivery_app/service/pickupRequestService.dart';
 import 'package:delivery_app/service/pickupWays.dart';
 import 'package:delivery_app/utils/constants.dart';
 import 'package:delivery_app/utils/global.dart';
@@ -39,6 +40,8 @@ class _PickupRequestDetailsState extends ConsumerState<PickupRequestDetails> {
   List<String> items = ["30", "50", "100", "All"];
   String? value;
   var getResult = 'QR Code Result';
+  var selectedImagePath = "";
+  bool isLoading = false;
   var parcelid;
   var deleteid;
 
@@ -233,125 +236,7 @@ class _PickupRequestDetailsState extends ConsumerState<PickupRequestDetails> {
                 )),
             InkWell(
               onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return StatefulBuilder(
-                        builder: (BuildContext context, StateSetter setState) {
-                      return Container(
-                        height: MediaQuery.of(context).size.height * 0.2,
-                        child: AlertDialog(
-                          contentPadding: EdgeInsets.zero,
-                          titleTextStyle: const TextStyle(
-                              fontSize: 14, color: Colors.black),
-                          content: Container(
-                            color: Constants.blue,
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height * 0.25,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 20),
-                            child: Column(
-                              //  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Container(
-                                  //  margin: EdgeInsets.symmetric(horizontal: 5),
-                                  padding: EdgeInsets.only(right: 10),
-                                  child: CircleAvatar(
-                                    radius: 37,
-                                    backgroundColor: Colors.white24,
-                                    child: CircleAvatar(
-                                      maxRadius: 35,
-                                      backgroundColor: Colors.black45,
-                                      child: Icon(
-                                        Icons.person,
-                                        size: 55,
-                                        color: Colors.white54,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 15, right: 15),
-                                  child: Text(
-                                    "aung naing",
-                                    style: const TextStyle(
-                                        fontSize: 12, color: Colors.white70),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 3,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 15, right: 15),
-                                  child: Text(
-                                    "Delivery Men",
-                                    style: const TextStyle(
-                                        fontSize: 12, color: Colors.white70),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 3,
-                                ),
-                                Center(
-                                    child: Text(
-                                  'Delivery Management System',
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.white70),
-                                )),
-                              ],
-                            ),
-                          ),
-                          actions: [
-                            Container(
-                              // color: Colors.black12,
-                              padding: EdgeInsets.only(left: 8),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  OutlinedButton(
-                                    // style: TextButton.styleFrom(
-                                    //     padding: const EdgeInsets.only(left: 70)),
-                                    onPressed: () {
-                                      Get.to(() => ProfileScreen());
-                                    },
-                                    child: Center(
-                                      child: const Text(
-                                        "Profile",
-                                        style: TextStyle(
-                                            color: Colors.black54,
-                                            fontSize: 12),
-                                      ),
-                                    ),
-                                  ),
-                                  OutlinedButton(
-                                    // style: TextButton.styleFrom(
-                                    //     padding: const EdgeInsets.only(left: 30)),
-                                    onPressed: () {
-                                      Get.to(() => LoginScreen());
-                                      // Get.back();
-                                    },
-                                    child: Center(
-                                      child: const Text("Sign out",
-                                          style: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 12)),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      );
-                    });
-                  },
-                );
+                Get.to(() => ProfileScreen());
               },
               child: Container(
                 padding: EdgeInsets.only(right: 10),
@@ -374,9 +259,10 @@ class _PickupRequestDetailsState extends ConsumerState<PickupRequestDetails> {
             margin: EdgeInsets.all(16),
             child: Column(children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Delimen",
+                    "Got Parcel List",
                     style: TextStyle(
                       fontSize: 20,
                       // color: Colors.white,
@@ -385,11 +271,412 @@ class _PickupRequestDetailsState extends ConsumerState<PickupRequestDetails> {
                   SizedBox(
                     width: 10,
                   ),
-                  Text(
-                    "Got Parcel List",
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey,
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        InkWell(
+                          onTap: (() {
+                            setState(() {
+                              parcelid = widget.id;
+                            });
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return Container(
+                                  // margin: EdgeInsets.only(bottom: 100),
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.7,
+                                  child: AlertDialog(
+                                    contentPadding: EdgeInsets.zero,
+                                    titleTextStyle: const TextStyle(
+                                        fontSize: 14, color: Colors.black),
+                                    content: StatefulBuilder(
+                                        builder: (context, setStateDialog) {
+                                      return Container(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.7,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 20),
+                                        child: Column(
+                                          // mainAxisAlignment:
+                                          //     MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 15, right: 15),
+                                                  child: Text(
+                                                    "Pickup Parcel",
+                                                    style: const TextStyle(
+                                                        fontSize: 16),
+                                                  ),
+                                                ),
+                                                InkWell(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      Get.back();
+                                                      // Navigator.push(context, MaterialPageRoute(builder: (context) => PickupRequestList()));
+                                                      // showDialogVisible = false;
+                                                    });
+                                                  },
+                                                  child: Icon(
+                                                    Icons.cancel,
+                                                    color: Colors.grey,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                            Divider(),
+                                            Text(
+                                              'Take Photo',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize:
+                                                    Constants.tDefaultSize,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: [
+                                                Column(
+                                                  children: [
+                                                    Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.3,
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .height *
+                                                              0.2,
+                                                      child: InkWell(
+                                                        onTap: () async {
+                                                          final pickedFile =
+                                                              await ImagePicker()
+                                                                  .getImage(
+                                                                      source: ImageSource
+                                                                          .camera);
+                                                          setStateDialog(() {
+                                                            selectedImagePath =
+                                                                pickedFile!
+                                                                    .path;
+                                                          });
+                                                          //  OrderController.getImage(ImageSource.camera);
+                                                          //  getImage(ImageSource.camera);
+                                                        },
+                                                        child:
+                                                            selectedImagePath !=
+                                                                    ""
+                                                                ? Container(
+                                                                    width: MediaQuery.of(context)
+                                                                            .size
+                                                                            .width *
+                                                                        0.3,
+                                                                    height: MediaQuery.of(context)
+                                                                            .size
+                                                                            .height *
+                                                                        0.2,
+                                                                    child: Image
+                                                                        .file(
+                                                                            File(
+                                                                      selectedImagePath,
+                                                                    )),
+                                                                  )
+                                                                : Image.asset(
+                                                                    'assets/icons/camera.png',
+                                                                    width: 100,
+                                                                    height: 100,
+                                                                  ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Divider(
+                                              color: Colors.grey,
+                                              thickness: 1,
+                                            ),
+                                            Column(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 15,
+                                                          right: 15,
+                                                          bottom: 10),
+                                                  child: Text(
+                                                    'Scan',
+                                                    style: TextStyle(
+                                                        fontSize: Constants
+                                                            .tDefaultSize,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ),
+                                                InkWell(
+                                                  onTap: () {
+                                                    scanQRCode(setStateDialog);
+                                                  },
+                                                  child: Image.asset(
+                                                    'assets/icons/scanner.png',
+                                                    width: 90,
+                                                    height: 90,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Text(
+                                                  getResult,
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontSize: Constants
+                                                          .tDefaultSize,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Container(
+                                                  margin: EdgeInsets.symmetric(
+                                                      horizontal: 20),
+                                                  child: Row(
+                                                    // mainAxisAlignment:
+                                                    //   MainAxisAlignment.spaceAround,
+                                                    children: [
+                                                      Container(
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal: 8,
+                                                                vertical: 4),
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.19,
+                                                        decoration: BoxDecoration(
+                                                            color: Constants
+                                                                .yellow,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        3)),
+                                                        child: Row(
+                                                          children: [
+                                                            InkWell(
+                                                              onTap: () =>
+                                                                  Get.back(),
+                                                              child: Text(
+                                                                'cancel',
+                                                                //  textAlign: TextAlign.center,
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        Constants
+                                                                            .tDefaultSize,
+                                                                    color: Colors
+                                                                        .white),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 95,
+                                                      ),
+                                                      Consumer(builder:
+                                                          (context, ref,
+                                                              child) {
+                                                        return isLoading
+                                                            ? Card(
+                                                                color: Constants
+                                                                    .green,
+                                                                elevation: 5,
+                                                                child:
+                                                                    Container(
+                                                                  width: 48,
+                                                                  height: 30,
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                  child:
+                                                                      Container(
+                                                                    width: 18,
+                                                                    height: 18,
+                                                                    child:
+                                                                        CircularProgressIndicator(
+                                                                      color: Colors
+                                                                          .white,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            : InkWell(
+                                                                highlightColor:
+                                                                    Colors
+                                                                        .transparent,
+                                                                splashColor: Colors
+                                                                    .transparent,
+                                                                onTap:
+                                                                    () async {
+                                                                  // final token = await SharedPref.getData(key: SharedPref.token)
+                                                                  setStateDialog(
+                                                                      () {
+                                                                    isLoading =
+                                                                        true;
+                                                                  });
+
+                                                                  if (selectedImagePath !=
+                                                                      "") {
+                                                                    await uploadImage(
+                                                                        selectedImagePath,
+                                                                        APIURL
+                                                                            .addWayWithPhoto);
+                                                                  } else {
+                                                                    addQRCode();
+                                                                  }
+                                                                  ref.invalidate(
+                                                                      requestServiceProvider);
+                                                                  Fluttertoast.showToast(
+                                                                      msg:
+                                                                          'Successful Scan',
+                                                                      toastLength:
+                                                                          Toast
+                                                                              .LENGTH_SHORT,
+                                                                      gravity: ToastGravity
+                                                                          .CENTER,
+                                                                      timeInSecForIosWeb:
+                                                                          1,
+                                                                      backgroundColor:
+                                                                          Colors
+                                                                              .green,
+                                                                      fontSize:
+                                                                          14);
+
+                                                                  setStateDialog(
+                                                                      () {
+                                                                    isLoading =
+                                                                        false;
+                                                                  });
+                                                                  Get.back();
+                                                                },
+                                                                child: Card(
+                                                                  shape: RoundedRectangleBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              3)),
+                                                                  color:
+                                                                      Constants
+                                                                          .green,
+                                                                  elevation: 5,
+                                                                  child:
+                                                                      Container(
+                                                                    width: 48,
+                                                                    height: 30,
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .center,
+                                                                    child: Text(
+                                                                      "send",
+                                                                      style: const TextStyle(
+                                                                          fontSize:
+                                                                              14,
+                                                                          color:
+                                                                              Colors.white),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              );
+                                                      }),
+                                                    ],
+                                                  ),
+                                                ),
+                                                // Text(
+                                                //     "$requestid")
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }),
+                                  ),
+                                );
+                              },
+                            );
+                          }),
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 2, vertical: 4),
+                            width: MediaQuery.of(context).size.width * 0.33,
+                            decoration: BoxDecoration(
+                                //  color: Constants.realBlue,
+                                borderRadius: BorderRadius.circular(3)),
+                            child: Column(
+                              children: [
+                                Image.asset(
+                                  'assets/icons/scanner.png',
+                                  width: 30,
+                                  height: 30,
+                                ),
+                                // Icon(
+                                //   Icons.telegram,
+                                //   color: Colors.white,
+                                // ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  'Scan',
+                                  style: TextStyle(
+                                    fontSize: Constants.tDefaultSize,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        // Row(
+                        //   children: [
+                        //     Icon(
+                        //       Icons.remove,
+                        //       color: Colors.grey[500],
+                        //     ),
+                        //     SizedBox(
+                        //       width: 10,
+                        //     ),
+                        //     InkWell(
+                        //       onTap: () => Get.back(),
+                        //       child: Icon(
+                        //         Icons.cancel,
+                        //         color: Colors.grey[500],
+                        //       ),
+                        //     )
+                        //   ],
+                        // )
+                      ],
                     ),
                   ),
                 ],
@@ -416,389 +703,8 @@ class _PickupRequestDetailsState extends ConsumerState<PickupRequestDetails> {
                       SizedBox(
                         height: 10,
                       ),
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 8),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            InkWell(
-                              onTap: (() {
-                                setState(() {
-                                  parcelid = widget.id;
-                                });
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return StatefulBuilder(builder:
-                                        (BuildContext context,
-                                            StateSetter setState) {
-                                      return Container(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.72,
-                                        child: AlertDialog(
-                                          contentPadding: EdgeInsets.zero,
-                                          titleTextStyle: const TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.black),
-                                          content: StatefulBuilder(builder:
-                                              (context, SetStateDialog) {
-                                            return Container(
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.8,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10,
-                                                      vertical: 20),
-                                              child: Column(
-                                                // mainAxisAlignment:
-                                                //     MainAxisAlignment.spaceAround,
-                                                children: [
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                left: 15,
-                                                                right: 15),
-                                                        child: Text(
-                                                          "Pickup Parcel",
-                                                          style:
-                                                              const TextStyle(
-                                                                  fontSize: 16),
-                                                        ),
-                                                      ),
-                                                      InkWell(
-                                                        onTap: () {
-                                                          Navigator.of(context)
-                                                              .pop();
-                                                          setState(() {});
-                                                        },
-                                                        child: Icon(
-                                                          Icons.cancel,
-                                                          color: Colors.grey,
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                  Divider(),
-                                                  Obx((() => OrderController
-                                                              .selectedImagePath
-                                                              .value ==
-                                                          ''
-                                                      ? Text(
-                                                          'Select image camera/gallery',
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: Constants
-                                                                  .tDefaultSize))
-                                                      : Container(
-                                                          width: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width *
-                                                              0.3,
-                                                          height: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .height *
-                                                              0.2,
-                                                          child: Column(
-                                                            children: [
-                                                              Image.file(File(
-                                                                OrderController
-                                                                    .selectedImagePath
-                                                                    .value,
-                                                              )),
-                                                              //FileImage(_image);
-                                                            ],
-                                                          ),
-                                                        ))),
-                                                  SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceAround,
-                                                    children: [
-                                                      Column(
-                                                        children: [
-                                                          InkWell(
-                                                            onTap: () {
-                                                              getImage(
-                                                                  ImageSource
-                                                                      .camera);
-                                                            },
-                                                            child: Image.asset(
-                                                              'assets/icons/camera.png',
-                                                              width: 100,
-                                                              height: 100,
-                                                            ),
-                                                          ),
-                                                          Text(
-                                                            'Take Photo',
-                                                            style: TextStyle(
-                                                                fontSize: Constants
-                                                                    .tDefaultSize,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  Divider(
-                                                    color: Colors.grey,
-                                                    thickness: 1,
-                                                  ),
-                                                  Column(
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                left: 15,
-                                                                right: 15,
-                                                                bottom: 10),
-                                                        child: Text(
-                                                          'Scan',
-                                                          style: TextStyle(
-                                                              fontSize: Constants
-                                                                  .tDefaultSize,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                        ),
-                                                      ),
-                                                      InkWell(
-                                                        onTap: () {
-                                                          scanQRCode();
-                                                        },
-                                                        child: Image.asset(
-                                                          'assets/icons/scanner.png',
-                                                          width: 90,
-                                                          height: 90,
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      InkWell(
-                                                        onTap: () {
-                                                          SetStateDialog(() {
-                                                            setState() {
-                                                              getResult;
-                                                            }
-                                                          });
-                                                        },
-                                                        child: Text(
-                                                          getResult,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                              fontSize: Constants
-                                                                  .tDefaultSize,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      Container(
-                                                        margin: EdgeInsets
-                                                            .symmetric(
-                                                                horizontal: 20),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceEvenly,
-                                                          children: [
-                                                            Container(
-                                                              padding: EdgeInsets
-                                                                  .symmetric(
-                                                                      horizontal:
-                                                                          8,
-                                                                      vertical:
-                                                                          4),
-                                                              width: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width *
-                                                                  0.19,
-                                                              decoration: BoxDecoration(
-                                                                  color: Constants
-                                                                      .yellow,
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              3)),
-                                                              child: Row(
-                                                                children: [
-                                                                  InkWell(
-                                                                    onTap: () =>
-                                                                        Get.back(),
-                                                                    child: Text(
-                                                                      'cancel',
-                                                                      //  textAlign: TextAlign.center,
-                                                                      style: TextStyle(
-                                                                          fontSize: Constants
-                                                                              .tDefaultSize,
-                                                                          color:
-                                                                              Colors.white),
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            SizedBox(
-                                                              width: 95,
-                                                            ),
-                                                            Container(
-                                                              padding: EdgeInsets
-                                                                  .symmetric(
-                                                                      horizontal:
-                                                                          8,
-                                                                      vertical:
-                                                                          4),
-                                                              width: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width *
-                                                                  0.15,
-                                                              decoration: BoxDecoration(
-                                                                  color:
-                                                                      Constants
-                                                                          .green,
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              3)),
-                                                              child: Row(
-                                                                children: [
-                                                                  InkWell(
-                                                                    onTap: () {
-                                                                      print(
-                                                                          "QR Code Result ****************: ");
-                                                                      addQRCode();
 
-                                                                      Fluttertoast.showToast(
-                                                                          msg:
-                                                                              'Successful Scan',
-                                                                          toastLength: Toast
-                                                                              .LENGTH_SHORT,
-                                                                          gravity: ToastGravity
-                                                                              .CENTER,
-                                                                          timeInSecForIosWeb:
-                                                                              1,
-                                                                          backgroundColor: Colors
-                                                                              .green,
-                                                                          fontSize:
-                                                                              14);
-                                                                      Get.back();
-                                                                    },
-                                                                    child: Text(
-                                                                      'send',
-                                                                      style: TextStyle(
-                                                                          fontSize: Constants
-                                                                              .tDefaultSize,
-                                                                          color:
-                                                                              Colors.white),
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      // Text(
-                                                      //     "$requestid")
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            );
-                                          }),
-                                        ),
-                                      );
-                                    });
-                                  },
-                                );
-                              }),
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 2, vertical: 4),
-                                width: MediaQuery.of(context).size.width * 0.33,
-                                decoration: BoxDecoration(
-                                    //  color: Constants.realBlue,
-                                    borderRadius: BorderRadius.circular(3)),
-                                child: Column(
-                                  children: [
-                                    Image.asset(
-                                      'assets/icons/scanner.png',
-                                      width: 30,
-                                      height: 30,
-                                    ),
-                                    // Icon(
-                                    //   Icons.telegram,
-                                    //   color: Colors.white,
-                                    // ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      'Scan',
-                                      style: TextStyle(
-                                        fontSize: Constants.tDefaultSize,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.remove,
-                                  color: Colors.grey[500],
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                InkWell(
-                                  onTap: () => Get.back(),
-                                  child: Icon(
-                                    Icons.cancel,
-                                    color: Colors.grey[500],
-                                  ),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                      Divider(),
+                      //   Divider(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -1074,14 +980,25 @@ class _PickupRequestDetailsState extends ConsumerState<PickupRequestDetails> {
                                                 )
                                               : Text('')),
                                           DataCell(pickup.photo_1 != null
-                                              ? Text(
-                                                  // '',
-                                                  pickup.photo_1!,
-                                                  style: TextStyle(
-                                                      fontSize:
-                                                          Constants.tSmallSize),
+                                              ? Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 5,
+                                                      vertical: 5),
+                                                  width: 100,
+                                                  height: 100,
+                                                  child: Image(
+                                                      image: NetworkImage(
+                                                    'https://newbrdemo.icgwebdevelopment.com/${pickupList.image_url}/${pickup.photo_1}',
+                                                  )),
                                                 )
-                                              : Text('')),
+                                              // Text(
+                                              //     // '',
+                                              //     pickup.photo_1!,
+                                              //     style: TextStyle(
+                                              //         fontSize:
+                                              //             Constants.tSmallSize),
+                                              //   )
+                                              : Container()),
                                           DataCell(pickup.status != null
                                               ? Text(
                                                   'Picked Up',
@@ -1263,8 +1180,8 @@ class _PickupRequestDetailsState extends ConsumerState<PickupRequestDetails> {
                                                                   OutlinedButton
                                                                       .styleFrom(
                                                                 side: BorderSide(
-                                                                    //  width: 5.0,
-                                                                    color: Colors.white),
+                                                                    color: Colors
+                                                                        .white),
                                                               ),
                                                               child: Text(
                                                                 'Confirm Delete',
@@ -1397,7 +1314,7 @@ class _PickupRequestDetailsState extends ConsumerState<PickupRequestDetails> {
     }
   }
 
-  void scanQRCode() async {
+  void scanQRCode(stateChange) async {
     try {
       final qrCode = await FlutterBarcodeScanner.scanBarcode(
           '#ff6666', 'Cancel', true, ScanMode.QR);
@@ -1413,7 +1330,7 @@ class _PickupRequestDetailsState extends ConsumerState<PickupRequestDetails> {
 
       if (!mounted) return;
 
-      setState(() {
+      stateChange(() {
         getResult = 'QR Code Result : ${substrings[4]} ';
       });
       print("QRCode_Result:--");

@@ -2,7 +2,7 @@
     package="com.example.delivery_app">
     <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="delivery_app"
+        android:label="Bunny Run"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon"
         android:requestLegacyExternalStorage="true">

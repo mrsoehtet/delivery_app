@@ -1,7 +1,10 @@
+import 'package:delivery_app/controller/naviController.dart';
 import 'package:delivery_app/error/errorScreen.dart';
 import 'package:delivery_app/screen/pickup/request/pickupRequestDetail.dart';
 import 'package:delivery_app/screen/profile.dart';
 import 'package:delivery_app/service/pickupRequestService.dart';
+import 'package:delivery_app/service/profileService.dart';
+import 'package:delivery_app/utils/global.dart';
 import 'package:delivery_app/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -18,6 +21,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final TextStyle unselectedLabelStyle = TextStyle(
+      color: Colors.white.withOpacity(0.5),
+      fontWeight: FontWeight.w500,
+      fontSize: 12);
+
+  final TextStyle selectedLabelStyle = TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.w500,
+    fontSize: 12,
+  );
   int? requestid;
   final PageStorageBucket bucket = PageStorageBucket();
   Widget currentScreen = HomeScreen();
@@ -32,9 +45,89 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
+  buildBottomNavigationMenu(context, naviController) {
+    return Obx(
+      () => MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.09,
+          child: BottomNavigationBar(
+            showUnselectedLabels: true,
+            showSelectedLabels: true,
+            onTap: Global.changePage,
+            currentIndex: naviController.currentIndex.value,
+            // backgroundColor: Color.fromRGBO(101, 10, 10, 0.8),
+            backgroundColor: Constants.blue,
+            unselectedItemColor: Colors.white,
+            selectedItemColor: Constants.red,
+            unselectedLabelStyle: unselectedLabelStyle,
+            selectedLabelStyle: selectedLabelStyle,
+            type: BottomNavigationBarType.fixed,
+            items: [
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.home,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Home'.tr,
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.card_giftcard,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Pickup'.tr,
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.qr_code,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Scan'.tr,
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.delivery_dining,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Delivery',
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.person_sharp,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Account'.tr,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final NaviController naviController = Get.put(NaviController());
+
     return Scaffold(
+      //    bottomNavigationBar: buildBottomNavigationMenu(context, naviController),
+
       appBar: AppBar(
         title: Text(
           "DelimenPannel",
@@ -138,26 +231,36 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 height: 10,
               ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                // width: MediaQuery.of(context).size.width * 0.95,
-                height: 40,
-                decoration: BoxDecoration(color: Constants.gray),
-                child: Row(children: [
-                  Icon(
-                    Icons.person,
-                    size: 30,
-                  ),
-                  Text(
-                    "aung naing's Dashboard",
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  // Text(
-                  //   ' Dashboard >',
-                  //   style: TextStyle(fontSize: 12),
-                  // ),
-                ]),
-              ),
+              //  Divider(),
+              ref.watch(profileServiceProvider).when(data: (profileList) {
+                return Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  // width: MediaQuery.of(context).size.width * 0.95,
+                  height: 40,
+                  decoration: BoxDecoration(color: Constants.gray),
+                  child: Row(children: [
+                    Icon(
+                      Icons.person,
+                      size: 30,
+                    ),
+                    Text(
+                      // "aungsoe naing's Dashboard",
+                      " ${profileList!.full_name}'s Dashboard",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    // Text(
+                    //   ' Dashboard >',
+                    //   style: TextStyle(fontSize: 12),
+                    // ),
+                  ]),
+                );
+              }, error: (Object error, StackTrace stackTrace) {
+                return Text('$error');
+              }, loading: () {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }),
               Container(
                 height: MediaQuery.of(context).size.height * 0.12,
                 margin: EdgeInsets.symmetric(vertical: 16, horizontal: 4),

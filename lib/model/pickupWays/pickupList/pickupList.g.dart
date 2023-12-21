@@ -14,6 +14,7 @@ _$_PickupList _$$_PickupListFromJson(Map<String, dynamic> json) =>
           .toList(),
       json['date'] as String?,
       json['clinet'] as String?,
+      json['image_url'] as String?,
     );
 
 Map<String, dynamic> _$$_PickupListToJson(_$_PickupList instance) =>
@@ -22,4 +23,5 @@ Map<String, dynamic> _$$_PickupListToJson(_$_PickupList instance) =>
       'data': instance.data,
       'date': instance.date,
       'clinet': instance.clinet,
+      'image_url': instance.image_url,
     };

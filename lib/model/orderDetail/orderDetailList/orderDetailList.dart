@@ -16,6 +16,7 @@ class OrderDetailList with _$OrderDetailList {
     Delimen? delimen,
     FromState? from_state,
     ToState? to_state,
+    String? image_url,
     String? message,
   ) = _OrderDetailList;
 

@@ -121,7 +121,7 @@ class _PickupScreenState extends State<PickupScreen> {
     final NaviController naviController = Get.put(NaviController());
 
     return Scaffold(
-        //  bottomNavigationBar: buildBottomNavigationMenu(context, naviController),
+      //  bottomNavigationBar: buildBottomNavigationMenu(context, naviController),
         appBar: AppBar(
           title: Text(
             "Pickup",
@@ -199,7 +199,7 @@ class _PickupScreenState extends State<PickupScreen> {
                 )),
             InkWell(
               onTap: () {
-                Get.to(()=>ProfileScreen());
+                Get.to(() => ProfileScreen());
               },
               child: Container(
                 padding: EdgeInsets.only(right: 10),

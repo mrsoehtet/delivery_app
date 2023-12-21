@@ -216,123 +216,7 @@ class _PickupDoneListState extends State<PickupDoneList> {
               )),
           InkWell(
             onTap: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return StatefulBuilder(
-                      builder: (BuildContext context, StateSetter setState) {
-                    return Container(
-                      height: MediaQuery.of(context).size.height * 0.2,
-                      child: AlertDialog(
-                        contentPadding: EdgeInsets.zero,
-                        titleTextStyle:
-                            const TextStyle(fontSize: 14, color: Colors.black),
-                        content: Container(
-                          color: Constants.blue,
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height * 0.25,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 20),
-                          child: Column(
-                            //  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Container(
-                                //  margin: EdgeInsets.symmetric(horizontal: 5),
-                                padding: EdgeInsets.only(right: 10),
-                                child: CircleAvatar(
-                                  radius: 37,
-                                  backgroundColor: Colors.white24,
-                                  child: CircleAvatar(
-                                    maxRadius: 35,
-                                    backgroundColor: Colors.black45,
-                                    child: Icon(
-                                      Icons.person,
-                                      size: 55,
-                                      color: Colors.white54,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 15, right: 15),
-                                child: Text(
-                                  "aung naing",
-                                  style: const TextStyle(
-                                      fontSize: 12, color: Colors.white70),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 3,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 15, right: 15),
-                                child: Text(
-                                  "Delivery Men",
-                                  style: const TextStyle(
-                                      fontSize: 12, color: Colors.white70),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 3,
-                              ),
-                              Center(
-                                  child: Text(
-                                'Delivery Management System',
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.white70),
-                              )),
-                            ],
-                          ),
-                        ),
-                        actions: [
-                          Container(
-                            // color: Colors.black12,
-                            padding: EdgeInsets.only(left: 8),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                OutlinedButton(
-                                  // style: TextButton.styleFrom(
-                                  //     padding: const EdgeInsets.only(left: 70)),
-                                  onPressed: () {
-                                    Get.to(() => ProfileScreen());
-                                  },
-                                  child: Center(
-                                    child: const Text(
-                                      "Profile",
-                                      style: TextStyle(
-                                          color: Colors.black54, fontSize: 12),
-                                    ),
-                                  ),
-                                ),
-                                OutlinedButton(
-                                  // style: TextButton.styleFrom(
-                                  //     padding: const EdgeInsets.only(left: 30)),
-                                  onPressed: () {
-                                    Get.to(() => LoginScreen());
-                                    // Get.back();
-                                  },
-                                  child: Center(
-                                    child: const Text("Sign out",
-                                        style: TextStyle(
-                                            color: Colors.black54,
-                                            fontSize: 12)),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    );
-                  });
-                },
-              );
+              Get.to(() => ProfileScreen());
             },
             child: Container(
               padding: EdgeInsets.only(right: 10),
@@ -357,7 +241,7 @@ class _PickupDoneListState extends State<PickupDoneList> {
               Row(
                 children: [
                   Text(
-                    "Delimen",
+                    "Pickup Done List",
                     style: TextStyle(
                       fontSize: 20,
                       // color: Colors.white,
@@ -366,13 +250,13 @@ class _PickupDoneListState extends State<PickupDoneList> {
                   SizedBox(
                     width: 10,
                   ),
-                  Text(
-                    "Pickup Done",
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey,
-                    ),
-                  ),
+                  // Text(
+                  //   "Pickup Done",
+                  //   style: TextStyle(
+                  //     fontSize: 14,
+                  //     color: Colors.grey,
+                  //   ),
+                  // ),
                 ],
               ),
               SizedBox(
@@ -392,42 +276,42 @@ class _PickupDoneListState extends State<PickupDoneList> {
                           SizedBox(
                             height: 10,
                           ),
-                          Container(
-                            margin: EdgeInsets.symmetric(horizontal: 8),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Order Done List',
-                                  style: TextStyle(
-                                      fontSize: 16, color: Constants.green),
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.remove,
-                                      color: Colors.grey[500],
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    InkWell(
-                                      onTap: (() {
-                                        setState(() {
-                                          _remove = !_remove;
-                                        });
-                                      }),
-                                      child: Icon(
-                                        Icons.cancel,
-                                        color: Colors.grey[500],
-                                      ),
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                          Divider(),
+                          // Container(
+                          //   margin: EdgeInsets.symmetric(horizontal: 8),
+                          //   child: Row(
+                          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //     children: [
+                          //       Text(
+                          //         'Order Done List',
+                          //         style: TextStyle(
+                          //             fontSize: 16, color: Constants.green),
+                          //       ),
+                          //       Row(
+                          //         children: [
+                          //           Icon(
+                          //             Icons.remove,
+                          //             color: Colors.grey[500],
+                          //           ),
+                          //           SizedBox(
+                          //             width: 10,
+                          //           ),
+                          //           InkWell(
+                          //             onTap: (() {
+                          //               setState(() {
+                          //                 _remove = !_remove;
+                          //               });
+                          //             }),
+                          //             child: Icon(
+                          //               Icons.cancel,
+                          //               color: Colors.grey[500],
+                          //             ),
+                          //           )
+                          //         ],
+                          //       )
+                          //     ],
+                          //   ),
+                          // ),
+                          //   Divider(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

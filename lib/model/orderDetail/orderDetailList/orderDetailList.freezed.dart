@@ -26,6 +26,7 @@ mixin _$OrderDetailList {
   Delimen? get delimen => throw _privateConstructorUsedError;
   FromState? get from_state => throw _privateConstructorUsedError;
   ToState? get to_state => throw _privateConstructorUsedError;
+  String? get image_url => throw _privateConstructorUsedError;
   String? get message => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -47,6 +48,7 @@ abstract class $OrderDetailListCopyWith<$Res> {
       Delimen? delimen,
       FromState? from_state,
       ToState? to_state,
+      String? image_url,
       String? message});
 
   $OrderDetailCopyWith<$Res>? get order;
@@ -75,6 +77,7 @@ class _$OrderDetailListCopyWithImpl<$Res, $Val extends OrderDetailList>
     Object? delimen = freezed,
     Object? from_state = freezed,
     Object? to_state = freezed,
+    Object? image_url = freezed,
     Object? message = freezed,
   }) {
     return _then(_value.copyWith(
@@ -102,6 +105,10 @@ class _$OrderDetailListCopyWithImpl<$Res, $Val extends OrderDetailList>
           ? _value.to_state
           : to_state // ignore: cast_nullable_to_non_nullable
               as ToState?,
+      image_url: freezed == image_url
+          ? _value.image_url
+          : image_url // ignore: cast_nullable_to_non_nullable
+              as String?,
       message: freezed == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -185,6 +192,7 @@ abstract class _$$_OrderDetailListCopyWith<$Res>
       Delimen? delimen,
       FromState? from_state,
       ToState? to_state,
+      String? image_url,
       String? message});
 
   @override
@@ -216,6 +224,7 @@ class __$$_OrderDetailListCopyWithImpl<$Res>
     Object? delimen = freezed,
     Object? from_state = freezed,
     Object? to_state = freezed,
+    Object? image_url = freezed,
     Object? message = freezed,
   }) {
     return _then(_$_OrderDetailList(
@@ -243,6 +252,10 @@ class __$$_OrderDetailListCopyWithImpl<$Res>
           ? _value.to_state
           : to_state // ignore: cast_nullable_to_non_nullable
               as ToState?,
+      freezed == image_url
+          ? _value.image_url
+          : image_url // ignore: cast_nullable_to_non_nullable
+              as String?,
       freezed == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -254,8 +267,15 @@ class __$$_OrderDetailListCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_OrderDetailList implements _OrderDetailList {
-  const _$_OrderDetailList(this.status, this.order, this.client_code,
-      this.delimen, this.from_state, this.to_state, this.message);
+  const _$_OrderDetailList(
+      this.status,
+      this.order,
+      this.client_code,
+      this.delimen,
+      this.from_state,
+      this.to_state,
+      this.image_url,
+      this.message);
 
   factory _$_OrderDetailList.fromJson(Map<String, dynamic> json) =>
       _$$_OrderDetailListFromJson(json);
@@ -273,11 +293,13 @@ class _$_OrderDetailList implements _OrderDetailList {
   @override
   final ToState? to_state;
   @override
+  final String? image_url;
+  @override
   final String? message;
 
   @override
   String toString() {
-    return 'OrderDetailList(status: $status, order: $order, client_code: $client_code, delimen: $delimen, from_state: $from_state, to_state: $to_state, message: $message)';
+    return 'OrderDetailList(status: $status, order: $order, client_code: $client_code, delimen: $delimen, from_state: $from_state, to_state: $to_state, image_url: $image_url, message: $message)';
   }
 
   @override
@@ -294,13 +316,15 @@ class _$_OrderDetailList implements _OrderDetailList {
                 other.from_state == from_state) &&
             (identical(other.to_state, to_state) ||
                 other.to_state == to_state) &&
+            (identical(other.image_url, image_url) ||
+                other.image_url == image_url) &&
             (identical(other.message, message) || other.message == message));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, status, order, client_code,
-      delimen, from_state, to_state, message);
+      delimen, from_state, to_state, image_url, message);
 
   @JsonKey(ignore: true)
   @override
@@ -324,6 +348,7 @@ abstract class _OrderDetailList implements OrderDetailList {
       final Delimen? delimen,
       final FromState? from_state,
       final ToState? to_state,
+      final String? image_url,
       final String? message) = _$_OrderDetailList;
 
   factory _OrderDetailList.fromJson(Map<String, dynamic> json) =
@@ -341,6 +366,8 @@ abstract class _OrderDetailList implements OrderDetailList {
   FromState? get from_state;
   @override
   ToState? get to_state;
+  @override
+  String? get image_url;
   @override
   String? get message;
   @override

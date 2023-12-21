@@ -29,6 +29,93 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final TextStyle unselectedLabelStyle = TextStyle(
+      color: Colors.white.withOpacity(0.5),
+      fontWeight: FontWeight.w500,
+      fontSize: 12);
+
+  final TextStyle selectedLabelStyle = TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.w500,
+    fontSize: 12,
+  );
+
+  buildBottomNavigationMenu(context, naviController) {
+    return Obx(
+      () => MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.09,
+          child: BottomNavigationBar(
+            showUnselectedLabels: true,
+            showSelectedLabels: true,
+            onTap: Global.changePage,
+            currentIndex: naviController.currentIndex.value,
+            // backgroundColor: Color.fromRGBO(101, 10, 10, 0.8),
+            backgroundColor: Constants.blue,
+            unselectedItemColor: Colors.white,
+            selectedItemColor: Constants.red,
+            unselectedLabelStyle: unselectedLabelStyle,
+            selectedLabelStyle: selectedLabelStyle,
+            type: BottomNavigationBarType.fixed,
+            items: [
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.home,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Home'.tr,
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.card_giftcard,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Pickup'.tr,
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.qr_code,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Scan'.tr,
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.delivery_dining,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Delivery',
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  margin: EdgeInsets.only(bottom: 7),
+                  child: Icon(
+                    Icons.person_sharp,
+                    size: 20.0,
+                  ),
+                ),
+                label: 'Account'.tr,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   TextEditingController yourNameController = TextEditingController();
   FocusNode yourNameFocusNode = FocusNode();
   TextEditingController loginNameController = TextEditingController();
@@ -56,9 +143,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final NaviController naviController = Get.put(NaviController());
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        //  bottomNavigationBar: buildBottomNavigationMenu(context, naviController),
         appBar: AppBar(
           title: Text(
             "DelimenPannel",
@@ -136,130 +225,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 )),
             InkWell(
               onTap: () {
-                // showDialog(
-                //   context: context,
-                //   builder: (context) {
-                //     return StatefulBuilder(
-                //         builder: (BuildContext context, StateSetter setState) {
-                //       return Container(
-                //         height: MediaQuery.of(context).size.height * 0.2,
-                //         child: AlertDialog(
-                //           contentPadding: EdgeInsets.zero,
-                //           titleTextStyle: const TextStyle(
-                //               fontSize: 14, color: Colors.black),
-                //           content: Container(
-                //             color: Constants.blue,
-                //             width: MediaQuery.of(context).size.width,
-                //             height: MediaQuery.of(context).size.height * 0.25,
-                //             padding: const EdgeInsets.symmetric(
-                //                 horizontal: 10, vertical: 20),
-                //             child: Column(
-                //               //  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                //               children: [
-                //                 Stack(
-                //                   children: [
-                //                     Container(
-                //                       //  margin: EdgeInsets.symmetric(horizontal: 5),
-                //                       padding: EdgeInsets.only(right: 10),
-                //                       child: CircleAvatar(
-                //                         radius: 37,
-                //                         backgroundColor: Colors.white24,
-                //                         child: CircleAvatar(
-                //                           maxRadius: 35,
-                //                           backgroundColor: Colors.black45,
-                //                           child: Icon(
-                //                             Icons.person,
-                //                             size: 55,
-                //                             color: Colors.white54,
-                //                           ),
-                //                         ),
-                //                       ),
-                //                     ),
-
-                //                   ],
-                //                 ),
-                //                 SizedBox(
-                //                   height: 20,
-                //                 ),
-                //                 Padding(
-                //                   padding: const EdgeInsets.only(
-                //                       left: 15, right: 15),
-                //                   child: Text(
-                //                     "aung naing",
-                //                     style: const TextStyle(
-                //                         fontSize: 12, color: Colors.white70),
-                //                   ),
-                //                 ),
-                //                 SizedBox(
-                //                   height: 3,
-                //                 ),
-                //                 Padding(
-                //                   padding: const EdgeInsets.only(
-                //                       left: 15, right: 15),
-                //                   child: Text(
-                //                     "Delivery Men",
-                //                     style: const TextStyle(
-                //                         fontSize: 12, color: Colors.white70),
-                //                   ),
-                //                 ),
-                //                 SizedBox(
-                //                   height: 3,
-                //                 ),
-                //                 Center(
-                //                     child: Text(
-                //                   'Delivery Management System',
-                //                   style: TextStyle(
-                //                       fontSize: 12, color: Colors.white70),
-                //                 )),
-                //               ],
-                //             ),
-                //           ),
-                //           actions: [
-                //             Container(
-                //               // color: Colors.black12,
-                //               padding: EdgeInsets.only(left: 8),
-                //               child: Row(
-                //                 mainAxisAlignment:
-                //                     MainAxisAlignment.spaceBetween,
-                //                 children: [
-                //                   OutlinedButton(
-                //                     // style: TextButton.styleFrom(
-                //                     //     padding: const EdgeInsets.only(left: 70)),
-                //                     onPressed: () {
-                //                       // Get.to(LoginScreen());
-                //                     },
-                //                     child: Center(
-                //                       child: const Text(
-                //                         "Profile",
-                //                         style: TextStyle(
-                //                             color: Colors.black54,
-                //                             fontSize: 12),
-                //                       ),
-                //                     ),
-                //                   ),
-                //                   OutlinedButton(
-                //                     // style: TextButton.styleFrom(
-                //                     //     padding: const EdgeInsets.only(left: 30)),
-                //                     onPressed: () {
-                //                       Get.to(() => LoginScreen());
-                //                       // Get.back();
-                //                     },
-                //                     child: Center(
-                //                       child: const Text("Sign out",
-                //                           style: TextStyle(
-                //                               color: Colors.black54,
-                //                               fontSize: 12)),
-                //                     ),
-                //                   ),
-                //                 ],
-                //               ),
-                //             )
-                //           ],
-                //         ),
-                //       );
-                //     });
-                //   },
-                // );
+               
               },
               child: Container(
                 padding: EdgeInsets.only(right: 10),

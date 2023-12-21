@@ -73,6 +73,8 @@ dev_dependencies:
   json_serializable:
   flutter_launcher_icons:  
   change_app_package_name:
+  cached_network_image: 
+
 
 flutter_icons:
   android: "launcher_icon"

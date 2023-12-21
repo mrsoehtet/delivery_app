@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:delivery_app/appStart/naviScreen.dart';
 import 'package:delivery_app/controller/naviController.dart';
 import 'package:delivery_app/screen/deliveryScreen.dart';
 import 'package:delivery_app/screen/home.dart';
@@ -91,17 +92,19 @@ class Global {
 
   static void changePage(int _index) {
     //print(_index);
-    if (_index == 0) {
-      Get.to(() => HomeScreen());
-    } else if (_index == 1) {
-      Get.to(() => PickupScreen());
-    } else if (_index == 2) {
-      Get.to(()=>QRScanScreen());
-    } else if (_index == 3) {
-      Get.to(()=>DeliveryScreen());
-    } else {
-      Get.to(()=>ProfileScreen());
-    }
+    NaviController.to.changePage(_index);
+    Get.off(() => NaviScreen());
+    // if (_index == 0) {
+    //   Get.to(() => HomeScreen());
+    // } else if (_index == 1) {
+    //   Get.to(() => PickupScreen());
+    // } else if (_index == 2) {
+    //   Get.to(()=>QRScanScreen());
+    // } else if (_index == 3) {
+    //   Get.to(()=>DeliveryScreen());
+    // } else {
+    //   Get.to(()=>ProfileScreen());
+    // }
   }
 
   static priceFormat(var price) {

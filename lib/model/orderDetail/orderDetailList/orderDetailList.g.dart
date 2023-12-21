@@ -24,6 +24,7 @@ _$_OrderDetailList _$$_OrderDetailListFromJson(Map<String, dynamic> json) =>
       json['to_state'] == null
           ? null
           : ToState.fromJson(json['to_state'] as Map<String, dynamic>),
+      json['image_url'] as String?,
       json['message'] as String?,
     );
 
@@ -35,5 +36,6 @@ Map<String, dynamic> _$$_OrderDetailListToJson(_$_OrderDetailList instance) =>
       'delimen': instance.delimen,
       'from_state': instance.from_state,
       'to_state': instance.to_state,
+      'image_url': instance.image_url,
       'message': instance.message,
     };

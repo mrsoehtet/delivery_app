@@ -24,6 +24,7 @@ mixin _$PickupList {
   List<PickupWays>? get data => throw _privateConstructorUsedError;
   String? get date => throw _privateConstructorUsedError;
   String? get clinet => throw _privateConstructorUsedError;
+  String? get image_url => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -38,7 +39,11 @@ abstract class $PickupListCopyWith<$Res> {
       _$PickupListCopyWithImpl<$Res, PickupList>;
   @useResult
   $Res call(
-      {bool? status, List<PickupWays>? data, String? date, String? clinet});
+      {bool? status,
+      List<PickupWays>? data,
+      String? date,
+      String? clinet,
+      String? image_url});
 }
 
 /// @nodoc
@@ -58,6 +63,7 @@ class _$PickupListCopyWithImpl<$Res, $Val extends PickupList>
     Object? data = freezed,
     Object? date = freezed,
     Object? clinet = freezed,
+    Object? image_url = freezed,
   }) {
     return _then(_value.copyWith(
       status: freezed == status
@@ -76,6 +82,10 @@ class _$PickupListCopyWithImpl<$Res, $Val extends PickupList>
           ? _value.clinet
           : clinet // ignore: cast_nullable_to_non_nullable
               as String?,
+      image_url: freezed == image_url
+          ? _value.image_url
+          : image_url // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -89,7 +99,11 @@ abstract class _$$_PickupListCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {bool? status, List<PickupWays>? data, String? date, String? clinet});
+      {bool? status,
+      List<PickupWays>? data,
+      String? date,
+      String? clinet,
+      String? image_url});
 }
 
 /// @nodoc
@@ -107,6 +121,7 @@ class __$$_PickupListCopyWithImpl<$Res>
     Object? data = freezed,
     Object? date = freezed,
     Object? clinet = freezed,
+    Object? image_url = freezed,
   }) {
     return _then(_$_PickupList(
       freezed == status
@@ -125,6 +140,10 @@ class __$$_PickupListCopyWithImpl<$Res>
           ? _value.clinet
           : clinet // ignore: cast_nullable_to_non_nullable
               as String?,
+      freezed == image_url
+          ? _value.image_url
+          : image_url // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -132,8 +151,8 @@ class __$$_PickupListCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_PickupList implements _PickupList {
-  const _$_PickupList(
-      this.status, final List<PickupWays>? data, this.date, this.clinet)
+  const _$_PickupList(this.status, final List<PickupWays>? data, this.date,
+      this.clinet, this.image_url)
       : _data = data;
 
   factory _$_PickupList.fromJson(Map<String, dynamic> json) =>
@@ -155,10 +174,12 @@ class _$_PickupList implements _PickupList {
   final String? date;
   @override
   final String? clinet;
+  @override
+  final String? image_url;
 
   @override
   String toString() {
-    return 'PickupList(status: $status, data: $data, date: $date, clinet: $clinet)';
+    return 'PickupList(status: $status, data: $data, date: $date, clinet: $clinet, image_url: $image_url)';
   }
 
   @override
@@ -169,13 +190,15 @@ class _$_PickupList implements _PickupList {
             (identical(other.status, status) || other.status == status) &&
             const DeepCollectionEquality().equals(other._data, _data) &&
             (identical(other.date, date) || other.date == date) &&
-            (identical(other.clinet, clinet) || other.clinet == clinet));
+            (identical(other.clinet, clinet) || other.clinet == clinet) &&
+            (identical(other.image_url, image_url) ||
+                other.image_url == image_url));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, status,
-      const DeepCollectionEquality().hash(_data), date, clinet);
+      const DeepCollectionEquality().hash(_data), date, clinet, image_url);
 
   @JsonKey(ignore: true)
   @override
@@ -192,8 +215,12 @@ class _$_PickupList implements _PickupList {
 }
 
 abstract class _PickupList implements PickupList {
-  const factory _PickupList(final bool? status, final List<PickupWays>? data,
-      final String? date, final String? clinet) = _$_PickupList;
+  const factory _PickupList(
+      final bool? status,
+      final List<PickupWays>? data,
+      final String? date,
+      final String? clinet,
+      final String? image_url) = _$_PickupList;
 
   factory _PickupList.fromJson(Map<String, dynamic> json) =
       _$_PickupList.fromJson;
@@ -206,6 +233,8 @@ abstract class _PickupList implements PickupList {
   String? get date;
   @override
   String? get clinet;
+  @override
+  String? get image_url;
   @override
   @JsonKey(ignore: true)
   _$$_PickupListCopyWith<_$_PickupList> get copyWith =>

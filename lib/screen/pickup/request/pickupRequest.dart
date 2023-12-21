@@ -386,123 +386,7 @@ class _PickupRequestListState extends State<PickupRequestList> {
               )),
           InkWell(
             onTap: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return StatefulBuilder(
-                      builder: (BuildContext context, StateSetter setState) {
-                    return Container(
-                      height: MediaQuery.of(context).size.height * 0.2,
-                      child: AlertDialog(
-                        contentPadding: EdgeInsets.zero,
-                        titleTextStyle:
-                            const TextStyle(fontSize: 14, color: Colors.black),
-                        content: Container(
-                          color: Constants.blue,
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height * 0.25,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 20),
-                          child: Column(
-                            //  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Container(
-                                //  margin: EdgeInsets.symmetric(horizontal: 5),
-                                padding: EdgeInsets.only(right: 10),
-                                child: CircleAvatar(
-                                  radius: 37,
-                                  backgroundColor: Colors.white24,
-                                  child: CircleAvatar(
-                                    maxRadius: 35,
-                                    backgroundColor: Colors.black45,
-                                    child: Icon(
-                                      Icons.person,
-                                      size: 55,
-                                      color: Colors.white54,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 15, right: 15),
-                                child: Text(
-                                  "aung naing",
-                                  style: const TextStyle(
-                                      fontSize: 12, color: Colors.white70),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 3,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 15, right: 15),
-                                child: Text(
-                                  "Delivery Men",
-                                  style: const TextStyle(
-                                      fontSize: 12, color: Colors.white70),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 3,
-                              ),
-                              Center(
-                                  child: Text(
-                                'Delivery Management System',
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.white70),
-                              )),
-                            ],
-                          ),
-                        ),
-                        actions: [
-                          Container(
-                            // color: Colors.black12,
-                            padding: EdgeInsets.only(left: 8),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                OutlinedButton(
-                                  // style: TextButton.styleFrom(
-                                  //     padding: const EdgeInsets.only(left: 70)),
-                                  onPressed: () {
-                                    Get.to(() => ProfileScreen());
-                                  },
-                                  child: Center(
-                                    child: const Text(
-                                      "Profile",
-                                      style: TextStyle(
-                                          color: Colors.black54, fontSize: 12),
-                                    ),
-                                  ),
-                                ),
-                                OutlinedButton(
-                                  // style: TextButton.styleFrom(
-                                  //     padding: const EdgeInsets.only(left: 30)),
-                                  onPressed: () {
-                                    Get.to(() => LoginScreen());
-                                    // Get.back();
-                                  },
-                                  child: Center(
-                                    child: const Text("Sign out",
-                                        style: TextStyle(
-                                            color: Colors.black54,
-                                            fontSize: 12)),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    );
-                  });
-                },
-              );
+              Get.to(() => ProfileScreen());
             },
             child: Container(
               padding: EdgeInsets.only(right: 10),
@@ -526,9 +410,10 @@ class _PickupRequestListState extends State<PickupRequestList> {
             margin: EdgeInsets.all(16),
             child: Column(children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Text(
-                    "Delimen",
+                    "Pickup List",
                     style: TextStyle(
                       fontSize: 20,
                       // color: Colors.white,
@@ -537,42 +422,148 @@ class _PickupRequestListState extends State<PickupRequestList> {
                   SizedBox(
                     width: 10,
                   ),
-                  Text(
-                    "To Pickup List",
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey,
+                  CircleAvatar(
+                    maxRadius: 20,
+                    backgroundColor: Colors.black12,
+                    child: InkWell(
+                      onTap: (() async {
+                        final result = await showDateRangePicker(
+                            context: context,
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime.now().add(Duration(days: 365)));
+
+                        if (result != null) {
+                          setState(() {
+                            start = result.start;
+
+                            end = result.end;
+                          });
+                        }
+                      }),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.date_range,
+                            color: Colors.black38,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
+                  // ElevatedButton(
+                  //   style: ButtonStyle(
+                  //       shape:
+                  //           MaterialStateProperty.all<RoundedRectangleBorder>(
+                  //               RoundedRectangleBorder(
+                  //                   borderRadius: BorderRadius.circular(100)))),
+                  //   onPressed: () async {
+                  //     final result = await showDateRangePicker(
+                  //         context: context,
+                  //         firstDate: DateTime(2000),
+                  //         lastDate: DateTime.now().add(Duration(days: 365)));
+
+                  //     if (result != null) {
+                  //       setState(() {
+                  //         start = result.start;
+
+                  //         end = result.end;
+                  //       });
+                  //     }
+                  //   },
+                  //   child: Row(
+                  //     children: [
+                  //       Icon(Icons.date_range),
+                  //       SizedBox(
+                  //         width: 5,
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               ),
-              // SizedBox(
-              //   height: 10,
-              // ),
-              // Container(
-              //   padding: EdgeInsets.symmetric(horizontal: 10),
-              //   // width: MediaQuery.of(context).size.width * 0.95,
-              //   height: 30,
-              //   decoration: BoxDecoration(color: Constants.gray),
-              //   child: Row(children: [
-              //     Icon(Icons.dashboard),
-              //     Text(
-              //       ' Home > ',
-              //       style: TextStyle(fontSize: 12),
-              //     ),
-              //     Text(
-              //       ' Delimen >',
-              //       style: TextStyle(fontSize: 12),
-              //     ),
-              //     Text(
-              //       ' To Pickup',
-              //       style: TextStyle(fontSize: 12),
-              //     ),
-              //   ]),
-              // ),
-              // SizedBox(
-              //   height: 16,
-              // ),
+              SizedBox(
+                height: 16,
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 5),
+                child: Row(
+                  children: [
+                    start != null
+                        ? Column(
+                            // crossAxisAlignment:
+                            //     CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text('Start Date :'),
+                                  SizedBox(
+                                    width: 8,
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 4),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(),
+                                        borderRadius: BorderRadius.circular(5)),
+                                    child: start != null
+                                        ? Text(
+                                            DateFormat("dd-MM-yyyy")
+                                                .format(start!),
+                                            // requestList.data![index]['assigned_date'],
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Constants.blue),
+                                          )
+                                        : Container(),
+                                  ),
+                                ],
+                              ),
+
+                              SizedBox(
+                                height: 8,
+                              ),
+                              //  Text('to'),
+                              Row(
+                                children: [
+                                  Text('End Date :'),
+                                  SizedBox(
+                                    width: 8,
+                                  ),
+                                  Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 4),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(),
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
+                                      child: Text(
+                                        DateFormat("dd-MM-yyyy").format(end!),
+                                        // requestList.data![index]['assigned_date'],
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Constants.blue),
+                                      )
+                                      // Text(
+                                      //   end?.toIso8601String() ??
+                                      //       '-',
+                                      //   style: TextStyle(
+                                      //       fontSize: 12,
+                                      //       color: Constants
+                                      //           .blue),
+                                      // ),
+                                      ),
+                                ],
+                              ),
+                            ],
+                          )
+                        : Container(),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 16,
+              ),
               _remove
                   ? ref.watch(requestServiceProvider).when(data: (requestList) {
                       return Card(
@@ -601,191 +592,163 @@ class _PickupRequestListState extends State<PickupRequestList> {
 
                                 Column(
                                   children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 20),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          ElevatedButton(
-                                            onPressed: () async {
-                                              final result =
-                                                  await showDateRangePicker(
-                                                      context: context,
-                                                      firstDate: DateTime(2000),
-                                                      lastDate: DateTime.now()
-                                                          .add(Duration(
-                                                              days: 365)));
+                                    // Padding(
+                                    //   padding: const EdgeInsets.only(left: 20),
+                                    //   child: Row(
+                                    //     mainAxisAlignment:
+                                    //         MainAxisAlignment.spaceBetween,
+                                    //     children: [
+                                    //       ElevatedButton(
+                                    //         onPressed: () async {
+                                    //           final result =
+                                    //               await showDateRangePicker(
+                                    //                   context: context,
+                                    //                   firstDate: DateTime(2000),
+                                    //                   lastDate: DateTime.now()
+                                    //                       .add(Duration(
+                                    //                           days: 365)));
 
-                                              if (result != null) {
-                                                setState(() {
-                                                  start = result.start;
+                                    //           if (result != null) {
+                                    //             setState(() {
+                                    //               start = result.start;
 
-                                                  end = result.end;
-                                                });
-                                              }
-                                            },
-                                            child: Row(
-                                              children: [
-                                                Icon(Icons.date_range),
-                                                SizedBox(
-                                                  width: 5,
-                                                ),
-                                                Text(
-                                                  'Filter',
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      color: Colors.white),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 110,
-                                          ),
-                                          Icon(
-                                            Icons.remove,
-                                            color: Colors.grey[500],
-                                          ),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          InkWell(
-                                            onTap: (() {
-                                              setState(() {
-                                                _remove = !_remove;
-                                              });
-                                            }),
-                                            child: Icon(
-                                              Icons.cancel,
-                                              color: Colors.grey[500],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
+                                    //               end = result.end;
+                                    //             });
+                                    //           }
+                                    //         },
+                                    //         child: Row(
+                                    //           children: [
+                                    //             Icon(Icons.date_range),
+                                    //             SizedBox(
+                                    //               width: 5,
+                                    //             ),
+                                    //             Text(
+                                    //               'Filter',
+                                    //               style: TextStyle(
+                                    //                   fontSize: 16,
+                                    //                   color: Colors.white),
+                                    //             ),
+                                    //           ],
+                                    //         ),
+                                    //       ),
+                                    //       SizedBox(
+                                    //         width: 110,
+                                    //       ),
+                                    //       Icon(
+                                    //         Icons.remove,
+                                    //         color: Colors.grey[500],
+                                    //       ),
+                                    //       SizedBox(
+                                    //         width: 10,
+                                    //       ),
+                                    //       InkWell(
+                                    //         onTap: (() {
+                                    //           setState(() {
+                                    //             _remove = !_remove;
+                                    //           });
+                                    //         }),
+                                    //         child: Icon(
+                                    //           Icons.cancel,
+                                    //           color: Colors.grey[500],
+                                    //         ),
+                                    //       )
+                                    //     ],
+                                    //   ),
+                                    // ),
                                     SizedBox(
                                       height: 10,
                                     ),
-                                    Row(
-                                      children: [
-                                        // ElevatedButton(
-                                        //   onPressed: () async {
-                                        //     final result =
-                                        //         await showDateRangePicker(
-                                        //             context: context,
-                                        //             firstDate: DateTime(2000),
-                                        //             lastDate: DateTime.now()
-                                        //                 .add(Duration(
-                                        //                     days: 365)));
+                                    // Row(
+                                    //   children: [
+                                    //     start != null
+                                    //         ? Column(
+                                    //             // crossAxisAlignment:
+                                    //             //     CrossAxisAlignment.start,
+                                    //             children: [
+                                    //               Row(
+                                    //                 children: [
+                                    //                   Text('Start Date :'),
+                                    //                   SizedBox(
+                                    //                     width: 8,
+                                    //                   ),
+                                    //                   Container(
+                                    //                     padding: EdgeInsets
+                                    //                         .symmetric(
+                                    //                             horizontal: 8,
+                                    //                             vertical: 4),
+                                    //                     decoration: BoxDecoration(
+                                    //                         border:
+                                    //                             Border.all(),
+                                    //                         borderRadius:
+                                    //                             BorderRadius
+                                    //                                 .circular(
+                                    //                                     5)),
+                                    //                     child: start != null
+                                    //                         ? Text(
+                                    //                             DateFormat(
+                                    //                                     "dd-MM-yyyy")
+                                    //                                 .format(
+                                    //                                     start!),
+                                    //                             // requestList.data![index]['assigned_date'],
+                                    //                             style: TextStyle(
+                                    //                                 fontSize:
+                                    //                                     12,
+                                    //                                 color: Constants
+                                    //                                     .blue),
+                                    //                           )
+                                    //                         : Container(),
+                                    //                   ),
+                                    //                 ],
+                                    //               ),
 
-                                        //     if (result != null) {
-                                        //       setState(() {
-                                        //         start = result.start;
-
-                                        //         end = result.end;
-                                        //       });
-                                        //     }
-                                        //   },
-                                        //   child: Text(
-                                        //     'Filter',
-                                        //     style: TextStyle(
-                                        //         fontSize: 16,
-                                        //         color: Colors.white),
-                                        //   ),
-                                        // ),
-                                        // SizedBox(
-                                        //   width: 10,
-                                        // ),
-                                        start != null
-                                            ? Column(
-                                                // crossAxisAlignment:
-                                                //     CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      Text('Start Date :'),
-                                                      SizedBox(
-                                                        width: 8,
-                                                      ),
-                                                      Container(
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                horizontal: 8,
-                                                                vertical: 4),
-                                                        decoration: BoxDecoration(
-                                                            border:
-                                                                Border.all(),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        5)),
-                                                        child: start != null
-                                                            ? Text(
-                                                                DateFormat(
-                                                                        "dd-MM-yyyy")
-                                                                    .format(
-                                                                        start!),
-                                                                // requestList.data![index]['assigned_date'],
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        12,
-                                                                    color: Constants
-                                                                        .blue),
-                                                              )
-                                                            : Container(),
-                                                      ),
-                                                    ],
-                                                  ),
-
-                                                  SizedBox(
-                                                    height: 8,
-                                                  ),
-                                                  //  Text('to'),
-                                                  Row(
-                                                    children: [
-                                                      Text('End Date :'),
-                                                      SizedBox(
-                                                        width: 8,
-                                                      ),
-                                                      Container(
-                                                          padding: EdgeInsets
-                                                              .symmetric(
-                                                                  horizontal: 8,
-                                                                  vertical: 4),
-                                                          decoration: BoxDecoration(
-                                                              border:
-                                                                  Border.all(),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5)),
-                                                          child: Text(
-                                                            DateFormat(
-                                                                    "dd-MM-yyyy")
-                                                                .format(end!),
-                                                            // requestList.data![index]['assigned_date'],
-                                                            style: TextStyle(
-                                                                fontSize: 12,
-                                                                color: Constants
-                                                                    .blue),
-                                                          )
-                                                          // Text(
-                                                          //   end?.toIso8601String() ??
-                                                          //       '-',
-                                                          //   style: TextStyle(
-                                                          //       fontSize: 12,
-                                                          //       color: Constants
-                                                          //           .blue),
-                                                          // ),
-                                                          ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              )
-                                            : Container(),
-                                      ],
-                                    ),
+                                    //               SizedBox(
+                                    //                 height: 8,
+                                    //               ),
+                                    //               //  Text('to'),
+                                    //               Row(
+                                    //                 children: [
+                                    //                   Text('End Date :'),
+                                    //                   SizedBox(
+                                    //                     width: 8,
+                                    //                   ),
+                                    //                   Container(
+                                    //                       padding: EdgeInsets
+                                    //                           .symmetric(
+                                    //                               horizontal: 8,
+                                    //                               vertical: 4),
+                                    //                       decoration: BoxDecoration(
+                                    //                           border:
+                                    //                               Border.all(),
+                                    //                           borderRadius:
+                                    //                               BorderRadius
+                                    //                                   .circular(
+                                    //                                       5)),
+                                    //                       child: Text(
+                                    //                         DateFormat(
+                                    //                                 "dd-MM-yyyy")
+                                    //                             .format(end!),
+                                    //                         // requestList.data![index]['assigned_date'],
+                                    //                         style: TextStyle(
+                                    //                             fontSize: 12,
+                                    //                             color: Constants
+                                    //                                 .blue),
+                                    //                       )
+                                    //                       // Text(
+                                    //                       //   end?.toIso8601String() ??
+                                    //                       //       '-',
+                                    //                       //   style: TextStyle(
+                                    //                       //       fontSize: 12,
+                                    //                       //       color: Constants
+                                    //                       //           .blue),
+                                    //                       // ),
+                                    //                       ),
+                                    //                 ],
+                                    //               ),
+                                    //             ],
+                                    //           )
+                                    //         : Container(),
+                                    //   ],
+                                    // ),
                                   ],
                                 ),
                               ],
@@ -989,7 +952,7 @@ class _PickupRequestListState extends State<PickupRequestList> {
                                                 fontSize: Constants.tSmallSize),
                                           )),
                                           DataCell(request.no_of_way != null &&
-                                                  request.no_of_way != -1
+                                                  request.no_of_way != 0
                                               ? Text(
                                                   //'2',
                                                   request!.no_of_way.toString(),

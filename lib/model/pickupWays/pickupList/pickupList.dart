@@ -10,6 +10,7 @@ class PickupList with _$PickupList {
     List<PickupWays>? data,
     String? date,
     String? clinet,
+    String? image_url,
   ) = _PickupList;
 
   factory PickupList.fromJson(Map<String, dynamic> json) =>

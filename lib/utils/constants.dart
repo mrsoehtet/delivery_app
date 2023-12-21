@@ -49,7 +49,7 @@ class APIURL {
   static const String cancelParcel = "$mainUrl/delivery/return_parcel";
   static const String deliveryDoneList = "$mainUrl/delivery/done_list";
   static const String deliveryReturnList = "$mainUrl/delivery/return_list";
-  
+  static const String cancelList = "$mainUrl/delivery/cancel_list";
 
   static const String signUpUrl = "$mainUrl/register";
   static const String signUpFirstStepUrl = "$mainUrl/create-login";
