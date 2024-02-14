@@ -6,8 +6,11 @@ class APIURL {
 
   static var client = http.Client();
 
-  static const String mainUrl = "https://newbrdemo.icgwebdevelopment.com/api";
-  static const String mainUrlForUri = "newbrdemo.icgwebdevelopment.com";
+  //static const String mainUrl = "https://newbrdemo.icgwebdevelopment.com/api";
+  static const String mainUrl = "https://newbr.icgwebdevelopment.com/api";
+
+  // static const String mainUrlForUri = "newbrdemo.icgwebdevelopment.com";
+  static const String mainUrlForUri = "https://newbr.icgwebdevelopment.com";
 
   static const String movieListUrl =
       "$mainUrl/title/get-videos?tconst=tt0944947&limit=7&region=MM";

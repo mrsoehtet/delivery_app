@@ -752,7 +752,8 @@ class _GetWayDetailState extends State<GetWayDetail> {
                                           height: 200,
                                           child: Image(
                                               image: NetworkImage(
-                                            'https://newbrdemo.icgwebdevelopment.com/${orderDetailList.image_url}/${orderDetailList.order!.photo_1}',
+                                            // 'https://newbrdemo.icgwebdevelopment.com/${orderDetailList.image_url}/${orderDetailList.order!.photo_1}',
+                                            'https://newbr.icgwebdevelopment.com/${orderDetailList.image_url}/${orderDetailList.order!.photo_1}',
                                           )),
                                         ),
                                         SizedBox(

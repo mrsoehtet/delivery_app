@@ -988,7 +988,8 @@ class _PickupRequestDetailsState extends ConsumerState<PickupRequestDetails> {
                                                   height: 100,
                                                   child: Image(
                                                       image: NetworkImage(
-                                                    'https://newbrdemo.icgwebdevelopment.com/${pickupList.image_url}/${pickup.photo_1}',
+                                                    //'https://newbrdemo.icgwebdevelopment.com/${pickupList.image_url}/${pickup.photo_1}',
+                                                    'https://newbr.icgwebdevelopment.com/${pickupList.image_url}/${pickup.photo_1}',
                                                   )),
                                                 )
                                               // Text(
@@ -1418,7 +1419,8 @@ class _PickupRequestDetailsState extends ConsumerState<PickupRequestDetails> {
     final token = await SharedPref.getData(key: SharedPref.token);
 
     final response = await http.delete(
-      Uri.parse('https://newbrdemo.icgwebdevelopment.com/api/delete_way/$id'),
+      // Uri.parse('https://newbrdemo.icgwebdevelopment.com/api/delete_way/$id'),
+      Uri.parse('https://newbr.icgwebdevelopment.com/api/delete_way/$id'),
       headers: {
         'Accept': 'application/json; charset=UTF-8',
         'Authorization': token!

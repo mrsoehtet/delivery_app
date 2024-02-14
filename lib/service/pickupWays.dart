@@ -38,7 +38,8 @@ class PickupService {
     //print(" Pickup Requet Id ************ $id");
 
     final response = await _dio.get(
-      "https://newbrdemo.icgwebdevelopment.com/api/pickup_ways/$id",
+      // "https://newbrdemo.icgwebdevelopment.com/api/pickup_ways/$id",
+      "https://newbr.icgwebdevelopment.com/api/pickup_ways/$id",
       options: Options(
         headers: <String, String>{
           'Accept': 'application/json; charset=UTF-8',

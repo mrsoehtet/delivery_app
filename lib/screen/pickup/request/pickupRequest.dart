@@ -213,7 +213,8 @@ class _PickupRequestListState extends State<PickupRequestList> {
     };
 
     final response = await http.post(
-      Uri.parse('https://newbrdemo.icgwebdevelopment.com/api/pickedup'),
+      //  Uri.parse('https://newbrdemo.icgwebdevelopment.com/api/pickedup'),
+      Uri.parse('https://newbr.icgwebdevelopment.com/api/pickedup'),
       headers: {
         'Accept': 'application/json; charset=UTF-8',
         'Authorization': token!

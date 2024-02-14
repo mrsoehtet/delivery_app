@@ -35,7 +35,8 @@ class OrderDetailService {
     final token = await SharedPref.getData(key: SharedPref.token);
 
     final response = await _dio.get(
-      'https://newbrdemo.icgwebdevelopment.com/api/delivery/order_detail/$id',
+      // 'https://newbrdemo.icgwebdevelopment.com/api/delivery/order_detail/$id',
+      'https://newbr.icgwebdevelopment.com/api/delivery/order_detail/$id',
       options: Options(
         headers: <String, String>{
           'Accept': 'application/json; charset=UTF-8',
